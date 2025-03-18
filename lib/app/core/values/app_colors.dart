@@ -18,7 +18,7 @@ class AppTextStyles {
   static TextStyle primary = GoogleFonts.poppins(color: Colors.black);
   static TextStyle secondary = GoogleFonts.poppins(color: Colors.white);
   static TextStyle gray = GoogleFonts.poppins(
-    color: Colors.white.withOpacity(0.5),
+    color: Colors.white.withValues(alpha: 0.5),
   );
 }
 
