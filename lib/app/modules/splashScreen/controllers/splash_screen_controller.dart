@@ -6,9 +6,9 @@ class SplashScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print("SplashScreenController onInit() called");
+    // print("SplashScreenController onInit() called");
     Future.delayed(Duration(seconds: 3), () {
-      print("🔄 Navigating to Home...");
+      // print("🔄 Navigating to Home...");
       Get.offAllNamed(Routes.ON_BOARDING);
     });
   }
