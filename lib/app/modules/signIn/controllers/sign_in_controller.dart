@@ -12,6 +12,11 @@ class SignInController extends GetxController {
   var signInResponse = Rx<SignInResponse?>(null);
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  var obscurePassword = true.obs;
+
+  void togglePasswordVisibility() {
+    obscurePassword.value = !obscurePassword.value;
+  }
 
   Future<void> signIn() async {
     isLoading.value = true;
@@ -22,17 +27,8 @@ class SignInController extends GetxController {
     };
 
     final url = "${apiService.baseUrl}/login";
-
-    // Debugging: Cek URL & Body sebelum request
-    print("🚀 Sending Request...");
-    print("🔗 URL: $url");
-    print("📦 Body: $body");
-
     final response = await apiService.signIn(body);
-
     isLoading.value = false;
-    print("✅ Status Code: ${response.statusCode}");
-    print("📝 Response Body: ${response.body}");
 
     if (response.status.isOk) {
       signInResponse.value = SignInResponse.fromJson(response.body);
@@ -41,7 +37,6 @@ class SignInController extends GetxController {
         String token = signInResponse.value!.token;
         storage.write("token", token);
 
-        // Redirect ke Home setelah login
         Get.offAllNamed(Routes.HOME);
       } else {
         Get.snackbar(
