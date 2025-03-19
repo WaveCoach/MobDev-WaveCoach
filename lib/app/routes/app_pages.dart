@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/contact_admin/bindings/contact_admin_binding.dart';
+import '../modules/contact_admin/views/contact_admin_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inventaris/bindings/inventaris_binding.dart';
@@ -64,6 +66,11 @@ class AppPages {
       name: _Paths.PENILAIAN,
       page: () => const PenilaianView(),
       binding: PenilaianBinding(),
+    ),
+    GetPage(
+      name: _Paths.CONTACT_ADMIN,
+      page: () => const ContactAdminView(),
+      binding: ContactAdminBinding(),
     ),
   ];
 }

@@ -5,7 +5,7 @@ import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.
 class ScheduleController extends GetxController {
   var isLoading = true.obs;
   var scheduleList = <Schedule>[].obs;
-  final ApiService apiService = Get.find<ApiService>(); // Gunakan DI
+  final ApiService apiService = Get.find<ApiService>();
 
   @override
   void onInit() {
@@ -16,7 +16,7 @@ class ScheduleController extends GetxController {
   void fetchSchedules() async {
     try {
       isLoading(true);
-      final response = await apiService.listSchedule(); // Hapus parameter {}
+      final response = await apiService.listSchedule();
 
       if (response.statusCode == 200 && response.body != null) {
         try {

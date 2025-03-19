@@ -34,4 +34,8 @@ class ApiService extends GetConnect {
   Future<Response> requestReschedule(Map<String, dynamic> body) {
     return post("$url/reschedule", body, headers: getHeaders());
   }
+
+  Future<Response> listAdmin() {
+    return get("$url/list-admin", headers: getHeaders(withAuth: false));
+  }
 }

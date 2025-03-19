@@ -12,6 +12,7 @@ abstract class Routes {
   static const INVENTARIS = _Paths.INVENTARIS;
   static const PROFILE = _Paths.PROFILE;
   static const PENILAIAN = _Paths.PENILAIAN;
+  static const CONTACT_ADMIN = _Paths.CONTACT_ADMIN;
 }
 
 abstract class _Paths {
@@ -25,4 +26,5 @@ abstract class _Paths {
   static const INVENTARIS = '/inventaris';
   static const PROFILE = '/profile';
   static const PENILAIAN = '/penilaian';
+  static const CONTACT_ADMIN = '/contact-admin';
 }
