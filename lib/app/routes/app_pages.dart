@@ -2,8 +2,14 @@ import 'package:get/get.dart';
 
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/inventaris/bindings/inventaris_binding.dart';
+import '../modules/inventaris/views/inventaris_view.dart';
 import '../modules/onBoarding/bindings/on_boarding_binding.dart';
 import '../modules/onBoarding/views/on_boarding_view.dart';
+import '../modules/penilaian/bindings/penilaian_binding.dart';
+import '../modules/penilaian/views/penilaian_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 import '../modules/schedule/bindings/schedule_binding.dart';
 import '../modules/schedule/views/schedule_view.dart';
 import '../modules/signIn/bindings/sign_in_binding.dart';
@@ -19,7 +25,11 @@ class AppPages {
   static const INITIAL = Routes.SPLASH_SCREEN;
 
   static final routes = [
-    GetPage(name: _Paths.HOME, page: () => HomeView(), binding: HomeBinding()),
+    GetPage(
+      name: _Paths.HOME,
+      page: () => HomeView(),
+      bindings: [HomeBinding(), ScheduleBinding()],
+    ),
     GetPage(
       name: _Paths.SPLASH_SCREEN,
       page: () => const SplashScreenView(),
@@ -39,6 +49,21 @@ class AppPages {
       name: _Paths.SCHEDULE,
       page: () => const ScheduleView(),
       binding: ScheduleBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVENTARIS,
+      page: () => const InventarisView(),
+      binding: InventarisBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.PENILAIAN,
+      page: () => const PenilaianView(),
+      binding: PenilaianBinding(),
     ),
   ];
 }

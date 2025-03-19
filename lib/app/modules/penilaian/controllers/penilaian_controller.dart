@@ -1,13 +1,7 @@
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
-
-  var currentIndex = 0.obs; // ✅ Tambahkan ini
-
-  void changeIndex(int index) {
-    currentIndex.value = index;
-  }
+class PenilaianController extends GetxController {
+  //TODO: Implement PenilaianController
 
   final count = 0.obs;
   @override

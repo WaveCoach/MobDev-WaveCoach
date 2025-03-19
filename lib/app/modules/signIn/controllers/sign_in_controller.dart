@@ -26,7 +26,6 @@ class SignInController extends GetxController {
       "password": passwordController.text.trim(),
     };
 
-    final url = "${apiService.baseUrl}/login";
     final response = await apiService.signIn(body);
     isLoading.value = false;
 

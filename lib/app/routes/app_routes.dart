@@ -9,6 +9,9 @@ abstract class Routes {
   static const SIGN_IN = _Paths.SIGN_IN;
   static const ON_BOARDING = _Paths.ON_BOARDING;
   static const SCHEDULE = _Paths.SCHEDULE;
+  static const INVENTARIS = _Paths.INVENTARIS;
+  static const PROFILE = _Paths.PROFILE;
+  static const PENILAIAN = _Paths.PENILAIAN;
 }
 
 abstract class _Paths {
@@ -19,4 +22,7 @@ abstract class _Paths {
   static const SIGN_IN = '/sign-in';
   static const ON_BOARDING = '/on-boarding';
   static const SCHEDULE = '/schedule';
+  static const INVENTARIS = '/inventaris';
+  static const PROFILE = '/profile';
+  static const PENILAIAN = '/penilaian';
 }
