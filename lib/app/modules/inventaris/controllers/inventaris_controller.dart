@@ -24,6 +24,7 @@ class InventarisController extends GetxController {
           try {
             var stockListResponse = StockListResponse.fromJson(response.body);
             stockList.assignAll(stockListResponse.data);
+            print("Stock list fetched successfully: ${stockListResponse.data}");
           } catch (e) {
             Get.snackbar("Error", "Invalid response format: $e");
           }

@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/inventaris_controller.dart';
 
-class InventarisView extends GetView<InventarisController> {
+class InventarisView extends StatefulWidget {
   const InventarisView({super.key});
+
+  @override
+  _InventarisViewState createState() => _InventarisViewState();
+}
+
+class _InventarisViewState extends State<InventarisView> {
+  final InventarisController controller = Get.put(InventarisController());
 
   @override
   Widget build(BuildContext context) {

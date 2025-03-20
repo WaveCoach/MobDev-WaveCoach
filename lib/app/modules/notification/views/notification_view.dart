@@ -33,7 +33,9 @@ class _NotificationViewState extends State<NotificationView> {
             return ListTile(
               leading: Icon(Icons.notifications),
               title: Text(notification.title),
-              subtitle: Text(notification.message),
+              subtitle: Text(
+                "Dari: ${notification.pengirim.name}\n${notification.message}",
+              ),
               trailing: Text(notification.createdAt),
             );
           },
