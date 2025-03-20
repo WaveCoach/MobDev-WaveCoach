@@ -25,10 +25,10 @@ class _InventarisViewState extends State<InventarisView> {
     return Scaffold(
       backgroundColor: AppColors.skyBlue,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [_selectBoxMenu(), Expanded(child: _StockList())],
+          children: [_selectBoxMenu(), Expanded(child: _buildContent())],
         ),
       ),
     );
@@ -53,6 +53,7 @@ class _InventarisViewState extends State<InventarisView> {
           setState(() {
             dropdownValue = newValue;
           });
+          controller.fetchInventaris(newValue!);
         },
         items:
             [
@@ -70,6 +71,16 @@ class _InventarisViewState extends State<InventarisView> {
             }).toList(),
       ),
     );
+  }
+
+  Widget _buildContent() {
+    if (dropdownValue == "Barang") {
+      return _StockList();
+    } else if (dropdownValue == "History Pengajuan") {
+      return _HistoryPeminjamanInventaris();
+    } else {
+      return _BorrowedItem();
+    }
   }
 
   Widget _StockList() {
@@ -103,6 +114,96 @@ class _InventarisViewState extends State<InventarisView> {
                       subtitle: Text("Total: ${item.totalQty}"),
                     );
                   }).toList(),
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  Widget _HistoryPeminjamanInventaris() {
+    List<Map<String, String>> history = [
+      {"name": "Kacamata Renang", "status": "Dikembalikan"},
+      {"name": "Pelampung Tangan", "status": "Belum Dikembalikan"},
+      {"name": "Papan Pelampung", "status": "Dikembalikan"},
+      {"name": "Pelampung Pinggang", "status": "Belum Dikembalikan"},
+    ];
+
+    return ListView.builder(
+      itemCount: history.length,
+      itemBuilder: (context, index) {
+        return Card(
+          margin: const EdgeInsets.all(8),
+          child: ListTile(
+            title: Text(
+              history[index]["name"]!,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text("Status: ${history[index]["status"]}"),
+            trailing: Icon(
+              history[index]["status"] == "Dikembalikan"
+                  ? Icons.check_circle
+                  : Icons.error,
+              color:
+                  history[index]["status"] == "Dikembalikan"
+                      ? Colors.green
+                      : Colors.red,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _BorrowedItem() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (controller.borrowedList.isEmpty) {
+        return const Center(child: Text("Tidak ada data peminjaman"));
+      }
+
+      return GridView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+          childAspectRatio: 1.2,
+        ),
+        itemCount: controller.borrowedList.length,
+        itemBuilder: (context, index) {
+          var item = controller.borrowedList[index];
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.blue[100],
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                ),
+              ],
+            ),
+            padding: EdgeInsets.all(12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  item.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Jumlah: ${item.totalQtyBorrowed}",
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+              ],
             ),
           );
         },

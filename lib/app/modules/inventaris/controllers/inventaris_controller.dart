@@ -1,36 +1,63 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
+import 'package:mob_dev_wave_coach/app/modules/inventaris/model/borrowed_item_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/inventaris/model/borrowed_item_response.dart';
+import 'package:mob_dev_wave_coach/app/modules/inventaris/model/history_inventory_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/inventaris/model/history_inventory_response.dart';
 import 'package:mob_dev_wave_coach/app/modules/inventaris/model/stock_list_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/inventaris/model/stock_list_response.dart';
 
 class InventarisController extends GetxController {
   var isLoading = false.obs;
   var stockList = <StockListModel>[].obs;
+  var borrowedList = <BorrowedItem>[].obs;
+  var historyList = <HistoryData>[].obs;
   final ApiService apiService = Get.find<ApiService>();
 
   @override
   void onInit() {
-    fetchStockList();
+    fetchInventaris('Barang');
     super.onInit();
   }
 
-  void fetchStockList() async {
+  void fetchInventaris(String category) async {
     try {
       isLoading(true);
-      final response = await apiService.listStock();
+      var response;
 
-      if (response.statusCode == 200 && response.body != null) {
-        if (response.body is Map<String, dynamic>) {
-          try {
-            var stockListResponse = StockListResponse.fromJson(response.body);
-            stockList.assignAll(stockListResponse.data);
-            print("Stock list fetched successfully: ${stockListResponse.data}");
-          } catch (e) {
-            Get.snackbar("Error", "Invalid response format: $e");
-          }
-        } else {
-          Get.snackbar("Error", "Unexpected response format");
+      switch (category) {
+        case 'Barang':
+          response = await apiService.listStock();
+          break;
+        case 'History Pengajuan':
+          response = await apiService.historyPeminjamanInventaris();
+          break;
+        case 'Stock Inventaris':
+          response = await apiService.borrowedItem();
+          break;
+        default:
+          Get.snackbar("Error", "Kategori tidak dikenali");
+          return;
+      }
+
+      if (response.statusCode == 200) {
+        switch (category) {
+          case 'Barang':
+            stockList.assignAll(StockListResponse.fromJson(response.body).data);
+            break;
+          case 'History Pengajuan':
+            historyList.assignAll(
+              HistoryInventoryResponse.fromJson(response.body).data,
+            );
+            break;
+          case 'Stock Inventaris':
+            borrowedList.assignAll(
+              BorrowedItemResponse.fromJson(response.body).data,
+            );
+            break;
         }
+      } else {
+        Get.snackbar("Error", "Unexpected response format");
       }
     } catch (e) {
       Get.snackbar("Error", "An error occurred: $e");
