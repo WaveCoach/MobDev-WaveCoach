@@ -21,7 +21,7 @@ class NotificationController extends GetxController {
 
       if (response.statusCode == 200 && response.body != null) {
         try {
-          var notificationResponse = NotificationResponse.fromMap(
+          var notificationResponse = NotificationResponse.fromJson(
             response.body,
           );
           notificationList.assignAll(notificationResponse.notifications);

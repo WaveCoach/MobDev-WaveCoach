@@ -24,7 +24,6 @@ class ContactAdminController extends GetxController {
       if (response.statusCode == 200) {
         final data = response.body;
         final adminResponse = AdminResponse.fromMap(data);
-        print("✅ Parsed AdminResponse: ${adminResponse.admins}");
         if (adminResponse.success) {
           admins.assignAll(adminResponse.admins);
         }
@@ -34,16 +33,5 @@ class ContactAdminController extends GetxController {
     } finally {
       isLoading(false);
     }
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-    log('hello');
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 }

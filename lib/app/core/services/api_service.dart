@@ -27,35 +27,19 @@ class ApiService extends GetConnect {
     return get("$url/list-admin", headers: getHeaders(withAuth: false));
   }
 
-  Future<Response> forgetPass(Map<String, dynamic> body) {
-    return post(
-      "$url/forgot-password",
-      body,
-      headers: getHeaders(withAuth: false),
-    );
-  }
-
-  Future<Response> resetPass(Map<String, dynamic> body) {
-    return post(
-      "$url/reset-password",
-      body,
-      headers: getHeaders(withAuth: false),
-    );
-  }
-
   Future<Response> listSchedule() {
     return get("$url/schedule", headers: getHeaders());
   }
 
-  Future<Response> getScheduleDetail(int id) {
-    return get("$url/schedule/$id", headers: getHeaders());
-  }
-
-  Future<Response> requestReschedule(Map<String, dynamic> body) {
-    return post("$url/reschedule", body, headers: getHeaders());
-  }
-
   Future<Response> listNotification() {
     return get("$url/notification", headers: getHeaders());
+  }
+
+  Future<Response> listStock() {
+    return get("$url/daftarinventory", headers: getHeaders());
+  }
+
+  Future<Response> borrowedItem(String id) {
+    return get("$url/list-inventory-landing", headers: getHeaders());
   }
 }

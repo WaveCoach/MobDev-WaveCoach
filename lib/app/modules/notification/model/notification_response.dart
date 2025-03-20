@@ -11,16 +11,23 @@ class NotificationResponse {
     required this.notifications,
   });
 
-  factory NotificationResponse.fromMap(Map<String, dynamic> map) {
+  factory NotificationResponse.fromJson(Map<String, dynamic> json) {
     return NotificationResponse(
-      success: map['success'] ?? false, // Default false kalau null
-      message: map['message'] ?? '', // Default string kosong kalau null
+      success: json['success'] ?? false, // Default false kalau null
+      message: json['message'] ?? '', // Default string kosong kalau null
       notifications:
-          (map['data'] as List?)
-              ?.map((x) => NotificationModel.fromMap(x))
+          (json['data'] as List?)
+              ?.map((item) => NotificationModel.fromJson(item))
               .toList() ??
-          [],
-      // Kalau map['data'] null, gunakan list kosong []
+          [], // Kalau json['data'] null, gunakan list kosong []
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'success': success,
+      'message': message,
+      'data': notifications.map((notif) => notif.toJson()).toList(),
+    };
   }
 }
