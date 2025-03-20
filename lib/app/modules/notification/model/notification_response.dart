@@ -13,11 +13,14 @@ class NotificationResponse {
 
   factory NotificationResponse.fromMap(Map<String, dynamic> map) {
     return NotificationResponse(
-      success: map['success'],
-      message: map['message'],
-      notifications: List<NotificationModel>.from(
-        map['data'].map((x) => NotificationModel.fromMap(x)),
-      ),
+      success: map['success'] ?? false, // Default false kalau null
+      message: map['message'] ?? '', // Default string kosong kalau null
+      notifications:
+          (map['data'] as List?)
+              ?.map((x) => NotificationModel.fromMap(x))
+              .toList() ??
+          [],
+      // Kalau map['data'] null, gunakan list kosong []
     );
   }
 }

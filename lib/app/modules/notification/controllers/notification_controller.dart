@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
+import 'package:mob_dev_wave_coach/app/modules/notification/model/notification_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/notification/model/notification_response.dart';
 
 class NotificationController extends GetxController {
-  var isLoading = true.obs;
-  var notificationList = [].obs;
+  var isLoading = false.obs;
+  var notificationList = <NotificationModel>[].obs;
   final ApiService apiService = Get.find<ApiService>();
 
   @override
@@ -19,14 +21,17 @@ class NotificationController extends GetxController {
 
       if (response.statusCode == 200 && response.body != null) {
         try {
-          notificationList.assignAll(response.body);
+          var notificationResponse = NotificationResponse.fromMap(
+            response.body,
+          );
+          notificationList.assignAll(notificationResponse.notifications);
         } catch (e) {
-          Get.snackbar("Error", "Invalid response format");
+          Get.snackbar("Error", "Invalid response format: $e");
         }
       } else {
         Get.snackbar(
           "Error",
-          "Failed to load schedules: ${response.statusText}",
+          "Failed to load notifications: ${response.statusText}",
         );
       }
     } catch (e) {

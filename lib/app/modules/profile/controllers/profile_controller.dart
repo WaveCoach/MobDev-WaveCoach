@@ -1,23 +1,12 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ProfileController extends GetxController {
-  //TODO: Implement ProfileController
-
   final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  final box = GetStorage();
 
-  @override
-  void onReady() {
-    super.onReady();
+  void logout() {
+    box.remove('token');
+    Get.offAllNamed('/sign-in]');
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

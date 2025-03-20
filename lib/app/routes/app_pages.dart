@@ -36,7 +36,14 @@ class AppPages {
     GetPage(
       name: _Paths.HOME,
       page: () => HomeView(),
-      bindings: [HomeBinding(), ScheduleBinding()],
+      bindings: [
+        HomeBinding(),
+        ScheduleBinding(),
+        InventarisBinding(),
+        ProfileBinding(),
+        PenilaianBinding(),
+        NotificationBinding(),
+      ],
     ),
     GetPage(
       name: _Paths.SPLASH_SCREEN,
@@ -90,7 +97,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.NOTIFICATION,
-      page: () => const NotificationView(),
+      page: () => NotificationView(),
       binding: NotificationBinding(),
     ),
   ];

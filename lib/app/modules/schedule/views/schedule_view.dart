@@ -78,10 +78,15 @@ class _ScheduleViewState extends State<ScheduleView> {
                   Positioned(
                     bottom: 30,
                     right: 30,
-                    child: Icon(
-                      Icons.notifications,
-                      color: Colors.white,
-                      size: 40, // Tambahkan properti size di sini
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed('/notification');
+                      },
+                      child: Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                        size: 40,
+                      ),
                     ),
                   ),
                 ],
@@ -224,7 +229,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                     height: 70,
                     decoration: BoxDecoration(
                       color: AppColors.deepOceanBlue,
-                      borderRadius: BorderRadius.circular(10)
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   title: Text(
@@ -236,7 +241,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                     children: [
                       Text("Time: ${schedule.startTime} - ${schedule.endTime}"),
                       Text("Location: ${schedule.locationName}"),
-                      SizedBox(height: 10,)
+                      SizedBox(height: 10),
                     ],
                   ),
                   onTap: () {
