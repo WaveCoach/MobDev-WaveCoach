@@ -250,13 +250,9 @@ class _SignInViewState extends State<SignInView> {
 
     Widget forgotPassword() {
       return GestureDetector(
-        // onTap: () {
-        //   Navigator.of(context).push(
-        //     MaterialPageRoute(
-        //       builder: (BuildContext context) => ForgotPasswordView(),
-        //     ),
-        //   );
-        // },
+        onTap: () {
+          Navigator.pushNamed(context, '/forget-pass');
+        },
         child: Text(
           "Forgot Password?",
           style: GoogleFonts.poppins(
@@ -316,24 +312,27 @@ class _SignInViewState extends State<SignInView> {
             Text(
               "Mengalami Kendala?",
               style: GoogleFonts.poppins(
-                fontWeight:
-                    FontWeight.w400,
+                fontWeight: FontWeight.w400,
                 fontSize: 15,
                 color: Colors.white,
                 letterSpacing: -0.5,
               ),
             ),
             SizedBox(width: 5),
-            Text(
-              "Hubungi Admin",
-              style: GoogleFonts.poppins(
-                fontWeight:
-                    FontWeight.w600,
-                fontSize: 15,
-                color: Colors.white,
-                letterSpacing: -0.5,
-                decoration: TextDecoration.underline,
-                decorationColor: Colors.white,
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/contact-admin');
+              },
+              child: Text(
+                "Hubungi Admin",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: Colors.white,
+                  letterSpacing: -0.5,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Colors.white,
+                ),
               ),
             ),
           ],

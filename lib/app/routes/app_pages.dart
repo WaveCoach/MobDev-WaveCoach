@@ -1,9 +1,17 @@
 import 'package:get/get.dart';
 
+import '../modules/contact_admin/bindings/contact_admin_binding.dart';
+import '../modules/contact_admin/views/contact_admin_view.dart';
+import '../modules/forget_pass/bindings/forget_pass_binding.dart';
+import '../modules/forget_pass/views/forget_pass_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inventaris/bindings/inventaris_binding.dart';
 import '../modules/inventaris/views/inventaris_view.dart';
+import '../modules/new_pass/bindings/new_pass_binding.dart';
+import '../modules/new_pass/views/new_pass_view.dart';
+import '../modules/notification/bindings/notification_binding.dart';
+import '../modules/notification/views/notification_view.dart';
 import '../modules/onBoarding/bindings/on_boarding_binding.dart';
 import '../modules/onBoarding/views/on_boarding_view.dart';
 import '../modules/penilaian/bindings/penilaian_binding.dart';
@@ -64,6 +72,26 @@ class AppPages {
       name: _Paths.PENILAIAN,
       page: () => const PenilaianView(),
       binding: PenilaianBinding(),
+    ),
+    GetPage(
+      name: _Paths.CONTACT_ADMIN,
+      page: () => const ContactAdminView(),
+      binding: ContactAdminBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGET_PASS,
+      page: () => const ForgetPassView(),
+      binding: ForgetPassBinding(),
+    ),
+    GetPage(
+      name: _Paths.NEW_PASS,
+      page: () => const NewPassView(),
+      binding: NewPassBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATION,
+      page: () => const NotificationView(),
+      binding: NotificationBinding(),
     ),
   ];
 }

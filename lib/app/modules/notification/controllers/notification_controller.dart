@@ -1,27 +1,25 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
-import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 
-class ScheduleController extends GetxController {
+class NotificationController extends GetxController {
   var isLoading = true.obs;
-  var scheduleList = <Schedule>[].obs;
+  var notificationList = [].obs;
   final ApiService apiService = Get.find<ApiService>();
 
   @override
   void onInit() {
-    fetchSchedules();
+    fetchNotifications();
     super.onInit();
   }
 
-  void fetchSchedules() async {
+  void fetchNotifications() async {
     try {
       isLoading(true);
-      final response = await apiService.listSchedule();
+      final response = await apiService.listNotification();
 
       if (response.statusCode == 200 && response.body != null) {
         try {
-          var scheduleResponse = ScheduleResponse.fromJson(response.body);
-          scheduleList.assignAll(scheduleResponse.data.schedule);
+          notificationList.assignAll(response.body);
         } catch (e) {
           Get.snackbar("Error", "Invalid response format");
         }

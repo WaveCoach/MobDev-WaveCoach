@@ -23,6 +23,26 @@ class ApiService extends GetConnect {
     return post("$url/login", body, headers: getHeaders(withAuth: false));
   }
 
+  Future<Response> listAdmin() {
+    return get("$url/list-admin", headers: getHeaders(withAuth: false));
+  }
+
+  Future<Response> forgetPass(Map<String, dynamic> body) {
+    return post(
+      "$url/forgot-password",
+      body,
+      headers: getHeaders(withAuth: false),
+    );
+  }
+
+  Future<Response> resetPass(Map<String, dynamic> body) {
+    return post(
+      "$url/reset-password",
+      body,
+      headers: getHeaders(withAuth: false),
+    );
+  }
+
   Future<Response> listSchedule() {
     return get("$url/schedule", headers: getHeaders());
   }
@@ -33,5 +53,9 @@ class ApiService extends GetConnect {
 
   Future<Response> requestReschedule(Map<String, dynamic> body) {
     return post("$url/reschedule", body, headers: getHeaders());
+  }
+
+  Future<Response> listNotification() {
+    return get("$url/notification", headers: getHeaders());
   }
 }
