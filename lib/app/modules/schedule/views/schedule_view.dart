@@ -55,21 +55,21 @@ class _ScheduleViewState extends State<ScheduleView> {
                       children: [
                         Text(
                           'Welcome Sarah',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'poppins_medium',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
                             fontSize: 14,
+                            color: Colors.white,
                             letterSpacing: -0.3,
                           ),
                         ),
                         // SizedBox(height: 12),
                         Text(
                           'Stay Strong Coach!',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'poppins_medium',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
                             fontSize: 20,
-                            letterSpacing: -0.3,
+                            color: Colors.white,
+                            letterSpacing: -0.4,
                           ),
                         ),
                       ],
@@ -161,9 +161,11 @@ class _ScheduleViewState extends State<ScheduleView> {
                           ),
                           child: Text(
                             monthNames[index],
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
+                              fontWeight:
+                                  FontWeight
+                                      .w500, // Medium (sesuai dengan "poppins_medium")
                               fontSize: 16,
-                              fontFamily: 'poppins_medium',
                               color:
                                   _selectedMonthIndex == index
                                       ? Colors.white
@@ -199,7 +201,12 @@ class _ScheduleViewState extends State<ScheduleView> {
             ),
             child: Text(
               'History',
-              style: TextStyle(fontSize: 16, fontFamily: 'poppins_medium'),
+              style: GoogleFonts.poppins(
+                fontWeight:
+                    FontWeight.w500, // Medium (sesuai dengan "poppins_medium")
+                fontSize: 16,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
@@ -220,33 +227,147 @@ class _ScheduleViewState extends State<ScheduleView> {
           itemCount: controller.scheduleList.length,
           itemBuilder: (context, index) {
             final schedule = controller.scheduleList[index];
-            return SingleChildScrollView(
-              child: Card(
-                margin: const EdgeInsets.fromLTRB(20, 0, 20, 15),
-                child: ListTile(
-                  leading: Container(
-                    width: 70,
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: AppColors.deepOceanBlue,
-                      borderRadius: BorderRadius.circular(10),
+            return Padding(
+              padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
+              child: GestureDetector(
+                onTap: () {
+                  Get.toNamed('/schedule_detail', arguments: schedule);
+                },
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: AppColors.softSteelBlue,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Container(
+                            width: 75,
+                            height: 75,
+                            decoration: BoxDecoration(
+                              color: AppColors.deepOceanBlue,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                        schedule.formattedDate.split(',')[1].trim().substring(0, 2),
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 47,
+                                        color: Colors.white,
+                                        height: 0.9,
+                                      ),
+                                    ),
+                                  ),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                        schedule.formattedDate.split(',')[1].trim().substring(2).replaceAll(RegExp(r'\d'), '').trim(),
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 5,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.goldenAmber,
+                                        borderRadius: BorderRadius.circular(
+                                          1000,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                      ),
+                                      child: Text(
+                                        "${schedule.startTime.substring(0, 5)} - ${schedule.endTime.substring(0, 5)} WIB", // Jam Muali dan Akhir
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(child: Container()),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.roseBlush,
+                                        borderRadius: BorderRadius.circular(
+                                          1000,
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                      ),
+                                      child: Text(
+                                        "Reschedule",
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                schedule.formattedDate, // Hari, Tanggal, Bulan, Tahun
+                                style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                        ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 5,
+                                  bottom: 10,
+                                ),
+                                child: Text(
+                                  schedule.locationName, // Nama Lokasi
+                                  style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  title: Text(
-                    schedule.formattedDate,
-                    style: const TextStyle(fontWeight: FontWeight.w400),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Time: ${schedule.startTime} - ${schedule.endTime}"),
-                      Text("Location: ${schedule.locationName}"),
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                  onTap: () {
-                    Get.toNamed('/schedule_detail', arguments: schedule);
-                  },
                 ),
               ),
             );
