@@ -250,13 +250,9 @@ class _SignInViewState extends State<SignInView> {
 
     Widget forgotPassword() {
       return GestureDetector(
-        // onTap: () {
-        //   Navigator.of(context).push(
-        //     MaterialPageRoute(
-        //       builder: (BuildContext context) => ForgotPasswordView(),
-        //     ),
-        //   );
-        // },
+        onTap: () {
+          Navigator.pushNamed(context, '/forget-pass');
+        },
         child: Text(
           "Forgot Password?",
           style: GoogleFonts.poppins(

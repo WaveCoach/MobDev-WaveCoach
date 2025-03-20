@@ -13,6 +13,9 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const PENILAIAN = _Paths.PENILAIAN;
   static const CONTACT_ADMIN = _Paths.CONTACT_ADMIN;
+  static const FORGET_PASS = _Paths.FORGET_PASS;
+  static const NEW_PASS = _Paths.NEW_PASS;
+  static const NOTIFICATION = _Paths.NOTIFICATION;
 }
 
 abstract class _Paths {
@@ -27,4 +30,7 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const PENILAIAN = '/penilaian';
   static const CONTACT_ADMIN = '/contact-admin';
+  static const FORGET_PASS = '/forget-pass';
+  static const NEW_PASS = '/new-pass';
+  static const NOTIFICATION = '/notification';
 }

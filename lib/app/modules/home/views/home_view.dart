@@ -6,7 +6,6 @@ import 'package:mob_dev_wave_coach/app/modules/profile/views/profile_view.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/views/schedule_view.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import '../controllers/home_controller.dart';
-import '../../schedule/bindings/schedule_binding.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});
