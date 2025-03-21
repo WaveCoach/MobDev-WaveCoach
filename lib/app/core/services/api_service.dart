@@ -39,7 +39,11 @@ class ApiService extends GetConnect {
     return get("$url/daftarinventory", headers: getHeaders());
   }
 
-  Future<Response> borrowedItem(String id) {
-    return get("$url/list-inventory-landing", headers: getHeaders());
+  Future<Response> borrowedItem() {
+    return get("$url/inventory-landing", headers: getHeaders());
+  }
+
+  Future<Response> historyPeminjamanInventaris() {
+    return get("$url/request-history-inventory", headers: getHeaders());
   }
 }
