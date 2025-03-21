@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import '../controllers/inventaris_controller.dart';
+import 'package:intl/intl.dart';
 
 class InventarisView extends StatefulWidget {
   const InventarisView({super.key});
@@ -75,11 +76,11 @@ class _InventarisViewState extends State<InventarisView> {
 
   Widget _buildContent() {
     if (dropdownValue == "Barang") {
-      return _StockList();
+      return _BorrowedItem();
     } else if (dropdownValue == "History Pengajuan") {
       return _HistoryPeminjamanInventaris();
     } else {
-      return _BorrowedItem();
+      return _StockList();
     }
   }
 
@@ -122,37 +123,34 @@ class _InventarisViewState extends State<InventarisView> {
   }
 
   Widget _HistoryPeminjamanInventaris() {
-    List<Map<String, String>> history = [
-      {"name": "Kacamata Renang", "status": "Dikembalikan"},
-      {"name": "Pelampung Tangan", "status": "Belum Dikembalikan"},
-      {"name": "Papan Pelampung", "status": "Dikembalikan"},
-      {"name": "Pelampung Pinggang", "status": "Belum Dikembalikan"},
-    ];
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-    return ListView.builder(
-      itemCount: history.length,
-      itemBuilder: (context, index) {
-        return Card(
-          margin: const EdgeInsets.all(8),
-          child: ListTile(
-            title: Text(
-              history[index]["name"]!,
-              style: TextStyle(fontWeight: FontWeight.bold),
+      if (controller.historyList.isEmpty) {
+        return const Center(child: Text("Tidak ada data history."));
+      }
+
+      return ListView.builder(
+        itemCount: controller.historyList.length,
+        itemBuilder: (context, index) {
+          final history = controller.historyList[index];
+          return Card(
+            margin: const EdgeInsets.all(8),
+            child: ListTile(
+              title: Text(
+                history.coachName,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                "Status: ${DateFormat('dd MMMM yyyy, HH:mm').format(DateTime.parse(history.createdAt))}\nType: ${history.type == 'request' ? 'Pengajuan Peminjaman Inventaris' : 'Pengajuan pengembalian inventaris'}",
+              ),
             ),
-            subtitle: Text("Status: ${history[index]["status"]}"),
-            trailing: Icon(
-              history[index]["status"] == "Dikembalikan"
-                  ? Icons.check_circle
-                  : Icons.error,
-              color:
-                  history[index]["status"] == "Dikembalikan"
-                      ? Colors.green
-                      : Colors.red,
-            ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    });
   }
 
   Widget _BorrowedItem() {
