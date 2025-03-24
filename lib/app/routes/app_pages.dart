@@ -20,6 +20,8 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/schedule/bindings/schedule_binding.dart';
 import '../modules/schedule/views/schedule_view.dart';
+import '../modules/schedule_detail/bindings/schedule_detail_binding.dart';
+import '../modules/schedule_detail/views/schedule_detail_view.dart';
 import '../modules/signIn/bindings/sign_in_binding.dart';
 import '../modules/signIn/views/sign_in_view.dart';
 import '../modules/splashScreen/bindings/splash_screen_binding.dart';
@@ -99,6 +101,11 @@ class AppPages {
       name: _Paths.NOTIFICATION,
       page: () => NotificationView(),
       binding: NotificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.SCHEDULE_DETAIL,
+      page: () => const ScheduleDetailView(),
+      binding: ScheduleDetailBinding(),
     ),
   ];
 }

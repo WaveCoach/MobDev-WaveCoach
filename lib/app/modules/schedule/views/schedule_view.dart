@@ -231,7 +231,10 @@ class _ScheduleViewState extends State<ScheduleView> {
               padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
               child: GestureDetector(
                 onTap: () {
-                  Get.toNamed('/schedule_detail', arguments: schedule);
+                  Get.toNamed(
+                    '/schedule-detail',
+                    arguments: {'id': schedule.id},
+                  );
                 },
                 child: Container(
                   width: double.infinity,
@@ -259,7 +262,10 @@ class _ScheduleViewState extends State<ScheduleView> {
                                   FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                        schedule.formattedDate.split(',')[1].trim().substring(0, 2),
+                                      schedule.formattedDate
+                                          .split(',')[1]
+                                          .trim()
+                                          .substring(0, 2),
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 47,
@@ -271,7 +277,12 @@ class _ScheduleViewState extends State<ScheduleView> {
                                   FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                        schedule.formattedDate.split(',')[1].trim().substring(2).replaceAll(RegExp(r'\d'), '').trim(),
+                                      schedule.formattedDate
+                                          .split(',')[1]
+                                          .trim()
+                                          .substring(2)
+                                          .replaceAll(RegExp(r'\d'), '')
+                                          .trim(),
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 14,
@@ -341,12 +352,13 @@ class _ScheduleViewState extends State<ScheduleView> {
                                 ),
                               ),
                               Text(
-                                schedule.formattedDate, // Hari, Tanggal, Bulan, Tahun
+                                schedule
+                                    .formattedDate, // Hari, Tanggal, Bulan, Tahun
                                 style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                        ),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
@@ -356,10 +368,10 @@ class _ScheduleViewState extends State<ScheduleView> {
                                 child: Text(
                                   schedule.locationName, // Nama Lokasi
                                   style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                        ),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ],

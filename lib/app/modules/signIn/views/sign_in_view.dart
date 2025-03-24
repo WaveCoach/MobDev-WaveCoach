@@ -26,8 +26,7 @@ class _SignInViewState extends State<SignInView> {
               "Come on Board",
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                fontWeight:
-                    FontWeight.w500, // Medium (sesuai dengan "poppins_medium")
+                fontWeight: FontWeight.w500,
                 fontSize: 30,
                 color: Colors.white,
                 letterSpacing: -0.5,

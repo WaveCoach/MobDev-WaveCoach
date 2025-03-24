@@ -31,6 +31,10 @@ class ApiService extends GetConnect {
     return get("$url/schedule", headers: getHeaders());
   }
 
+  Future<Response> ScheduleDetail(int id) {
+    return get("$url/schedule/$id", headers: getHeaders());
+  }
+
   Future<Response> listNotification() {
     return get("$url/notification", headers: getHeaders());
   }
