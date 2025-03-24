@@ -4,17 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import '../controllers/schedule_detail_controller.dart';
 
-class ScheduleDetailView extends StatefulWidget {
+class ScheduleDetailView extends GetView<ScheduleDetailController> {
   const ScheduleDetailView({super.key});
-
-  @override
-  _ScheduleDetailViewState createState() => _ScheduleDetailViewState();
-}
-
-class _ScheduleDetailViewState extends State<ScheduleDetailView> {
-  final ScheduleDetailController controller = Get.put(
-    ScheduleDetailController(),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -232,58 +223,79 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Icon(Icons.account_circle, color: AppColors.deepOceanBlue),
+                SizedBox(width: 8),
+                Text(
+                  'Daftar Siswa',
+                  style: GoogleFonts.poppins(
+                    color: AppColors.deepOceanBlue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
             Text(
               '1. Cinta Ramayanti',
               style: GoogleFonts.poppins(
                 color: AppColors.deepOceanBlue,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeightStyles.semiBold,
                 fontSize: 18,
               ),
             ),
             Row(
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Add your onPressed code here!
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.lightGreen,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 16.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: Colors.black, width: 1),
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Hadir',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    child: Text(
+                      'Hadir',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(width: 5),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add your onPressed code here!
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.softRed,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 16.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: Colors.black, width: 1),
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Tidak Hadir',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    child: Text(
+                      'Tidak Hadir',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -320,54 +332,60 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               '2. Ananda Putra',
               style: GoogleFonts.poppins(
                 color: AppColors.deepOceanBlue,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeightStyles.semiBold,
                 fontSize: 18,
               ),
             ),
             Row(
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Add your onPressed code here!
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.lightGreen,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 16.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: Colors.black, width: 1),
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Hadir',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    child: Text(
+                      'Hadir',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(width: 5),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add your onPressed code here!
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.softRed,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 16.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: Colors.black, width: 1),
+                      ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Tidak Hadir',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    child: Text(
+                      'Tidak Hadir',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -405,11 +423,9 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
     }
 
     return Scaffold(
-      body: Obx(
-        () => SingleChildScrollView(
-          child: Column(
-            children: [header(), location(), buttonAttendance(), listSiswa()],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [header(), location(), buttonAttendance(), listSiswa()],
         ),
       ),
     );
