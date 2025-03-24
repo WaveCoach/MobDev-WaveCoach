@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/onBoarding/controllers/on_boarding_controller.dart';
 
@@ -58,11 +59,11 @@ class OnBoardingView extends StatelessWidget {
                           Text(
                             data["title"]!,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: "poppins_medium",
-                              fontSize: 32,
-                              color: AppColors.deepOceanBlue,
-                            ),
+                            style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 32,
+                                          color: AppColors.deepOceanBlue,
+                                        ),
                           ),
                           const SizedBox(height: 10),
                           Padding(
