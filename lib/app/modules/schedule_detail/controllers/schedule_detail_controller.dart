@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule_detail/model/schedule_detail_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/schedule_detail/model/schedule_detail_response.dart';
 
 class ScheduleDetailController extends GetxController {
   var isLoading = true.obs;
@@ -10,24 +11,22 @@ class ScheduleDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    int scheduleId = Get.arguments ?? 1;
+    int scheduleId = Get.arguments;
     fetchScheduleDetail(scheduleId);
   }
 
   Future<void> fetchScheduleDetail(int id) async {
     try {
       isLoading(true);
-      var response = await apiService.ScheduleDetail(id);
+      final response = await apiService.ScheduleDetail(id);
+
       if (response.statusCode == 200) {
-        scheduleDetail.value = ScheduleDetail.fromJson(
-          response.body['data']['schedule'],
-        );
+        var responseData = ScheduleDetailResponse.fromJson(response.body);
+        scheduleDetail.value = responseData.data;
       } else {
-        print("Failed to load schedule: ${response.statusText}");
+        Get.snackbar('Error', 'Failed to fetch schedule details');
       }
     } catch (e) {
-      print("Error fetching schedule: $e");
-    } finally {
       isLoading(false);
     }
   }
