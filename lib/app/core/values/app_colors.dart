@@ -12,6 +12,8 @@ class AppColors {
   static const Color softSteelBlue = Color(0xFFC1D2DD);
   static const Color goldenAmber = Color(0xFFECC791);
   static const Color roseBlush = Color(0xFFE2A7A8);
+  static const Color lightGreen = Color(0xFFACFFC7);
+  static const Color softRed = Color(0xFFFF9696);
 }
 
 class AppTextStyles {
