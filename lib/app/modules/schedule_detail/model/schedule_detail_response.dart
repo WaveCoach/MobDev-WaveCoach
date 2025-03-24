@@ -1,27 +1,21 @@
 import 'package:mob_dev_wave_coach/app/modules/schedule_detail/model/schedule_detail_model.dart';
 
-class ScheduleResponse {
+class ScheduleDetailResponse {
   final bool success;
   final String message;
-  final ScheduleDetail schedule;
-  final List<Student> students;
+  final ScheduleDetail data;
 
-  ScheduleResponse({
+  ScheduleDetailResponse({
     required this.success,
     required this.message,
-    required this.schedule,
-    required this.students,
+    required this.data,
   });
 
-  factory ScheduleResponse.fromJson(Map<String, dynamic> json) {
-    return ScheduleResponse(
+  factory ScheduleDetailResponse.fromJson(Map<String, dynamic> json) {
+    return ScheduleDetailResponse(
       success: json['success'],
       message: json['message'],
-      schedule: ScheduleDetail.fromJson(json['data']['schedule']),
-      students:
-          (json['data']['students'] as List)
-              .map((student) => Student.fromJson(student))
-              .toList(),
+      data: ScheduleDetail.fromJson(json['data']),
     );
   }
 }
