@@ -40,8 +40,8 @@ dependencies:
   get: ^4.7.2
   get_storage: ^2.1.1
   salomon_bottom_bar: ^3.3.2
-  intl: ^0.20.2
-  
+  intl: ^0.20.2  
+  flutter_svg: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +61,10 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/icons/NavBarJadwal.svg
+    - assets/icons/NavBarInventaris.svg
+    - assets/icons/NavBarPenilaian.svg
+    - assets/icons/NavBarProfil.svg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

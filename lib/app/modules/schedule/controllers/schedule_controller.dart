@@ -3,7 +3,7 @@ import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 
 class ScheduleController extends GetxController {
-  var isLoading = true.obs;
+  var isLoading = false.obs;
   var scheduleList = <Schedule>[].obs;
   final ApiService apiService = Get.find<ApiService>();
 
@@ -35,6 +35,15 @@ class ScheduleController extends GetxController {
       Get.snackbar("Error", "An error occurred: $e");
     } finally {
       isLoading(false);
+    }
+  }
+
+  Future<void> refreshScheduleList() async {
+    isLoading.value = true;
+    try {
+      fetchSchedules();
+    } finally {
+      isLoading.value = false;
     }
   }
 }
