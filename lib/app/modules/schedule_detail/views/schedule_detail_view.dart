@@ -28,17 +28,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
           return Center(child: Text("Data tidak tersedia"));
         }
 
-        // Ambil "2025-05-10" dari API
         String dateString =
             controller.scheduleResponse.value?.schedule?.date ?? "";
 
-        // Pecah berdasarkan "-"
-        List<String> dateParts = dateString.split("-"); // ["2025", "05", "10"]
+        List<String> dateParts = dateString.split("-");
 
-        // Ambil hanya tanggal (bagian ke-2 dalam array)
-        String day = dateParts[2]; // "10"
+        String day = dateParts[2];
 
-        // Mapping bulan ke format teks
         Map<String, String> monthMap = {
           "01": "Januari",
           "02": "Februari",
@@ -200,277 +196,215 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
     }
 
     Widget buttonAttendance() {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.deepOceanBlue,
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+      return Obx(() {
+        final coach = controller.scheduleResponse.value?.coach;
+        final isCoachAttendanceNull = coach?.attendanceStatus == null;
+
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed:
+                      isCoachAttendanceNull
+                          ? () {
+                            // Add your onPressed code here!
+                          }
+                          : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.deepOceanBlue,
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                ),
-                child: Text(
-                  'Absensi Coach',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.deepOceanBlue,
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(
-                  'Absensi Siswa',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                  child: Text(
+                    'Absensi Coach',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
+              SizedBox(height: 16.0),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed:
+                      isCoachAttendanceNull
+                          ? null
+                          : () {
+                            // Add your onPressed code here!
+                          },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.deepOceanBlue,
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Absensi Siswa',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      });
     }
 
     Widget listSiswa() {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        margin: EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.account_circle, color: AppColors.deepOceanBlue),
-                SizedBox(width: 8),
-                Text(
-                  'Daftar Siswa',
-                  style: GoogleFonts.poppins(
-                    color: AppColors.deepOceanBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              '1. Cinta Ramayanti',
-              style: GoogleFonts.poppins(
-                color: AppColors.deepOceanBlue,
-                fontWeight: FontWeightStyles.semiBold,
-                fontSize: 18,
+      return Obx(() {
+        final students = controller.scheduleResponse.value?.students ?? [];
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          margin: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 4),
               ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add your onPressed code here!
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lightGreen,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 16.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: Colors.black, width: 1),
-                      ),
-                    ),
-                    child: Text(
-                      'Hadir',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.account_circle, color: AppColors.deepOceanBlue),
+                  SizedBox(width: 8),
+                  Text(
+                    'Daftar Siswa',
+                    style: GoogleFonts.poppins(
+                      color: AppColors.deepOceanBlue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
-                ),
-                SizedBox(width: 5),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add your onPressed code here!
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.softRed,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 16.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: Colors.black, width: 1),
-                      ),
-                    ),
-                    child: Text(
-                      'Tidak Hadir',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8.0),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.deepOceanBlue,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 16.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(
-                  'Beri Penilaian',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                ],
               ),
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              '2. Ananda Putra',
-              style: GoogleFonts.poppins(
-                color: AppColors.deepOceanBlue,
-                fontWeight: FontWeightStyles.semiBold,
-                fontSize: 18,
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add your onPressed code here!
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lightGreen,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 16.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: Colors.black, width: 1),
-                      ),
-                    ),
-                    child: Text(
-                      'Hadir',
+              SizedBox(height: 16.0),
+              ...students.map((student) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      student.name,
                       style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                        color: AppColors.deepOceanBlue,
+                        fontWeight: FontWeightStyles.semiBold,
+                        fontSize: 18,
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(width: 5),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add your onPressed code here!
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.softRed,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 16.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: Colors.black, width: 1),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Add your onPressed code here!
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  student.attendanceStatus == null
+                                      ? Colors.white
+                                      : AppColors.lightGreen,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 16.0,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(color: Colors.black, width: 1),
+                              ),
+                            ),
+                            child: Text(
+                              'Hadir',
+                              style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Add your onPressed code here!
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  student.attendanceStatus == null
+                                      ? Colors.white
+                                      : AppColors.softRed,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 16.0,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(color: Colors.black, width: 1),
+                              ),
+                            ),
+                            child: Text(
+                              'Tidak Hadir',
+                              style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Add your onPressed code here!
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.deepOceanBlue,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 8.0,
+                            horizontal: 16.0,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Beri Penilaian',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                    child: Text(
-                      'Tidak Hadir',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8.0),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.deepOceanBlue,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 16.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(
-                  'Beri Penilaian',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+                    SizedBox(height: 16.0),
+                  ],
+                );
+              }).toList(),
+            ],
+          ),
+        );
+      });
     }
 
     return Scaffold(
