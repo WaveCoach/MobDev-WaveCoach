@@ -50,4 +50,12 @@ class ApiService extends GetConnect {
   Future<Response> historyPeminjamanInventaris() {
     return get("$url/request-history-inventory", headers: getHeaders());
   }
+
+  Future<Response> absensiCoach(Map<String, dynamic> body) {
+    return post("$url/absensi-coach", body, headers: getHeaders());
+  }
+
+  Future<Response> absensiStudent(Map<String, dynamic> body) {
+    return post("$url/absensi-student", body, headers: getHeaders());
+  }
 }

@@ -1,27 +1,4 @@
-class ScheduleDetail {
-  final Schedule schedule;
-  final Location location;
-  final Coach coach;
-  final List<Student> students;
-
-  ScheduleDetail({
-    required this.schedule,
-    required this.location,
-    required this.coach,
-    required this.students,
-  });
-
-  factory ScheduleDetail.fromJson(Map<String, dynamic> json) {
-    return ScheduleDetail(
-      schedule: Schedule.fromJson(json['schedule']),
-      location: Location.fromJson(json['location']),
-      coach: Coach.fromJson(json['coach']),
-      students:
-          (json['students'] as List).map((s) => Student.fromJson(s)).toList(),
-    );
-  }
-}
-
+// Model: schedule_model.dart
 class Schedule {
   final int id;
   final String date;
@@ -67,6 +44,7 @@ class Location {
   }
 }
 
+// Model: coach_model.dart
 class Coach {
   final int id;
   final String name;
@@ -83,6 +61,7 @@ class Coach {
   }
 }
 
+// Model: student_model.dart
 class Student {
   final int id;
   final String name;

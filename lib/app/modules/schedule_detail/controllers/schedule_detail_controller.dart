@@ -1,33 +1,32 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
-import 'package:mob_dev_wave_coach/app/modules/schedule_detail/model/schedule_detail_model.dart';
-import 'package:mob_dev_wave_coach/app/modules/schedule_detail/model/schedule_detail_response.dart';
+import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 
 class ScheduleDetailController extends GetxController {
-  var isLoading = true.obs;
-  var scheduleDetail = Rxn<ScheduleDetail>();
   final ApiService apiService = ApiService();
+  var scheduleResponse = Rxn<ScheduleResponse>();
+  var isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    int scheduleId = Get.arguments;
-    fetchScheduleDetail(scheduleId);
+    int id = Get.arguments['id']; // Get the ID from arguments
+    print("ID: $id 😃"); // Debug ID with emoji
+    fetchScheduleDetail(id);
   }
 
-  Future<void> fetchScheduleDetail(int id) async {
-    try {
-      isLoading(true);
-      final response = await apiService.ScheduleDetail(id);
-
-      if (response.statusCode == 200) {
-        var responseData = ScheduleDetailResponse.fromJson(response.body);
-        scheduleDetail.value = responseData.data;
-      } else {
-        Get.snackbar('Error', 'Failed to fetch schedule details');
-      }
-    } catch (e) {
-      isLoading(false);
+  void fetchScheduleDetail(int id) async {
+    isLoading.value = true;
+    final response = await apiService.ScheduleDetail(id);
+    if (response.status.hasError) {
+      isLoading.value = false;
+      Get.snackbar("Error", "Failed to load schedule");
+    } else {
+      print(
+        "Response Body: ${response.body} 😃",
+      ); // Debug response body with emoji
+      scheduleResponse.value = ScheduleResponse.fromJson(response.body);
+      isLoading.value = false;
     }
   }
 }
