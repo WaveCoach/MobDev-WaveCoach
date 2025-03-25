@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
-import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
+import 'package:mob_dev_wave_coach/app/modules/schedule_detail/model/schedule_detail_response.dart';
 
 class ScheduleDetailController extends GetxController {
   final ApiService apiService = ApiService();

@@ -1,6 +1,6 @@
 import 'package:mob_dev_wave_coach/app/modules/schedule_detail/model/schedule_detail_model.dart';
 
-class ScheduleDetailResponse {
+class ScheduleResponse {
   final bool success;
   final String message;
   final Schedule schedule;
@@ -8,7 +8,7 @@ class ScheduleDetailResponse {
   final Coach coach;
   final List<Student> students;
 
-  ScheduleDetailResponse({
+  ScheduleResponse({
     required this.success,
     required this.message,
     required this.schedule,
@@ -17,8 +17,8 @@ class ScheduleDetailResponse {
     required this.students,
   });
 
-  factory ScheduleDetailResponse.fromJson(Map<String, dynamic> json) {
-    return ScheduleDetailResponse(
+  factory ScheduleResponse.fromJson(Map<String, dynamic> json) {
+    return ScheduleResponse(
       success: json['success'],
       message: json['message'],
       schedule: Schedule.fromJson(json['data']['schedule']),
