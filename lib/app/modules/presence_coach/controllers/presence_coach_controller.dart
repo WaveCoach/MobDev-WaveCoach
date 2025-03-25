@@ -1,23 +1,43 @@
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 
 class PresenceCoachController extends GetxController {
-  //TODO: Implement PresenceCoachController
+  final ApiService apiService = ApiService();
+  final ImagePicker picker = ImagePicker();
 
-  final count = 0.obs;
+  RxBool isSubmitting = false.obs;
+
   @override
   void onInit() {
     super.onInit();
+    // Retrieve scheduleId from Get.arguments
+    int scheduleId = Get.arguments['scheduleId'];
+    print('📅 Schedule ID: $scheduleId');
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  Future<void> submitPresence({
+    required String attendanceStatus,
+    required int scheduleId,
+    String? remarks,
+    XFile? proof,
+  }) async {
+    isSubmitting.value = true;
+    Map<String, dynamic> body = {"schedule_id": scheduleId};
+    if (attendanceStatus == "Hadir" && proof != null) {
+      body["attendance_status"] = "Hadir";
+      body["proof"] = proof.path;
+    } else if (attendanceStatus == "Tidak Hadir" && remarks != null) {
+      body["remarks"] = remarks;
+    }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
+    final response = await apiService.absensiCoach(body);
+    isSubmitting.value = false;
 
-  void increment() => count.value++;
+    if (response.statusCode == 200) {
+      Get.snackbar("Success", "Presensi berhasil dikirim");
+    } else {
+      Get.snackbar("Error", "Gagal mengirim presensi");
+    }
+  }
 }

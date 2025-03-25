@@ -210,7 +210,17 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                   onPressed:
                       isCoachAttendanceNull
                           ? () {
-                            Get.toNamed('/presence-coach');
+                            Get.toNamed(
+                              '/presence-coach',
+                              arguments: {
+                                'scheduleId':
+                                    controller
+                                        .scheduleResponse
+                                        .value
+                                        ?.schedule
+                                        ?.id,
+                              },
+                            );
                           }
                           : null,
                   style: ElevatedButton.styleFrom(

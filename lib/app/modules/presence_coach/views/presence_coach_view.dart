@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
+import 'package:mob_dev_wave_coach/app/modules/presence_coach/controllers/presence_coach_controller.dart';
 
 class PresenceCoachView extends StatefulWidget {
   const PresenceCoachView({super.key});
@@ -9,6 +11,7 @@ class PresenceCoachView extends StatefulWidget {
 }
 
 class _PresenceCoachState extends State<PresenceCoachView> {
+  final PresenceCoachController controller = Get.put(PresenceCoachController());
   Color hadirButtonColor = Colors.white;
   Color tidakHadirButtonColor = Colors.white;
   bool showBuktiKehadiranButton = false;
@@ -262,6 +265,31 @@ class _PresenceCoachState extends State<PresenceCoachView> {
           ),
         ],
       ),
+      floatingActionButton: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: ElevatedButton(
+          onPressed: () {
+            // Tambahkan aksi yang diinginkan di sini
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF264C6B),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.symmetric(vertical: 15),
+          ),
+          child: Text(
+            "Upload",
+            style: TextStyle(
+              fontFamily: "poppins_semibold",
+              fontSize: 18,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
