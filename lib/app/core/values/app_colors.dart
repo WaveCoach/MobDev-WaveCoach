@@ -14,6 +14,7 @@ class AppColors {
   static const Color roseBlush = Color(0xFFE2A7A8);
   static const Color lightGreen = Color(0xFFACFFC7);
   static const Color softRed = Color(0xFFFF9696);
+  static const Color honeyGold = Color(0xFFDE9C3C);
 }
 
 class AppTextStyles {
