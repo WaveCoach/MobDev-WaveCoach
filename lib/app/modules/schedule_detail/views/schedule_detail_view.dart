@@ -19,142 +19,184 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
   @override
   Widget build(BuildContext context) {
     Widget header() {
-      return Container(
-        width: double.infinity,
-        height: 420,
-        decoration: BoxDecoration(
-          color: AppColors.deepOceanBlue,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
+      return Obx(() {
+        if (controller.isLoading.value) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.scheduleResponse.value == null) {
+          return Center(child: Text("Data tidak tersedia"));
+        }
+
+        // Ambil "2025-05-10" dari API
+        String dateString =
+            controller.scheduleResponse.value?.schedule?.date ?? "";
+
+        // Pecah berdasarkan "-"
+        List<String> dateParts = dateString.split("-"); // ["2025", "05", "10"]
+
+        // Ambil hanya tanggal (bagian ke-2 dalam array)
+        String day = dateParts[2]; // "10"
+
+        // Mapping bulan ke format teks
+        Map<String, String> monthMap = {
+          "01": "Januari",
+          "02": "Februari",
+          "03": "Maret",
+          "04": "April",
+          "05": "Mei",
+          "06": "Juni",
+          "07": "Juli",
+          "08": "Agustus",
+          "09": "September",
+          "10": "Oktober",
+          "11": "November",
+          "12": "Desember",
+        };
+
+        String monthYear =
+            "${monthMap[dateParts[1]]} ${dateParts[0]}"; // "Mei 2025"
+
+        return Container(
+          width: double.infinity,
+          height: 420,
+          decoration: BoxDecoration(
+            color: AppColors.deepOceanBlue,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
           ),
-        ),
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '17',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 200,
-                fontWeight: FontWeightStyles.bold,
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                day, // Hanya angka tanggal
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 200,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            Text(
-              'Januari 2024',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 50,
-                fontWeight: FontWeightStyles.bold,
+              Text(
+                monthYear, // "Mei 2025"
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 50,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-          ],
-        ),
-      );
+            ],
+          ),
+        );
+      });
     }
 
     Widget location() {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                margin: EdgeInsets.only(right: 5.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.access_time_filled,
-                            color: AppColors.deepOceanBlue,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Pelaksanaan',
-                            style: GoogleFonts.poppins(
-                              color: AppColors.deepOceanBlue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+      return Obx(() {
+        final schedule = controller.scheduleResponse.value?.schedule;
+        final location = controller.scheduleResponse.value?.location;
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '12.00 - 12.50',
-                            style: GoogleFonts.poppins(
+                    ],
+                  ),
+                  margin: EdgeInsets.only(right: 5.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.access_time_filled,
                               color: AppColors.deepOceanBlue,
-                              fontSize: 24,
-                              fontWeight: FontWeightStyles.medium,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 8),
+                            Text(
+                              'Pelaksanaan',
+                              style: GoogleFonts.poppins(
+                                color: AppColors.deepOceanBlue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${schedule?.startTime?.substring(0, 5)} - ${schedule?.endTime?.substring(0, 5)}',
+                              style: GoogleFonts.poppins(
+                                color: AppColors.deepOceanBlue,
+                                fontSize: 24,
+                                fontWeight: FontWeightStyles.medium,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  color: AppColors.deepOceanBlue,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                padding: EdgeInsets.all(8.0),
-                margin: EdgeInsets.only(left: 5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment:
-                      CrossAxisAlignment.center, // Pusatkan vertikal
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Lokasi Latihannnnnnnn yang sangat panjang hingga perlu turun ke bawah',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
+              Expanded(
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: AppColors.deepOceanBlue,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
                       ),
-                    ),
-                    Icon(Icons.location_on, color: Colors.white, size: 50),
-                  ],
+                    ],
+                  ),
+                  padding: EdgeInsets.all(8.0),
+                  margin: EdgeInsets.only(left: 5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          location?.name ?? '',
+                          style: GoogleFonts.poppins(color: Colors.white),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                        ),
+                      ),
+                      Icon(Icons.location_on, color: Colors.white, size: 50),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
+            ],
+          ),
+        );
+      });
     }
 
     Widget buttonAttendance() {

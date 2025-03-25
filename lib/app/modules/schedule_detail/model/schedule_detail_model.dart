@@ -1,81 +1,79 @@
-class ScheduleDetail {
+// Model: schedule_model.dart
+class Schedule {
   final int id;
-  final String date, startTime, endTime, status, formattedDate;
-  final Location? location;
-  final Coach? coach;
-  final List<Student> students;
+  final String date;
+  final String startTime;
+  final String endTime;
+  final String status;
+  final String formattedDate;
 
-  ScheduleDetail({
+  Schedule({
     required this.id,
     required this.date,
     required this.startTime,
     required this.endTime,
     required this.status,
     required this.formattedDate,
-    this.location,
-    this.coach,
-    required this.students,
   });
 
-  factory ScheduleDetail.fromJson(Map<String, dynamic> json) {
-    return ScheduleDetail(
-      id: json['id'] as int,
-      date: json['date'] as String,
-      startTime: json['start_time'] as String,
-      endTime: json['end_time'] as String,
-      status: json['status'] as String,
-      formattedDate: json['formatted_date'] as String,
-      location:
-          json['location'] != null ? Location.fromJson(json['location']) : null,
-      coach: json['coach'] != null ? Coach.fromJson(json['coach']) : null,
-      students:
-          (json['students'] as List?)
-              ?.map((s) => Student.fromJson(s))
-              .toList() ??
-          [],
+  factory Schedule.fromJson(Map<String, dynamic> json) {
+    return Schedule(
+      id: json['id'],
+      date: json['date'],
+      startTime: json['start_time'],
+      endTime: json['end_time'],
+      status: json['status'],
+      formattedDate: json['formatted_date'],
     );
   }
 }
 
 class Location {
-  final String name, address, maps;
+  final String name;
+  final String address;
+  final String maps;
+
   Location({required this.name, required this.address, required this.maps});
 
-  factory Location.fromJson(Map<String, dynamic>? json) {
+  factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
-      name: json?['name'] as String? ?? '',
-      address: json?['address'] as String? ?? '',
-      maps: json?['maps'] as String? ?? '',
+      name: json['name'],
+      address: json['address'],
+      maps: json['maps'],
     );
   }
 }
 
+// Model: coach_model.dart
 class Coach {
   final int id;
   final String name;
   final String? attendanceStatus;
+
   Coach({required this.id, required this.name, this.attendanceStatus});
 
-  factory Coach.fromJson(Map<String, dynamic>? json) {
+  factory Coach.fromJson(Map<String, dynamic> json) {
     return Coach(
-      id: json?['id'] as int? ?? 0,
-      name: json?['name'] as String? ?? 'Unknown',
-      attendanceStatus: json?['attendance_status'] as String?,
+      id: json['id'],
+      name: json['name'],
+      attendanceStatus: json['attendance_status'],
     );
   }
 }
 
+// Model: student_model.dart
 class Student {
   final int id;
   final String name;
   final String? attendanceStatus;
+
   Student({required this.id, required this.name, this.attendanceStatus});
 
-  factory Student.fromJson(Map<String, dynamic>? json) {
+  factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
-      id: json?['id'] as int? ?? 0,
-      name: json?['name'] as String? ?? 'Unknown',
-      attendanceStatus: json?['attendance_status'] as String?,
+      id: json['id'],
+      name: json['name'],
+      attendanceStatus: json['attendance_status'],
     );
   }
 }
