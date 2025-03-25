@@ -16,6 +16,10 @@ import '../modules/onBoarding/bindings/on_boarding_binding.dart';
 import '../modules/onBoarding/views/on_boarding_view.dart';
 import '../modules/penilaian/bindings/penilaian_binding.dart';
 import '../modules/penilaian/views/penilaian_view.dart';
+import '../modules/presence_coach/bindings/presence_coach_binding.dart';
+import '../modules/presence_coach/views/presence_coach_view.dart';
+import '../modules/presence_student/bindings/presence_student_binding.dart';
+import '../modules/presence_student/views/presence_student_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/schedule/bindings/schedule_binding.dart';
@@ -106,6 +110,16 @@ class AppPages {
       name: _Paths.SCHEDULE_DETAIL,
       page: () => ScheduleDetailView(),
       binding: ScheduleDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRESENCE_COACH,
+      page: () => const PresenceCoachView(),
+      binding: PresenceCoachBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRESENCE_STUDENT,
+      page: () => const PresenceStudentView(),
+      binding: PresenceStudentBinding(),
     ),
   ];
 }

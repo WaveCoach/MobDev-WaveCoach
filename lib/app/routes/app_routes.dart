@@ -16,6 +16,8 @@ abstract class Routes {
   static const NEW_PASS = _Paths.NEW_PASS;
   static const NOTIFICATION = _Paths.NOTIFICATION;
   static const SCHEDULE_DETAIL = _Paths.SCHEDULE_DETAIL;
+  static const PRESENCE_COACH = _Paths.PRESENCE_COACH;
+  static const PRESENCE_STUDENT = _Paths.PRESENCE_STUDENT;
 }
 
 abstract class _Paths {
@@ -33,4 +35,6 @@ abstract class _Paths {
   static const NEW_PASS = '/new-pass';
   static const NOTIFICATION = '/notification';
   static const SCHEDULE_DETAIL = '/schedule-detail';
+  static const PRESENCE_COACH = '/presence-coach';
+  static const PRESENCE_STUDENT = '/presence-student';
 }
