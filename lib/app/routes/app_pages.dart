@@ -104,7 +104,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SCHEDULE_DETAIL,
-      page: () => const ScheduleDetailView(),
+      page: () => ScheduleDetailView(),
       binding: ScheduleDetailBinding(),
     ),
   ];

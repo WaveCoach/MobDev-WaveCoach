@@ -4,8 +4,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import '../controllers/schedule_detail_controller.dart';
 
-class ScheduleDetailView extends GetView<ScheduleDetailController> {
+class ScheduleDetailView extends StatefulWidget {
   const ScheduleDetailView({super.key});
+
+  @override
+  State<ScheduleDetailView> createState() => _ScheduleDetailViewState();
+}
+
+class _ScheduleDetailViewState extends State<ScheduleDetailView> {
+  final ScheduleDetailController controller = Get.put(
+    ScheduleDetailController(),
+  );
 
   @override
   Widget build(BuildContext context) {
