@@ -28,14 +28,16 @@ class PresenceCoachController extends GetxController {
       body["attendance_status"] = "Hadir";
       body["proof"] = proof.path;
     } else if (attendanceStatus == "Tidak Hadir" && remarks != null) {
+      body["attendance_status"] = "Tidak Hadir";
       body["remarks"] = remarks;
     }
 
     final response = await apiService.absensiCoach(body);
     isSubmitting.value = false;
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       Get.snackbar("Success", "Presensi berhasil dikirim");
+      Get.offAndToNamed('/schedule-detail', arguments: {'id': scheduleId});
     } else {
       Get.snackbar("Error", "Gagal mengirim presensi");
     }

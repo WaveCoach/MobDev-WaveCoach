@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/presence_coach/controllers/presence_coach_controller.dart';
 
@@ -15,7 +16,20 @@ class _PresenceCoachState extends State<PresenceCoachView> {
   Color hadirButtonColor = Colors.white;
   Color tidakHadirButtonColor = Colors.white;
   bool showBuktiKehadiranButton = false;
-  bool showAlasanTidakHadir = false; // New state variable
+  bool showAlasanTidakHadir = false;
+  XFile? proof;
+  final TextEditingController alasanController = TextEditingController();
+
+  Future<void> pickImage() async {
+    final pickedFile = await controller.picker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        proof = pickedFile;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +210,7 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                           height: 70,
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: pickImage,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.goldenAmber,
                               shape: RoundedRectangleBorder(
@@ -246,6 +260,7 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                         ],
                       ),
                       child: TextField(
+                        controller: alasanController,
                         maxLines: 5,
                         decoration: InputDecoration(
                           filled: true,
@@ -269,24 +284,46 @@ class _PresenceCoachState extends State<PresenceCoachView> {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: ElevatedButton(
-          onPressed: () {
-            // Tambahkan aksi yang diinginkan di sini
-          },
+          onPressed:
+              controller.isSubmitting.value
+                  ? null
+                  : () {
+                    final scheduleId = Get.arguments['scheduleId'];
+                    if (showBuktiKehadiranButton) {
+                      controller.submitPresence(
+                        attendanceStatus: "Hadir",
+                        scheduleId: scheduleId,
+                        proof: proof,
+                      );
+                    } else if (showAlasanTidakHadir) {
+                      controller.submitPresence(
+                        attendanceStatus: "Tidak Hadir",
+                        scheduleId: scheduleId,
+                        remarks: alasanController.text,
+                      );
+                    }
+                  },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF264C6B),
+            backgroundColor:
+                controller.isSubmitting.value
+                    ? Colors.grey
+                    : const Color(0xFF264C6B),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            padding: EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsets.symmetric(vertical: 15),
           ),
-          child: Text(
-            "Upload",
-            style: TextStyle(
-              fontFamily: "poppins_semibold",
-              fontSize: 18,
-              color: Colors.white,
-            ),
-          ),
+          child:
+              controller.isSubmitting.value
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text(
+                    "Upload",
+                    style: TextStyle(
+                      fontFamily: "poppins_semibold",
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
