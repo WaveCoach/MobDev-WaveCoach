@@ -7,6 +7,7 @@ class AppColors {
   static const Color pastelBlue = Color(0xFF89B5D9);
   static const Color mistyBlue = Color(0xFF9EB2C2);
   static const Color lightBlue = Color(0xFFC4D5E0);
+  static const Color mildBlue = Color(0xFFDAEFFF);
   static const Color charcoalGrey = Color.fromARGB(255, 48, 48, 48);
   static const Color warmSand = Color(0xFFEDC892);
   static const Color midnightNavy = Color(0xFF223340);

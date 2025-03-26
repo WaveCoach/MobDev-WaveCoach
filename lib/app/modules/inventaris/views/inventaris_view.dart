@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -156,15 +158,15 @@ class _InventarisViewState extends State<InventarisView> {
 
   Widget _buildContent() {
     if (dropdownValue == "Barang") {
-      return _BorrowedItem();
+      return _borrowedItem();
     } else if (dropdownValue == "History Pengajuan") {
-      return _HistoryPeminjamanInventaris();
+      return _historyPeminjamanInventaris();
     } else {
-      return _StockList();
+      return _stockList();
     }
   }
 
-  Widget _StockList() {
+  Widget _stockList() {
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
@@ -174,35 +176,227 @@ class _InventarisViewState extends State<InventarisView> {
         return const Center(child: Text("Tidak ada data inventaris."));
       }
 
-      return ListView.builder(
-        itemCount: controller.stockList.length,
-        itemBuilder: (context, index) {
-          final stock = controller.stockList[index];
-          return Card(
-            margin: const EdgeInsets.all(8),
-            child: ExpansionTile(
-              title: Text(
-                stock.mastercoachName,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+      return Column(
+        children: [
+          Container(
+            height: 50,
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
                 ),
-              ),
-              children:
-                  stock.items.map((item) {
-                    return ListTile(
-                      title: Text(item.inventoryName),
-                      subtitle: Text("Total: ${item.totalQty}"),
-                    );
-                  }).toList(),
+              ],
             ),
-          );
-        },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.search, color: Colors.black54),
+                SizedBox(width: 8),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Search by Keywords",
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black54,
+                      ),
+                    ),
+                    onChanged: (value) {
+                      // Add your search logic here
+                      // controller.searchBorrowedItems(value);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 25),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.only(bottom: 120),
+              itemCount: controller.stockList.length,
+              itemBuilder: (context, index) {
+                final stock = controller.stockList[index];
+                return Column(
+                  children: [
+                    Card(
+                      color:
+                          Colors.transparent, // Card color set to transparent
+                      elevation: 0, // Remove shadow by setting elevation to 0
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          dividerColor:
+                              Colors
+                                  .transparent, // Ubah warna garis di bawah ExpansionTile
+                        ),
+                        child: ExpansionTile(
+                          title: Row(
+                            children: [
+                              Icon(
+                                Icons.person,
+                                color: Colors.black54,
+                                size: 40,
+                              ),
+                              SizedBox(width: 20),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Master Coach",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      letterSpacing: -0.3,
+                                    ),
+                                  ),
+                                  Text(
+                                    stock.mastercoachName,
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      letterSpacing: -0.3,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          children: [
+                            Table(
+                              border: TableBorder.all(color: Colors.white),
+                              columnWidths: const {
+                                0: FixedColumnWidth(40),
+                                1: FlexColumnWidth(),
+                                2: FixedColumnWidth(90),
+                              },
+                              children: [
+                                TableRow(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.deepOceanBlue,
+                                  ),
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "No",
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Nama Barang",
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "Jumlah",
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                ...stock.items.asMap().entries.map((entry) {
+                                  final index = entry.key + 1;
+                                  final item = entry.value;
+                                  return TableRow(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.mildBlue,
+                                    ),
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            color: AppColors.deepOceanBlue,
+                                          ),
+                                          index.toString(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          item.inventoryName,
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            color: AppColors.deepOceanBlue,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            color: AppColors.deepOceanBlue,
+                                          ),
+                                          item.totalQty.toString(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Divider(
+                        color: Colors.black.withValues(
+                          alpha: 0.18,
+                        ), // Warna divider
+                        thickness: 1, // Ketebalan divider
+                        height: 1, // Tinggi divider
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       );
     });
   }
 
-  Widget _HistoryPeminjamanInventaris() {
+  Widget _historyPeminjamanInventaris() {
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
@@ -267,10 +461,11 @@ class _InventarisViewState extends State<InventarisView> {
                     decoration: InputDecoration(
                       hintText: "Search by Keywords",
                       border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 16,
+                      hintStyle: GoogleFonts.poppins(
                         fontWeight: FontWeight.w400,
+                        fontSize: 16,
                         color: Colors.black54,
+                        letterSpacing: -0.5,
                       ),
                     ),
                     onChanged: (value) {
@@ -296,7 +491,7 @@ class _InventarisViewState extends State<InventarisView> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Container(
-                          width: 100,
+                          width: 80,
                           decoration: BoxDecoration(
                             color: AppColors.deepOceanBlue,
                             borderRadius: BorderRadius.only(
@@ -304,7 +499,7 @@ class _InventarisViewState extends State<InventarisView> {
                               bottomLeft: Radius.circular(12),
                             ),
                           ),
-                            child: Center(
+                          child: Center(
                             child: Icon(
                               Icons.description,
                               color: Colors.white,
@@ -326,39 +521,46 @@ class _InventarisViewState extends State<InventarisView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.goldenAmber,
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                    child: Text(
-                                      DateFormat('dd MMMM yyyy, HH:mm').format(
-                                      DateTime.parse(history.createdAt),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
                                       ),
-                                      style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.goldenAmber,
+                                        borderRadius: BorderRadius.circular(
+                                          100,
+                                        ),
                                       ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
+                                      child: Text(
+                                        DateFormat(
+                                          'dd MMMM yyyy, HH:mm',
+                                        ).format(
+                                          DateTime.parse(history.createdAt),
+                                        ),
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                          letterSpacing: -0.5,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
-                                  Icon(Icons.home, color: Colors.black),
+                                    Icon(Icons.home, color: Colors.black),
                                   ],
-                                
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   history.type == 'request'
                                       ? 'Pengajuan Peminjaman Inventaris'
                                       : 'Pengajuan Pengembalian Inventaris',
-                                  style: const TextStyle(
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     color: Colors.black,
                                   ),
@@ -370,14 +572,19 @@ class _InventarisViewState extends State<InventarisView> {
                                   children: [
                                     Icon(Icons.person, color: Colors.black),
                                     SizedBox(width: 6),
-                                    Text(
-                                      history.coachName,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
+                                    Row(
+                                      children: [
+                                        Text(
+                                          history.coachName,
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -397,7 +604,7 @@ class _InventarisViewState extends State<InventarisView> {
     });
   }
 
-  Widget _BorrowedItem() {
+  Widget _borrowedItem() {
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
@@ -456,36 +663,107 @@ class _InventarisViewState extends State<InventarisView> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
-                childAspectRatio: 1.2,
+                childAspectRatio: 1,
               ),
               padding: EdgeInsets.only(bottom: 190),
               itemCount: controller.borrowedList.length,
               itemBuilder: (context, index) {
                 var item = controller.borrowedList[index];
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        item.name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                return Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        // color: Colors.blue[100],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 50),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.asset(
+                            'assets/images/onboarding1.png', // Replace with your own image path
+                            height: double.infinity,
+                            width: double.infinity,
+                            fit:
+                                BoxFit
+                                    .cover, // Make the image cover the container
+                          ),
                         ),
                       ),
-                      SizedBox(height: 8),
-                      Text(
-                        "Jumlah: ${item.totalQtyBorrowed}",
-                        style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                    Positioned.fill(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.center,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xFF8AC4FF).withOpacity(0.0),
+                              AppColors.deepOceanBlue.withOpacity(1.0),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          bottom: 10,
+                        ),
+                        child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      item.name,
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
+                                        color: AppColors.midnightNavy,
+                                        letterSpacing: -0.3,
+                                        height: 1,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      "Jumlah: ${item.totalQtyBorrowed}",
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                        color: const Color.fromARGB(255, 32, 66, 94),
+                                        letterSpacing: -0.3,
+                                        height: 1,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

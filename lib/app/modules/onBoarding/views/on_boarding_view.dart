@@ -60,10 +60,10 @@ class OnBoardingView extends StatelessWidget {
                             data["title"]!,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 32,
-                                          color: AppColors.deepOceanBlue,
-                                        ),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 32,
+                              color: AppColors.deepOceanBlue,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           Padding(
@@ -71,8 +71,8 @@ class OnBoardingView extends StatelessWidget {
                             child: Text(
                               data["description"]!,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: "poppins_regular",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w400,
                                 fontSize: 14,
                                 color: AppColors.deepOceanBlue,
                               ),
@@ -108,8 +108,8 @@ class OnBoardingView extends StatelessWidget {
                         ? "Login"
                         : "Next",
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: "poppins_bold",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w700,
                       fontSize: 16,
                       color: Colors.white,
                     ),
