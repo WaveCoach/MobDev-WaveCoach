@@ -66,12 +66,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
           padding: EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 day, // Hanya angka tanggal
                 style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontSize: 200,
+                  fontSize: 100,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -79,8 +80,32 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                 monthYear, // "Mei 2025"
                 style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontSize: 50,
+                  fontSize: 30,
                   fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Get.toNamed('/reschedule');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 32.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  'Pengajuan Reschedule',
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ],
