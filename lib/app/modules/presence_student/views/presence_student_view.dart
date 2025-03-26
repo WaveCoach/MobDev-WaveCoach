@@ -15,6 +15,9 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
     PresenceStudentController(),
   );
 
+  // Menggunakan RxMap agar reaktif
+  final RxMap<int, String> attendanceData = <int, String>{}.obs;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,40 +27,37 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
             top: 0,
             left: 0,
             right: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Container(
-                height: 230,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.deepOceanBlue,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
+            child: Container(
+              height: 230,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.deepOceanBlue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
                 ),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 100),
-                        child: Text(
-                          "Absensi Siswa",
-                          style: TextStyle(
-                            fontFamily: "poppins_semibold",
-                            fontSize: 32,
-                            color: Colors.white,
-                          ),
+              ),
+              child: Stack(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 100),
+                      child: Text(
+                        "Absensi Siswa",
+                        style: TextStyle(
+                          fontFamily: "poppins_semibold",
+                          fontSize: 32,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                    Positioned(
-                      left: 15,
-                      top: 70,
-                      child: BackButton(color: Colors.white),
-                    ),
-                  ],
-                ),
+                  ),
+                  Positioned(
+                    left: 15,
+                    top: 70,
+                    child: BackButton(color: Colors.white),
+                  ),
+                ],
               ),
             ),
           ),
@@ -89,19 +89,22 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
                   Obx(() {
                     final student =
                         controller.studentResponse.value?.students ?? [];
-                    final List<String> siswaList =
-                        student.map((s) => s.name).toList();
+                    final List<Map<String, dynamic>> siswaList =
+                        student
+                            .map((s) => {"id": s.id, "name": s.name})
+                            .toList();
 
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: siswaList.length,
                       itemBuilder: (context, index) {
+                        final int studentId = siswaList[index]['id'];
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${index + 1}. ${siswaList[index]}',
+                              '${index + 1}. ${siswaList[index]['name']}',
                               style: TextStyle(
                                 fontFamily: "poppins_medium",
                                 fontSize: 20,
@@ -115,22 +118,30 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
                                 Expanded(
                                   child: SizedBox(
                                     height: 70,
-                                    child: ElevatedButton(
-                                      onPressed: () {},
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
+                                    child: Obx(
+                                      () => ElevatedButton(
+                                        onPressed: () {
+                                          attendanceData[studentId] = "Hadir";
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              attendanceData[studentId] ==
+                                                      "Hadir"
+                                                  ? Colors.green
+                                                  : Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      child: Text(
-                                        "Hadir",
-                                        style: TextStyle(
-                                          fontFamily: "poppins_regular",
-                                          fontSize: 18,
-                                          color: Colors.black,
+                                        child: Text(
+                                          "Hadir",
+                                          style: TextStyle(
+                                            fontFamily: "poppins_regular",
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -140,22 +151,31 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
                                 Expanded(
                                   child: SizedBox(
                                     height: 70,
-                                    child: ElevatedButton(
-                                      onPressed: () {},
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            10,
+                                    child: Obx(
+                                      () => ElevatedButton(
+                                        onPressed: () {
+                                          attendanceData[studentId] =
+                                              "Tidak Hadir";
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              attendanceData[studentId] ==
+                                                      "Tidak Hadir"
+                                                  ? Colors.red
+                                                  : Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      child: Text(
-                                        "Tidak hadir",
-                                        style: TextStyle(
-                                          fontFamily: "poppins_regular",
-                                          fontSize: 18,
-                                          color: Colors.black,
+                                        child: Text(
+                                          "Tidak Hadir",
+                                          style: TextStyle(
+                                            fontFamily: "poppins_regular",
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -181,7 +201,15 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: ElevatedButton(
           onPressed: () {
-            // Tambahkan aksi yang diinginkan di sini
+            List<Map<String, dynamic>> studentAttendance =
+                attendanceData.entries.map((entry) {
+                  return {
+                    "student_id": entry.key,
+                    "attendance_status": entry.value,
+                  };
+                }).toList();
+
+            controller.submitPresenceStudent(1, studentAttendance);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF264C6B),

@@ -11,7 +11,6 @@ class ScheduleDetailController extends GetxController {
   void onInit() {
     super.onInit();
     int id = Get.arguments['id']; // Get the ID from aa
-    print("ID: $id 😃"); // Debug ID with emoji
     fetchScheduleDetail(id);
   }
 
@@ -22,9 +21,6 @@ class ScheduleDetailController extends GetxController {
       isLoading.value = false;
       Get.snackbar("Error", "Failed to load schedule");
     } else {
-      print(
-        "Response Body: ${response.body} 😃",
-      ); // Debug response body with emoji
       scheduleResponse.value = ScheduleResponse.fromJson(response.body);
       isLoading.value = false;
     }

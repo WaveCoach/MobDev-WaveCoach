@@ -21,11 +21,32 @@ class PresenceStudentController extends GetxController {
       isLoading.value = false;
       Get.snackbar("Error", "Failed to load schedule");
     } else {
-      print(
-        "Response Body: ${response.body} 😃",
-      ); // Debug response body with emoji
       studentResponse.value = ScheduleResponse.fromJson(response.body);
       isLoading.value = false;
+    }
+  }
+
+  Future<void> submitPresenceStudent(
+    int scheduleId,
+    List<Map<String, dynamic>> studentAttendance,
+  ) async {
+    final Map<String, dynamic> requestBody = {
+      "schedule_id": scheduleId,
+      "student_attendance": studentAttendance,
+    };
+
+    print(requestBody.toString());
+
+    try {
+      final response = await apiService.absensiStudent(requestBody);
+      if (response.statusCode == 201) {
+        final responseData = response.body;
+        print("Success: Absensi berhasil 😃: ${responseData['data']}");
+      } else {
+        print("Error: Gagal submit absensi: ${response.body}");
+      }
+    } catch (error) {
+      print("Error: $error");
     }
   }
 }
