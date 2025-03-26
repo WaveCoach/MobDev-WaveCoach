@@ -218,27 +218,28 @@ class _InventarisViewState extends State<InventarisView> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: filterOptions.map((filter) {
-              return Container(
-                margin: EdgeInsets.only(right: 8),
-                width: 80,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(100),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
+            children:
+                filterOptions.map((filter) {
+                  return Container(
+                    margin: EdgeInsets.only(right: 8),
+                    width: 80,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(100),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Center(
-                  child: Text(filter, style: TextStyle(fontSize: 16)),
-                ),
-              );
-            }).toList(),
+                    child: Center(
+                      child: Text(filter, style: TextStyle(fontSize: 16)),
+                    ),
+                  );
+                }).toList(),
           ),
           SizedBox(height: 20),
           Container(
@@ -284,19 +285,107 @@ class _InventarisViewState extends State<InventarisView> {
           SizedBox(height: 25),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.only(bottom: 120),
+              padding: EdgeInsets.only(bottom: 110),
               itemCount: controller.historyList.length,
               itemBuilder: (context, index) {
                 final history = controller.historyList[index];
-                return Card(
-                  margin: const EdgeInsets.all(8),
-                  child: ListTile(
-                    title: Text(
-                      history.coachName,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      "Status: ${DateFormat('dd MMMM yyyy, HH:mm').format(DateTime.parse(history.createdAt))}\nType: ${history.type == 'request' ? 'Pengajuan Peminjaman Inventaris' : 'Pengajuan pengembalian inventaris'}",
+                return Container(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                            color: AppColors.deepOceanBlue,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              bottomLeft: Radius.circular(12),
+                            ),
+                          ),
+                            child: Center(
+                            child: Icon(
+                              Icons.description,
+                              color: Colors.white,
+                              size: 50,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: AppColors.lightBlue,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(12),
+                                bottomRight: Radius.circular(12),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.goldenAmber,
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Text(
+                                      DateFormat('dd MMMM yyyy, HH:mm').format(
+                                      DateTime.parse(history.createdAt),
+                                      ),
+                                      style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Icon(Icons.home, color: Colors.black),
+                                  ],
+                                
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  history.type == 'request'
+                                      ? 'Pengajuan Peminjaman Inventaris'
+                                      : 'Pengajuan Pengembalian Inventaris',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(Icons.person, color: Colors.black),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      history.coachName,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
