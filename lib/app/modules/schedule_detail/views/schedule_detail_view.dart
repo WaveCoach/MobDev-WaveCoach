@@ -339,9 +339,9 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                                  student.attendanceStatus == null
-                                      ? Colors.white
-                                      : AppColors.lightGreen,
+                                  student.attendanceStatus == "Hadir"
+                                      ? AppColors.lightGreen
+                                      : Colors.white,
                               padding: EdgeInsets.symmetric(
                                 vertical: 8.0,
                                 horizontal: 16.0,
@@ -368,9 +368,9 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
-                                  student.attendanceStatus == null
-                                      ? Colors.white
-                                      : AppColors.softRed,
+                                  student.attendanceStatus == "Tidak Hadir"
+                                      ? AppColors.softRed
+                                      : Colors.white,
                               padding: EdgeInsets.symmetric(
                                 vertical: 8.0,
                                 horizontal: 16.0,

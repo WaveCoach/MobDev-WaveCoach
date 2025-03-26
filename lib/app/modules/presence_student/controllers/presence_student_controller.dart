@@ -41,9 +41,13 @@ class PresenceStudentController extends GetxController {
       final response = await apiService.absensiStudent(requestBody);
       if (response.statusCode == 201) {
         final responseData = response.body;
-        print("Success: Absensi berhasil 😃: ${responseData['data']}");
+        Get.snackbar("Success", "Absensi berhasil 😃: ${responseData['data']}");
+        Get.offNamed(
+          '/schedule-detail',
+          arguments: {'scheduleId': Get.arguments['scheduleId']},
+        );
       } else {
-        print("Error: Gagal submit absensi: ${response.body}");
+        Get.snackbar("Error", "Gagal submit absensi: ${response.body}");
       }
     } catch (error) {
       print("Error: $error");
