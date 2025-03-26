@@ -11,6 +11,7 @@ class PresenceStudentController extends GetxController {
   void onInit() {
     super.onInit();
     int scheduleId = Get.arguments['scheduleId'];
+    print("Schedule ID: $scheduleId");
     fetchStudentList(scheduleId);
   }
 
@@ -27,11 +28,10 @@ class PresenceStudentController extends GetxController {
   }
 
   Future<void> submitPresenceStudent(
-    int scheduleId,
     List<Map<String, dynamic>> studentAttendance,
   ) async {
     final Map<String, dynamic> requestBody = {
-      "schedule_id": scheduleId,
+      "schedule_id": Get.arguments['scheduleId'],
       "student_attendance": studentAttendance,
     };
 

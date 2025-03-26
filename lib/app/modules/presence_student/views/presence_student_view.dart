@@ -209,7 +209,7 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
                   };
                 }).toList();
 
-            controller.submitPresenceStudent(1, studentAttendance);
+            controller.submitPresenceStudent(studentAttendance);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF264C6B),
