@@ -10,7 +10,7 @@ class ScheduleDetailController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    int id = Get.arguments['id']; // Get the ID from arguments
+    int id = Get.arguments['id']; // Get the ID from aa
     print("ID: $id 😃"); // Debug ID with emoji
     fetchScheduleDetail(id);
   }

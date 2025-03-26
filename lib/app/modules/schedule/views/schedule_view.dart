@@ -372,7 +372,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                                     bottom: 10,
                                   ),
                                   child: Text(
-                                    schedule.locationName, // Nama Lokasi
+                                    schedule.locationName,
                                     style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 15,
