@@ -35,7 +35,7 @@ class PresenceStudentController extends GetxController {
       "student_attendance": studentAttendance,
     };
 
-    print(requestBody.toString());
+    // print(requestBody.toString());
 
     try {
       final response = await apiService.absensiStudent(requestBody);

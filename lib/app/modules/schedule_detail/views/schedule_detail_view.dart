@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import '../controllers/schedule_detail_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScheduleDetailView extends StatefulWidget {
   const ScheduleDetailView({super.key});
@@ -87,7 +88,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               ),
               SizedBox(height: 20),
               Text(
-                day, // Hanya angka tanggal
+                day,
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 230,
@@ -96,7 +97,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                 ),
               ),
               Text(
-                monthYear, // "Mei 2025"
+                monthYear,
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 40,
@@ -107,7 +108,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () {
-                  Get.toNamed('/reschedule');
+                  Get.toNamed(
+                    '/reschedule',
+                    arguments: {
+                      'scheduleId':
+                          controller.scheduleResponse.value?.schedule?.id,
+                    },
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
@@ -209,39 +216,76 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               ),
               SizedBox(width: 20),
               Expanded(
-                child: Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: AppColors.deepOceanBlue,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.all(10),
-                  // margin: EdgeInsets.only(left: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          location?.name ?? '',
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
+                child: GestureDetector(
+                  onTap: () async {
+                    final urlMaps = location?.maps ?? '';
+
+                    // Cek apakah URL kosong
+                    if (urlMaps.isEmpty) {
+                      print("🚨 URL Maps kosong!");
+                      return;
+                    }
+
+                    try {
+                      final uri = Uri.tryParse(urlMaps);
+
+                      // Cek apakah URI valid
+                      if (uri == null) {
+                        print("❌ URL tidak valid: $urlMaps");
+                        return;
+                      }
+
+                      // Cek apakah bisa dibuka
+                      final canOpen = await canLaunchUrl(uri);
+                      print("🔍 Can launch URL? $canOpen");
+
+                      if (canOpen) {
+                        await launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                        print("✅ Berhasil membuka Google Maps");
+                      } else {
+                        print("❌ Could not open the map.");
+                      }
+                    } catch (e) {
+                      print("🔥 Error launching URL: $e");
+                    }
+                  },
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: AppColors.deepOceanBlue,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
                         ),
-                      ),
-                      Icon(Icons.location_on, color: Colors.white, size: 50),
-                    ],
+                      ],
+                    ),
+                    padding: EdgeInsets.all(10),
+                    // margin: EdgeInsets.only(left: 5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            location?.name ?? '',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                          ),
+                        ),
+                        Icon(Icons.location_on, color: Colors.white, size: 50),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -495,12 +539,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
         children: [
           SingleChildScrollView(
             child: Column(
-              children: [
-                header(),
-                location(),
-                buttonAttendance(),
-                listSiswa(),
-              ],
+              children: [header(), location(), buttonAttendance(), listSiswa()],
             ),
           ),
           Positioned(

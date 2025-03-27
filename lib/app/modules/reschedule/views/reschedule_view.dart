@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
-import '../controllers/reschedule_controller.dart';
+import 'package:mob_dev_wave_coach/app/modules/reschedule/controllers/reschedule_controller.dart';
 
-class RescheduleView extends GetView<RescheduleController> {
-  const RescheduleView({super.key});
+class RescheduleView extends StatelessWidget {
+  final RescheduleController controller = RescheduleController();
+  final TextEditingController reasonController = TextEditingController();
+  RescheduleView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +23,7 @@ class RescheduleView extends GetView<RescheduleController> {
                 height: 230,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color:
-                      AppColors
-                          .deepOceanBlue, // Replace blueColor with AppColors.deepOceanBlue
+                  color: AppColors.deepOceanBlue,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),
@@ -45,8 +45,8 @@ class RescheduleView extends GetView<RescheduleController> {
                             fontFamily: "poppins_semibold",
                             fontSize: 32,
                             color: Colors.white,
-                            height: 1, // Line height
-                            letterSpacing: -0.5, // Letter spacing
+                            height: 1,
+                            letterSpacing: -0.5,
                           ),
                         ),
                       ),
@@ -92,9 +92,7 @@ class RescheduleView extends GetView<RescheduleController> {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
-                      color:
-                          AppColors
-                              .deepOceanBlue, // Replace blueColor with AppColors.deepOceanBlue
+                      color: AppColors.deepOceanBlue,
                     ),
                     child: Text(
                       "Alasan",
@@ -113,12 +111,13 @@ class RescheduleView extends GetView<RescheduleController> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(0, 3), // changes position of shadow
+                          offset: Offset(0, 3),
                         ),
                       ],
                     ),
                     child: TextField(
-                      maxLines: 5, // Increase the height of the TextField
+                      controller: reasonController,
+                      maxLines: 5,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -141,7 +140,12 @@ class RescheduleView extends GetView<RescheduleController> {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: ElevatedButton(
           onPressed: () {
-            // Tambahkan aksi yang diinginkan di sini
+            String reason = reasonController.text.trim();
+            if (reason.isNotEmpty) {
+              controller.sendRescheduleRequest(reason);
+            } else {
+              Get.snackbar("Error", "Reason cannot be empty");
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF264C6B),
