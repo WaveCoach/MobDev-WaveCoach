@@ -69,7 +69,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                day, // Hanya angka tanggal
+                day,
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 100,
@@ -77,7 +77,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                 ),
               ),
               Text(
-                monthYear, // "Mei 2025"
+                monthYear,
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 30,
@@ -87,7 +87,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  Get.toNamed('/reschedule');
+                  Get.toNamed(
+                    '/reschedule',
+                    arguments: {
+                      'scheduleId':
+                          controller.scheduleResponse.value?.schedule?.id,
+                    },
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,

@@ -125,7 +125,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.RESCHEDULE,
-      page: () => const RescheduleView(),
+      page: () => RescheduleView(),
       binding: RescheduleBinding(),
     ),
   ];

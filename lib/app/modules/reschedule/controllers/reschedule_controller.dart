@@ -1,23 +1,32 @@
 import 'package:get/get.dart';
+import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 
 class RescheduleController extends GetxController {
-  //TODO: Implement RescheduleController
+  final ApiService apiService = ApiService();
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  Future<void> sendRescheduleRequest(String reason) async {
+    try {
+      var response = await apiService.reschedule({
+        "schedule_id": Get.arguments['scheduleId'],
+        "reason": reason,
+      });
+
+      print(response.toString());
+
+      if (response.statusCode == 201) {
+        Get.snackbar("Success", "Berhasil melakukan pengajuan reschedule");
+        Get.offNamed(
+          '/schedule-detail',
+          arguments: {'scheduleId': Get.arguments['scheduleId']},
+        );
+      } else {
+        Get.snackbar(
+          "Error",
+          "Gagal melakukan pengajuan reschedule karena sudah ada pengajuan sebelumnya",
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong: $e");
+    }
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }
