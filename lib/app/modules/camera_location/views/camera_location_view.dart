@@ -24,11 +24,19 @@ class CameraLocationView extends StatelessWidget {
           body: MapCameraLocation(
             camera: controller.camera.value!, // Gunakan .value
             onImageCaptured: (ImageAndLocationData data) {
-              print('Captured image path: ${data.imagePath}');
-              print('Latitude: ${data.latitude}');
-              print('Longitude: ${data.longitude}');
-              print('Location name: ${data.locationName}');
-              print('Sublocation: ${data.subLocation}');
+              if (data.imagePath != null) {
+                print('halo');
+
+                controller.setCapturedImage(data.imagePath!);
+              } else {
+                // Handle the case where imagePath is null
+                print('Error: imagePath is null');
+              }
+              // print('Captured image path: ${data.imagePath}');
+              // print('Latitude: ${data.latitude}');
+              // print('Longitude: ${data.longitude}');
+              // print('Location name: ${data.locationName}');
+              // print('Sublocation: ${data.subLocation}');
             },
           ),
         );

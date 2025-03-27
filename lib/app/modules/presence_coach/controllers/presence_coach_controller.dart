@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
@@ -5,15 +6,19 @@ import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 class PresenceCoachController extends GetxController {
   final ApiService apiService = ApiService();
   final ImagePicker picker = ImagePicker();
+  RxString capturedImagePath = ''.obs;
+  var arguments = Get.arguments;
 
   RxBool isSubmitting = false.obs;
+  RxBool showBuktiKehadiranButton = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Retrieve scheduleId from Get.arguments
-    int scheduleId = Get.arguments['scheduleId'];
-    print('📅 Schedule ID: $scheduleId');
+    debugPrint("ARGUMENTS: $arguments");
+    // capturedImagePath = Get.arguments?['capturedImage'];
+    // print("📸 Captured Image Path: $capturedImagePath");
+    int scheduleId = Get.arguments?['scheduleId'];
   }
 
   Future<void> submitPresence({
