@@ -26,12 +26,13 @@ class PresenceCoachController extends GetxController {
     required int scheduleId,
     String? remarks,
     XFile? proof,
+    String? proofBase64,
   }) async {
     isSubmitting.value = true;
     Map<String, dynamic> body = {"schedule_id": scheduleId};
-    if (attendanceStatus == "Hadir" && proof != null) {
+    if (attendanceStatus == "Hadir") {
       body["attendance_status"] = "Hadir";
-      body["proof"] = proof.path;
+      body["proof"] = proofBase64;
     } else if (attendanceStatus == "Tidak Hadir" && remarks != null) {
       body["attendance_status"] = "Tidak Hadir";
       body["remarks"] = remarks;
@@ -46,7 +47,7 @@ class PresenceCoachController extends GetxController {
       Get.snackbar("Success", "Presensi berhasil dikirim");
       Get.offAndToNamed('/schedule-detail', arguments: {'id': scheduleId});
     } else {
-      Get.snackbar("Error", "Gagal mengirim presensi");
+      print("Error: Gagal mengirim presensi: ${response.body}");
     }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/camera_location/views/camera_location_view.dart';
@@ -359,7 +360,18 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                         controller.submitPresence(
                           attendanceStatus: "Hadir",
                           scheduleId: scheduleId,
-                          proof: proof,
+                          proof:
+                              controller.capturedImagePath.value.isNotEmpty
+                                  ? XFile(controller.capturedImagePath.value)
+                                  : null,
+                          proofBase64:
+                              controller.capturedImagePath.value.isNotEmpty
+                                  ? base64Encode(
+                                    File(
+                                      controller.capturedImagePath.value,
+                                    ).readAsBytesSync(),
+                                  )
+                                  : null,
                         );
                       } else if (showAlasanTidakHadir) {
                         controller.submitPresence(
