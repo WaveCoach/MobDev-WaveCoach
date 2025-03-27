@@ -53,16 +53,17 @@ class _ScheduleViewState extends State<ScheduleView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Welcome Sarah',
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: Colors.white,
-                            letterSpacing: -0.3,
+                        Obx(
+                          () => Text(
+                            'Welcome ${controller.name.value}',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Colors.white,
+                              letterSpacing: -0.3,
+                            ),
                           ),
                         ),
-                        // SizedBox(height: 12),
                         Text(
                           'Stay Strong Coach!',
                           style: GoogleFonts.poppins(

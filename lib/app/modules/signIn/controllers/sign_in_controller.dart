@@ -35,6 +35,7 @@ class SignInController extends GetxController {
       if (signInResponse.value?.success == true) {
         String token = signInResponse.value!.token;
         storage.write("token", token);
+        storage.write("name", signInResponse.value!.user.name);
 
         Get.offAllNamed(Routes.HOME);
       } else {
