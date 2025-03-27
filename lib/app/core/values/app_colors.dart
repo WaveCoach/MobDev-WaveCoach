@@ -17,6 +17,7 @@ class AppColors {
   static const Color lightGreen = Color(0xFFACFFC7);
   static const Color softRed = Color(0xFFFF9696);
   static const Color honeyGold = Color(0xFFDE9C3C);
+  static const Color redPastel = Color(0xFFFF5858);
 }
 
 class AppTextStyles {

@@ -55,7 +55,6 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
 
         return Container(
           width: double.infinity,
-          height: 420,
           decoration: BoxDecoration(
             color: AppColors.deepOceanBlue,
             borderRadius: BorderRadius.only(
@@ -63,48 +62,67 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               bottomRight: Radius.circular(30),
             ),
           ),
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.fromLTRB(20, 70, 20, 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Text(
+                    "Reschedule",
+                    style: GoogleFonts.poppins(
+                      color: AppColors.deepOceanBlue,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
               Text(
                 day, // Hanya angka tanggal
                 style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontSize: 100,
+                  fontSize: 230,
                   fontWeight: FontWeight.w700,
+                  height: 1,
                 ),
               ),
               Text(
                 monthYear, // "Mei 2025"
                 style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontSize: 30,
+                  fontSize: 40,
                   fontWeight: FontWeight.w700,
+                  height: 1,
                 ),
               ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
+              SizedBox(height: 20),
+              ElevatedButton.icon(
                 onPressed: () {
                   Get.toNamed('/reschedule');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.0,
-                    horizontal: 32.0,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 25),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(100),
                   ),
                 ),
-                child: Text(
+                icon: Icon(Icons.edit, color: Colors.white, size: 24),
+                label: Text(
                   'Pengajuan Reschedule',
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 21,
                   ),
                 ),
               ),
@@ -119,7 +137,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
         final schedule = controller.scheduleResponse.value?.schedule;
         final location = controller.scheduleResponse.value?.location;
         return Container(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -137,22 +155,26 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                       ),
                     ],
                   ),
-                  margin: EdgeInsets.only(right: 5.0),
+                  // margin: EdgeInsets.only(right: 5.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(10),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.access_time_filled,
+                              size: 25,
                               color: AppColors.deepOceanBlue,
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(width: 10),
                             Text(
                               'Pelaksanaan',
                               style: GoogleFonts.poppins(
+                                fontSize: 16,
                                 color: AppColors.deepOceanBlue,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -160,26 +182,32 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${schedule?.startTime?.substring(0, 5)} - ${schedule?.endTime?.substring(0, 5)}',
-                              style: GoogleFonts.poppins(
-                                color: AppColors.deepOceanBlue,
-                                fontSize: 24,
-                                fontWeight: FontWeightStyles.medium,
-                              ),
+                      SizedBox(height: 5),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.lightBlue.withValues(alpha: 0.4),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          child: Text(
+                            '${schedule?.startTime?.substring(0, 5)} - ${schedule?.endTime?.substring(0, 5)} WIB',
+                            style: GoogleFonts.poppins(
+                              color: AppColors.deepOceanBlue,
+                              fontSize: 16,
+                              fontWeight: FontWeightStyles.medium,
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+              SizedBox(width: 20),
               Expanded(
                 child: Container(
                   height: 100,
@@ -194,8 +222,8 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                       ),
                     ],
                   ),
-                  padding: EdgeInsets.all(8.0),
-                  margin: EdgeInsets.only(left: 5.0),
+                  padding: EdgeInsets.all(10),
+                  // margin: EdgeInsets.only(left: 5.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -203,7 +231,10 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                       Expanded(
                         child: Text(
                           location?.name ?? '',
-                          style: GoogleFonts.poppins(color: Colors.white),
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
@@ -226,7 +257,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
         final isCoachAttendanceNull = coach?.attendanceStatus == null;
 
         return Container(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(left: 20, right: 20),
           child: Column(
             children: [
               SizedBox(
@@ -250,7 +281,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                           : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.deepOceanBlue,
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    padding: EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -260,12 +291,12 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 20,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -287,7 +318,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                           },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.deepOceanBlue,
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    padding: EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -297,7 +328,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 20,
                     ),
                   ),
                 ),
@@ -313,7 +344,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
         final students = controller.scheduleResponse.value?.students ?? [];
         return Container(
           padding: EdgeInsets.all(16.0),
-          margin: EdgeInsets.all(16.0),
+          margin: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -348,96 +379,103 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      student.name,
+                      '${students.indexOf(student) + 1}. ${student.name}',
                       style: GoogleFonts.poppins(
                         color: AppColors.deepOceanBlue,
                         fontWeight: FontWeightStyles.semiBold,
                         fontSize: 18,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Add your onPressed code here!
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  student.attendanceStatus == "Hadir"
-                                      ? AppColors.lightGreen
-                                      : Colors.white,
+                    SizedBox(height: 8.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color:
+                                    student.attendanceStatus == "Hadir"
+                                        ? AppColors.lightGreen
+                                        : Colors.white,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
                               padding: EdgeInsets.symmetric(
                                 vertical: 8.0,
                                 horizontal: 16.0,
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: Colors.black, width: 1),
-                              ),
-                            ),
-                            child: Text(
-                              'Hadir',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                              child: Center(
+                                child: Text(
+                                  'Hadir',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Add your onPressed code here!
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  student.attendanceStatus == "Tidak Hadir"
-                                      ? AppColors.softRed
-                                      : Colors.white,
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color:
+                                    student.attendanceStatus == "Tidak Hadir"
+                                        ? AppColors.softRed
+                                        : Colors.white,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                              ),
                               padding: EdgeInsets.symmetric(
                                 vertical: 8.0,
                                 horizontal: 16.0,
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: Colors.black, width: 1),
-                              ),
-                            ),
-                            child: Text(
-                              'Tidak Hadir',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                              child: Center(
+                                child: Text(
+                                  'Tidak Hadir',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     SizedBox(height: 8.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Add your onPressed code here!
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.deepOceanBlue,
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 16.0,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Add your onPressed code here!
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.deepOceanBlue,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 16.0,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text(
-                          'Beri Penilaian',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                          child: Text(
+                            'Beri Penilaian',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -453,10 +491,47 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
     }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [header(), location(), buttonAttendance(), listSiswa()],
-        ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                header(),
+                location(),
+                buttonAttendance(),
+                listSiswa(),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 70,
+            left: 20,
+            child: GestureDetector(
+              onTap: () => Get.back(),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.deepOceanBlue,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      "Kembali",
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

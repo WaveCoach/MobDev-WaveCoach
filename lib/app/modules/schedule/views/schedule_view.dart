@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // Tambahkan ini untuk mendukung SVG
 import '../controllers/schedule_controller.dart';
 
 class ScheduleView extends StatefulWidget {
@@ -395,15 +396,35 @@ class _ScheduleViewState extends State<ScheduleView> {
       });
     }
 
+    Widget wavePattern() {
+      return Positioned(
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: SvgPicture.asset(
+          'assets/images/WavePattern.svg',
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
+          color: Colors.black.withOpacity(0.04), // Set opacity to 3%
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.skyBlue,
-      body: Column(
+      body: Stack(
         children: [
-          header(),
-          SizedBox(height: 15),
-          textJadwalLatihan(),
-          monthAndHistoryButton(),
-          Expanded(child: listJadwal()),
+          wavePattern(), // Tambahkan SVG di bagian bawah
+          Column(
+            children: [
+              header(),
+              SizedBox(height: 15),
+              textJadwalLatihan(),
+              monthAndHistoryButton(),
+              Expanded(child: listJadwal()),
+            ],
+          ),
         ],
       ),
     );
