@@ -97,7 +97,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FORGET_PASS,
-      page: () => const ForgetPassView(),
+      page: () => ForgetPassView(),
       binding: ForgetPassBinding(),
     ),
     GetPage(

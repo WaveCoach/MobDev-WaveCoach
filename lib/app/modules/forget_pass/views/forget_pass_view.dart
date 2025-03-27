@@ -5,8 +5,11 @@ import '../controllers/forget_pass_controller.dart';
 
 class ForgetPassView extends GetView<ForgetPassController> {
   const ForgetPassView({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.deepOceanBlue,
@@ -17,11 +20,9 @@ class ForgetPassView extends GetView<ForgetPassController> {
               left: 25,
               top: 80,
               child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
+                onTap: () => Get.back(),
                 child: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.arrow_back, color: Colors.white),
                     SizedBox(width: 8),
                     Text(
@@ -46,9 +47,8 @@ class ForgetPassView extends GetView<ForgetPassController> {
                         'assets/images/LatinWaveCoach.png',
                         width: 121,
                       ),
-
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 60, 30, 20),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(30, 60, 30, 20),
                         child: Text(
                           "Forgot Password",
                           textAlign: TextAlign.center,
@@ -56,14 +56,13 @@ class ForgetPassView extends GetView<ForgetPassController> {
                             fontFamily: "poppins_bold",
                             fontSize: 45,
                             color: Colors.white,
-                            height: 1, // Line height
-                            letterSpacing: -0.5, // Letter spacing
+                            height: 1,
+                            letterSpacing: -0.5,
                           ),
                         ),
                       ),
-
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 0, 30, 60),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(30, 0, 30, 60),
                         child: Text(
                           "Masukkan email anda untuk mengubah kata sandi",
                           textAlign: TextAlign.center,
@@ -71,12 +70,11 @@ class ForgetPassView extends GetView<ForgetPassController> {
                             fontFamily: "poppins_medium",
                             fontSize: 20,
                             color: AppColors.mistyBlue,
-                            height: 1.27, // Line height
-                            letterSpacing: -0.5, // Letter spacing
+                            height: 1.27,
+                            letterSpacing: -0.5,
                           ),
                         ),
                       ),
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: Row(
@@ -84,7 +82,7 @@ class ForgetPassView extends GetView<ForgetPassController> {
                             Container(
                               width: 64,
                               height: 64,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15),
                                   bottomLeft: Radius.circular(15),
@@ -103,7 +101,7 @@ class ForgetPassView extends GetView<ForgetPassController> {
                               child: Container(
                                 height: 64,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(15),
                                     bottomRight: Radius.circular(15),
                                   ),
@@ -114,22 +112,21 @@ class ForgetPassView extends GetView<ForgetPassController> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 15),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: TextFormField(
-                                      style: TextStyle(
+                                  child: TextFormField(
+                                    controller: emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    style: const TextStyle(
+                                      fontFamily: "poppins_medium",
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Email",
+                                      hintStyle: TextStyle(
                                         fontFamily: "poppins_medium",
                                         fontSize: 14,
-                                        color: Colors.white,
-                                      ),
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Email",
-                                        hintStyle: TextStyle(
-                                          fontFamily: "poppins_medium",
-                                          fontSize: 14,
-                                          color: AppColors.mistyBlue,
-                                        ),
+                                        color: AppColors.mistyBlue,
                                       ),
                                     ),
                                   ),
@@ -139,26 +136,48 @@ class ForgetPassView extends GetView<ForgetPassController> {
                           ],
                         ),
                       ),
-
                       Padding(
                         padding: const EdgeInsets.fromLTRB(40, 70, 40, 0),
-                        child: GestureDetector(
-                          child: Container(
-                            height: 64,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white.withValues(alpha: 0.3),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Submit",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: "poppins_regular",
-                                  fontSize: 18,
-                                  color: AppColors.deepOceanBlue,
-                                ),
+                        child: Obx(
+                          () => GestureDetector(
+                            onTap:
+                                controller.isLoading.value
+                                    ? null
+                                    : () {
+                                      String email =
+                                          emailController.text.trim();
+                                      if (email.isEmail) {
+                                        controller.sendResetPassword(email);
+                                      } else {
+                                        Get.snackbar(
+                                          "Error",
+                                          "Email tidak valid",
+                                        );
+                                      }
+                                    },
+                            child: Container(
+                              height: 64,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color:
+                                    controller.isLoading.value
+                                        ? Colors.grey
+                                        : Colors.white,
+                              ),
+                              child: Center(
+                                child:
+                                    controller.isLoading.value
+                                        ? const CircularProgressIndicator()
+                                        : const Text(
+                                          "Submit",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontFamily: "poppins_regular",
+                                            fontSize: 18,
+                                            color: AppColors.deepOceanBlue,
+                                          ),
+                                        ),
                               ),
                             ),
                           ),

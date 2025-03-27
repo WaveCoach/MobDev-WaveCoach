@@ -62,4 +62,12 @@ class ApiService extends GetConnect {
   Future<Response> reschedule(Map<String, dynamic> body) {
     return post("$url/reschedule", body, headers: getHeaders());
   }
+
+  Future<Response> forgetPassword(Map<String, dynamic> body) {
+    return post(
+      "$url/forgot-password",
+      body,
+      headers: getHeaders(withAuth: false),
+    );
+  }
 }
