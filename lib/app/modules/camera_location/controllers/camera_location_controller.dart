@@ -2,19 +2,19 @@ import 'package:get/get.dart';
 import 'package:camera/camera.dart';
 
 class CameraLocationController extends GetxController {
-  late CameraDescription? camera;
+  Rxn<CameraDescription> camera = Rxn<CameraDescription>(); // Gunakan Rxn
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    await _initializeCamera();
+    _initializeCamera();
   }
 
   Future<void> _initializeCamera() async {
     final cameras = await availableCameras();
     if (cameras.isNotEmpty) {
-      camera = cameras.first;
-      update();
+      camera.value = cameras.first; // Gunakan .value untuk menyimpan data
+      update(); // Perbarui UI
     }
   }
 }

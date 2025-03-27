@@ -10,19 +10,19 @@ class CameraLocationView extends StatelessWidget {
     return GetBuilder<CameraLocationController>(
       init: CameraLocationController(),
       builder: (controller) {
-        if (!Get.isRegistered<CameraLocationController>() ||
-            controller.camera == null) {
+        if (controller.camera.value == null) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
+
         return Scaffold(
           appBar: AppBar(
             title: const Text('Camera Location'),
             centerTitle: true,
           ),
           body: MapCameraLocation(
-            camera: controller.camera!,
+            camera: controller.camera.value!, // Gunakan .value
             onImageCaptured: (ImageAndLocationData data) {
               print('Captured image path: ${data.imagePath}');
               print('Latitude: ${data.latitude}');
