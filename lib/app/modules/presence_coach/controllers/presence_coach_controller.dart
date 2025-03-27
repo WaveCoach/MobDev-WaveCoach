@@ -35,6 +35,8 @@ class PresenceCoachController extends GetxController {
     final response = await apiService.absensiCoach(body);
     isSubmitting.value = false;
 
+    print(body.toString());
+
     if (response.statusCode == 201) {
       Get.snackbar("Success", "Presensi berhasil dikirim");
       Get.offAndToNamed('/schedule-detail', arguments: {'id': scheduleId});

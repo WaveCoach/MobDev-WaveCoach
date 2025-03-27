@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/camera_location/bindings/camera_location_binding.dart';
+import '../modules/camera_location/views/camera_location_view.dart';
 import '../modules/contact_admin/bindings/contact_admin_binding.dart';
 import '../modules/contact_admin/views/contact_admin_view.dart';
 import '../modules/forget_pass/bindings/forget_pass_binding.dart';
@@ -127,6 +129,11 @@ class AppPages {
       name: _Paths.RESCHEDULE,
       page: () => RescheduleView(),
       binding: RescheduleBinding(),
+    ),
+    GetPage(
+      name: _Paths.CAMERA_LOCATION,
+      page: () => const CameraLocationView(),
+      binding: CameraLocationBinding(),
     ),
   ];
 }

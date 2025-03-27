@@ -19,6 +19,7 @@ abstract class Routes {
   static const PRESENCE_COACH = _Paths.PRESENCE_COACH;
   static const PRESENCE_STUDENT = _Paths.PRESENCE_STUDENT;
   static const RESCHEDULE = _Paths.RESCHEDULE;
+  static const CAMERA_LOCATION = _Paths.CAMERA_LOCATION;
 }
 
 abstract class _Paths {
@@ -39,4 +40,5 @@ abstract class _Paths {
   static const PRESENCE_COACH = '/presence-coach';
   static const PRESENCE_STUDENT = '/presence-student';
   static const RESCHEDULE = '/reschedule';
+  static const CAMERA_LOCATION = '/camera-location';
 }
