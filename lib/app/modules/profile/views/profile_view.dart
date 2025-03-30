@@ -108,7 +108,7 @@ class _ProfileViewState extends State<ProfileView> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Add your onPressed code here!
+                      Get.toNamed('/change-password');
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(20),
