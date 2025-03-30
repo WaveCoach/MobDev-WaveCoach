@@ -20,6 +20,12 @@ abstract class Routes {
   static const PRESENCE_STUDENT = _Paths.PRESENCE_STUDENT;
   static const RESCHEDULE = _Paths.RESCHEDULE;
   static const CAMERA_LOCATION = _Paths.CAMERA_LOCATION;
+  static const FORM_PENILAIAN = _Paths.FORM_PENILAIAN;
+  static const HISTORY_PENILAIAN = _Paths.HISTORY_PENILAIAN;
+  static const AJUKAN_PEMINJAMAN = _Paths.AJUKAN_PEMINJAMAN;
+  static const AJUKAN_PENGEMBALIAN = _Paths.AJUKAN_PENGEMBALIAN;
+  static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
+  static const DETAIL_INVENTARIS = _Paths.DETAIL_INVENTARIS;
 }
 
 abstract class _Paths {
@@ -41,4 +47,10 @@ abstract class _Paths {
   static const PRESENCE_STUDENT = '/presence-student';
   static const RESCHEDULE = '/reschedule';
   static const CAMERA_LOCATION = '/camera-location';
+  static const FORM_PENILAIAN = '/form-penilaian';
+  static const HISTORY_PENILAIAN = '/history-penilaian';
+  static const AJUKAN_PEMINJAMAN = '/ajukan-peminjaman';
+  static const AJUKAN_PENGEMBALIAN = '/ajukan-pengembalian';
+  static const CHANGE_PASSWORD = '/change-password';
+  static const DETAIL_INVENTARIS = '/detail-inventaris';
 }

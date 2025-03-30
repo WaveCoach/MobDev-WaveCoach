@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ScheduleController extends GetxController {
@@ -14,8 +13,6 @@ class ScheduleController extends GetxController {
   void onInit() {
     final storage = GetStorage();
     final storedName = storage.read("name") ?? " ";
-
-    print("🎉 Name from storage: $storedName");
     name.value = storedName;
 
     fetchSchedules();

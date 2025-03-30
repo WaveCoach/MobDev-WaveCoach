@@ -12,13 +12,7 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  late final ProfileController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.find<ProfileController>();
-  }
+  final ProfileController controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +50,15 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Text(
-                          "Coach Sarah",
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: -0.5,
+                        Obx(
+                          () => Text(
+                            controller.name.value,
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: -0.5,
+                            ),
                           ),
                         ),
                       ],
@@ -91,12 +87,14 @@ class _ProfileViewState extends State<ProfileView> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text(
-                        'example@gmail.com',
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                      Obx(
+                        () => Text(
+                          controller.email.value,
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],

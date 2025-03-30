@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
-import '../controllers/penilaian_controller.dart';
 
 class PenilaianView extends StatefulWidget {
   const PenilaianView({super.key});
@@ -50,6 +49,7 @@ class _PenilaianViewState extends State<PenilaianView> {
               ),
               onPressed: () {
                 // Add your onPressed logic here
+                Get.toNamed('/form-penilaian');
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,6 +100,7 @@ class _PenilaianViewState extends State<PenilaianView> {
               ),
               onPressed: () {
                 // Add your onPressed logic here
+                Get.toNamed('/history-penilaian');
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

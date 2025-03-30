@@ -1,11 +1,23 @@
 import 'package:get/get.dart';
 
+import '../modules/ajukan_peminjaman/bindings/ajukan_peminjaman_binding.dart';
+import '../modules/ajukan_peminjaman/views/ajukan_peminjaman_view.dart';
+import '../modules/ajukan_pengembalian/bindings/ajukan_pengembalian_binding.dart';
+import '../modules/ajukan_pengembalian/views/ajukan_pengembalian_view.dart';
 import '../modules/camera_location/bindings/camera_location_binding.dart';
 import '../modules/camera_location/views/camera_location_view.dart';
+import '../modules/change_password/bindings/change_password_binding.dart';
+import '../modules/change_password/views/change_password_view.dart';
 import '../modules/contact_admin/bindings/contact_admin_binding.dart';
 import '../modules/contact_admin/views/contact_admin_view.dart';
+import '../modules/detail_inventaris/bindings/detail_inventaris_binding.dart';
+import '../modules/detail_inventaris/views/detail_inventaris_view.dart';
 import '../modules/forget_pass/bindings/forget_pass_binding.dart';
 import '../modules/forget_pass/views/forget_pass_view.dart';
+import '../modules/form_penilaian/bindings/form_penilaian_binding.dart';
+import '../modules/form_penilaian/views/form_penilaian_view.dart';
+import '../modules/history_penilaian/bindings/history_penilaian_binding.dart';
+import '../modules/history_penilaian/views/history_penilaian_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inventaris/bindings/inventaris_binding.dart';
@@ -134,6 +146,36 @@ class AppPages {
       name: _Paths.CAMERA_LOCATION,
       page: () => const CameraLocationView(),
       binding: CameraLocationBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORM_PENILAIAN,
+      page: () => const FormPenilaianView(),
+      binding: FormPenilaianBinding(),
+    ),
+    GetPage(
+      name: _Paths.HISTORY_PENILAIAN,
+      page: () => const HistoryPenilaianView(),
+      binding: HistoryPenilaianBinding(),
+    ),
+    GetPage(
+      name: _Paths.AJUKAN_PEMINJAMAN,
+      page: () => const AjukanPeminjamanView(),
+      binding: AjukanPeminjamanBinding(),
+    ),
+    GetPage(
+      name: _Paths.AJUKAN_PENGEMBALIAN,
+      page: () => const AjukanPengembalianView(),
+      binding: AjukanPengembalianBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_INVENTARIS,
+      page: () => const DetailInventarisView(),
+      binding: DetailInventarisBinding(),
     ),
   ];
 }
