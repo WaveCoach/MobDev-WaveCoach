@@ -21,10 +21,9 @@ class _InventarisViewState extends State<InventarisView> {
   @override
   void initState() {
     super.initState();
-    dropdownValue = 'Barang'; // Set nilai default dropdown
+    dropdownValue = 'Barang';
   }
 
-  @override
   Widget build(BuildContext context) {
     Widget ajukanPeminjaman() {
       return Positioned(
@@ -161,8 +160,10 @@ class _InventarisViewState extends State<InventarisView> {
       return _borrowedItem();
     } else if (dropdownValue == "History Pengajuan") {
       return _historyPeminjamanInventaris();
-    } else {
+    } else if (dropdownValue == "Stock Inventaris") {
       return _stockList();
+    } else {
+      return _borrowedItem();
     }
   }
 
@@ -173,7 +174,7 @@ class _InventarisViewState extends State<InventarisView> {
       }
 
       if (controller.stockList.isEmpty) {
-        return const Center(child: Text("Tidak ada data inventaris."));
+        return const Center(child: Text("Tidak ada stok barang."));
       }
 
       return Column(
@@ -232,11 +233,9 @@ class _InventarisViewState extends State<InventarisView> {
                           Colors.transparent, // Card color set to transparent
                       elevation: 0, // Remove shadow by setting elevation to 0
                       child: Theme(
-                        data: Theme.of(context).copyWith(
-                          dividerColor:
-                              Colors
-                                  .transparent, // Ubah warna garis di bawah ExpansionTile
-                        ),
+                        data: Theme.of(
+                          context,
+                        ).copyWith(dividerColor: Colors.transparent),
                         child: ExpansionTile(
                           title: Row(
                             children: [
@@ -673,7 +672,6 @@ class _InventarisViewState extends State<InventarisView> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        // color: Colors.blue[100],
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Padding(
@@ -750,7 +748,12 @@ class _InventarisViewState extends State<InventarisView> {
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 13,
-                                        color: const Color.fromARGB(255, 32, 66, 94),
+                                        color: const Color.fromARGB(
+                                          255,
+                                          32,
+                                          66,
+                                          94,
+                                        ),
                                         letterSpacing: -0.3,
                                         height: 1,
                                       ),

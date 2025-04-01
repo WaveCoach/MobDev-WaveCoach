@@ -13,6 +13,7 @@ class InventarisController extends GetxController {
   var borrowedList = <BorrowedItem>[].obs;
   var historyList = <HistoryData>[].obs;
   final ApiService apiService = Get.find<ApiService>();
+  String? dropdownValue;
 
   @override
   void onInit() {
@@ -26,13 +27,16 @@ class InventarisController extends GetxController {
       var response;
 
       switch (category) {
-        case 'Barang':
+        case 'Stock Inventaris':
+          //inventory yang dipegang mastercoach
           response = await apiService.listStock();
           break;
         case 'History Pengajuan':
+          //history pengajuan inventaris
           response = await apiService.historyPeminjamanInventaris();
           break;
-        case 'Stock Inventaris':
+        case 'Barang':
+          //inventory yang dipinjam
           response = await apiService.borrowedItem();
           break;
         default:
@@ -42,7 +46,7 @@ class InventarisController extends GetxController {
 
       if (response.statusCode == 200) {
         switch (category) {
-          case 'Barang':
+          case 'Stock Inventaris':
             stockList.assignAll(StockListResponse.fromJson(response.body).data);
             break;
           case 'History Pengajuan':
@@ -50,7 +54,7 @@ class InventarisController extends GetxController {
               HistoryInventoryResponse.fromJson(response.body).data,
             );
             break;
-          case 'Stock Inventaris':
+          case 'Barang':
             borrowedList.assignAll(
               BorrowedItemResponse.fromJson(response.body).data,
             );

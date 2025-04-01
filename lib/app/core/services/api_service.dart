@@ -39,14 +39,17 @@ class ApiService extends GetConnect {
     return get("$url/notification", headers: getHeaders());
   }
 
+  //melihat jumlah inventory stok yang dipegang mastercoach
   Future<Response> listStock() {
     return get("$url/daftarinventory", headers: getHeaders());
   }
 
+  //melihat inventory yang dipinjam
   Future<Response> borrowedItem() {
     return get("$url/inventory-landing", headers: getHeaders());
   }
 
+  //mengambil history inventaris
   Future<Response> historyPeminjamanInventaris() {
     return get("$url/request-history-inventory", headers: getHeaders());
   }
