@@ -11,10 +11,7 @@ class ScheduleController extends GetxController {
 
   @override
   void onInit() {
-    final storage = GetStorage();
-    final storedName = storage.read("name") ?? " ";
-    name.value = storedName;
-
+    name.value = GetStorage().read("name") ?? " ";
     fetchSchedules();
     super.onInit();
   }
@@ -25,12 +22,8 @@ class ScheduleController extends GetxController {
       final response = await apiService.listSchedule();
 
       if (response.statusCode == 200 && response.body != null) {
-        try {
-          var scheduleResponse = ScheduleResponse.fromJson(response.body);
-          scheduleList.assignAll(scheduleResponse.data.schedule);
-        } catch (e) {
-          Get.snackbar("Error", "Invalid response format");
-        }
+        var scheduleResponse = ScheduleResponse.fromJson(response.body);
+        scheduleList.assignAll(scheduleResponse.data.schedule);
       } else {
         Get.snackbar(
           "Error",
@@ -45,11 +38,8 @@ class ScheduleController extends GetxController {
   }
 
   Future<void> refreshScheduleList() async {
-    isLoading.value = true;
-    try {
-      fetchSchedules();
-    } finally {
-      isLoading.value = false;
-    }
+    isLoading(true);
+    fetchSchedules();
+    isLoading(false);
   }
 }

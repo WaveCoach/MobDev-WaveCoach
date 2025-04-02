@@ -27,8 +27,25 @@ class ApiService extends GetConnect {
     return get("$url/list-admin", headers: getHeaders(withAuth: false));
   }
 
-  Future<Response> listSchedule() {
-    return get("$url/schedule", headers: getHeaders());
+  Future<Response> listSchedule({String? month, bool? history, String? date}) {
+    String urlString = "$url/schedule";
+    Map<String, String> queryParams = {};
+
+    if (month != null) {
+      queryParams['month'] = month;
+    }
+    if (history != null) {
+      queryParams['history'] = history.toString();
+    }
+    if (date != null) {
+      queryParams['date'] = date;
+    }
+
+    if (queryParams.isNotEmpty) {
+      urlString += '?' + Uri(queryParameters: queryParams).query;
+    }
+
+    return get(urlString, headers: getHeaders());
   }
 
   Future<Response> ScheduleDetail(int id) {

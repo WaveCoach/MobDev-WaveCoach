@@ -149,7 +149,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FORM_PENILAIAN,
-      page: () => const FormPenilaianView(),
+      page: () => FormPenilaianView(),
       binding: FormPenilaianBinding(),
     ),
     GetPage(
