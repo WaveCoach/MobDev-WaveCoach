@@ -73,4 +73,8 @@ class ApiService extends GetConnect {
       headers: getHeaders(withAuth: false),
     );
   }
+
+  Future<Response> changePassword(Map<String, dynamic> body) {
+    return post("$url/change-password", body, headers: getHeaders());
+  }
 }

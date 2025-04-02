@@ -11,8 +11,6 @@ class RescheduleController extends GetxController {
         "reason": reason,
       });
 
-      print(response.toString());
-
       if (response.statusCode == 201) {
         Get.snackbar("Success", "Berhasil melakukan pengajuan reschedule");
         Get.offNamed(

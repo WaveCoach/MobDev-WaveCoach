@@ -169,7 +169,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.CHANGE_PASSWORD,
-      page: () => const ChangePasswordView(),
+      page: () => ChangePasswordView(),
       binding: ChangePasswordBinding(),
     ),
     GetPage(
