@@ -123,13 +123,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     borderRadius: BorderRadius.circular(100),
                   ),
                 ),
-                icon: Icon(Icons.edit, color: Colors.white, size: 24),
+                icon: Icon(Icons.edit, color: Colors.white, size: 22),
                 label: Text(
                   'Pengajuan Reschedule',
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 21,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -174,14 +174,14 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                           children: [
                             Icon(
                               Icons.access_time_filled,
-                              size: 25,
+                              size: 20,
                               color: AppColors.deepOceanBlue,
                             ),
                             SizedBox(width: 10),
                             Text(
                               'Pelaksanaan',
                               style: GoogleFonts.poppins(
-                                fontSize: 16,
+                                fontSize: 14,
                                 color: AppColors.deepOceanBlue,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -204,7 +204,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                             '${schedule?.startTime?.substring(0, 5)} - ${schedule?.endTime?.substring(0, 5)} WIB',
                             style: GoogleFonts.poppins(
                               color: AppColors.deepOceanBlue,
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeightStyles.medium,
                             ),
                           ),
