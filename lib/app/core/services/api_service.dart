@@ -102,4 +102,8 @@ class ApiService extends GetConnect {
   Future<Response> getStyleSwim() {
     return get("$url/assesment-category", headers: getHeaders());
   }
+
+  Future<Response> getStyleSwimAspect(int CategoryId) {
+    return get("$url/assessment-aspect/$CategoryId", headers: getHeaders());
+  }
 }

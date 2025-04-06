@@ -27,6 +27,8 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
             _buildStudentDropdown(),
             const SizedBox(height: 16),
             _buildSwimStyleDropdown(),
+            const SizedBox(height: 16),
+            _buildAspectAssessment(),
           ],
         ),
       ),
@@ -149,5 +151,63 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
         },
       );
     });
+  }
+
+  Widget _buildAspectAssessment() {
+    final List<Map<String, dynamic>> aspekList = [
+      {
+        'id': 1,
+        'name': 'Kecepatan',
+        'desc': 'Seberapa cepat siswa berenang dalam gaya ini.',
+      },
+      {
+        'id': 2,
+        'name': 'Ketahanan',
+        'desc': 'Kemampuan siswa mempertahankan stamina.',
+      },
+    ];
+
+    final Map<int, TextEditingController> _controllers = {
+      1: TextEditingController(),
+      2: TextEditingController(),
+    };
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: aspekList.length,
+      itemBuilder: (context, index) {
+        final aspek = aspekList[index];
+        return ExpansionTile(
+          title: Text(aspek['name']),
+          subtitle: Text(aspek['desc'] ?? ''),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _controllers[aspek['id']],
+                    decoration: InputDecoration(
+                      labelText: "Nilai ${aspek['name']}",
+                      border: const OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: "Catatan ${aspek['name']}",
+                      border: const OutlineInputBorder(),
+                    ),
+                    maxLines: 3,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

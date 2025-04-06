@@ -229,9 +229,8 @@ class _InventarisViewState extends State<InventarisView> {
                 return Column(
                   children: [
                     Card(
-                      color:
-                          Colors.transparent, // Card color set to transparent
-                      elevation: 0, // Remove shadow by setting elevation to 0
+                      color: Colors.transparent,
+                      elevation: 0,
                       child: Theme(
                         data: Theme.of(
                           context,

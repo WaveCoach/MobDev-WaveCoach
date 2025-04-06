@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
+import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/aspect_assessment_response.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_response.dart';
@@ -91,6 +92,31 @@ class FormPenilaianController extends GetxController {
         final swimStyleResponse = SwimStyleResponse.fromJson(decoded);
 
         swimStyleList.value = swimStyleResponse.data;
+      } else {
+        print("Failed to fetch swim styles: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching swim styles: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchAspectSwimStyle() async {
+    final swimStyle = selectedSwimStyle.value;
+    if (swimStyle == null) {
+      print("No swim style selected.");
+      return;
+    }
+
+    try {
+      isLoading.value = true;
+      final response = await apiService.getStyleSwimAspect(swimStyle.id);
+
+      if (response.statusCode == 200) {
+        final decoded = response.body;
+        print("Response JSON: $decoded");
+        final aspectResponse = AssessmentAspectResponse.fromJson(decoded);
       } else {
         print("Failed to fetch swim styles: ${response.statusCode}");
       }
