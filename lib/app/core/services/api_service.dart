@@ -94,4 +94,8 @@ class ApiService extends GetConnect {
   Future<Response> changePassword(Map<String, dynamic> body) {
     return post("$url/change-password", body, headers: getHeaders());
   }
+
+  Future<Response> getStudentbySchedule(int scheduleId) {
+    return get("$url/student-list/$scheduleId", headers: getHeaders());
+  }
 }
