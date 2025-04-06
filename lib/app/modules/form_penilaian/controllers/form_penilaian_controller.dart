@@ -25,7 +25,10 @@ class FormPenilaianController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        var scheduleList = response.body;
+        final decoded = response.body;
+        final scheduleResponse = ScheduleResponse.fromJson(decoded);
+        final scheduleList = scheduleResponse.data.schedule;
+
         scheduleController.scheduleList.value = scheduleList;
       } else {
         print("Error: ${response.statusCode}");
