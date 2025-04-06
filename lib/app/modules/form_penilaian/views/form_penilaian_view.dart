@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/controllers/schedule_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 import '../controllers/form_penilaian_controller.dart';
 
 class FormPenilaianView extends GetView<FormPenilaianController> {
-  final FormPenilaianController penilaianController = Get.put(
-    FormPenilaianController(),
-  );
+  FormPenilaianView({Key? key}) : super(key: key);
   final ScheduleController scheduleController = Get.find<ScheduleController>();
 
   @override
@@ -25,6 +25,8 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
             _buildScheduleDropdown(),
             const SizedBox(height: 16),
             _buildStudentDropdown(),
+            const SizedBox(height: 16),
+            _buildSwimStyleDropdown(),
           ],
         ),
       ),
@@ -33,7 +35,7 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
 
   Widget _buildDatePicker(BuildContext context) {
     return TextFormField(
-      controller: penilaianController.dateController,
+      controller: controller.dateController,
       decoration: const InputDecoration(
         labelText: "Tanggal",
         border: OutlineInputBorder(),
@@ -50,9 +52,8 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
         if (pickedDate != null) {
           final formattedDate =
               "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-          penilaianController.dateController.text = formattedDate;
-
-          await penilaianController.fetchSchedulesByDate(date: formattedDate);
+          controller.dateController.text = formattedDate;
+          await controller.fetchSchedulesByDate(date: formattedDate);
         }
       },
     );
@@ -70,24 +71,25 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
 
       return DropdownButtonFormField<Schedule>(
         isExpanded: true,
-        value: penilaianController.selectedSchedule.value,
+        value: controller.selectedSchedule.value,
         decoration: const InputDecoration(
           labelText: "Pilih Jadwal",
           border: OutlineInputBorder(),
         ),
         items:
-            scheduleController.scheduleList.map((schedule) {
-              return DropdownMenuItem(
+            scheduleController.scheduleList.map<DropdownMenuItem<Schedule>>((
+              schedule,
+            ) {
+              return DropdownMenuItem<Schedule>(
                 value: schedule,
                 child: Text(
                   "${schedule.date} | ${schedule.startTime} - ${schedule.endTime}",
-                  style: const TextStyle(fontSize: 14),
                 ),
               );
             }).toList(),
         onChanged: (selectedSchedule) {
-          penilaianController.selectedSchedule.value = selectedSchedule;
-          penilaianController.fetchStudentBySchedule();
+          controller.selectedSchedule.value = selectedSchedule;
+          controller.fetchStudentBySchedule();
         },
       );
     });
@@ -95,30 +97,55 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
 
   Widget _buildStudentDropdown() {
     return Obx(() {
-      if (penilaianController.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      if (penilaianController.studentList.isEmpty) {
-        return const Center(child: Text("Tidak ada siswa tersedia"));
-      }
-
       return DropdownButtonFormField<Student>(
         isExpanded: true,
-        value: penilaianController.selectedStudent.value,
+        value: controller.selectedStudent.value,
         decoration: const InputDecoration(
           labelText: "Pilih Siswa",
           border: OutlineInputBorder(),
         ),
         items:
-            penilaianController.studentList.map((student) {
-              return DropdownMenuItem(
+            controller.studentList.map<DropdownMenuItem<Student>>((student) {
+              return DropdownMenuItem<Student>(
                 value: student,
                 child: Text(student.name),
               );
             }).toList(),
         onChanged: (selectedStudent) {
-          penilaianController.selectedStudent.value = selectedStudent;
+          controller.selectedStudent.value = selectedStudent;
+        },
+      );
+    });
+  }
+
+  Widget _buildSwimStyleDropdown() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      if (controller.swimStyleList.isEmpty) {
+        return const Center(child: Text("Tidak ada gaya renang tersedia"));
+      }
+
+      return DropdownButtonFormField<SwimStyle>(
+        isExpanded: true,
+        value: controller.selectedSwimStyle.value,
+        decoration: const InputDecoration(
+          labelText: "Pilih Gaya Renang",
+          border: OutlineInputBorder(),
+        ),
+        items:
+            controller.swimStyleList.map<DropdownMenuItem<SwimStyle>>((
+              swimStyle,
+            ) {
+              return DropdownMenuItem<SwimStyle>(
+                value: swimStyle,
+                child: Text(swimStyle.name),
+              );
+            }).toList(),
+        onChanged: (selectedSwimStyle) {
+          controller.selectedSwimStyle.value = selectedSwimStyle;
         },
       );
     });

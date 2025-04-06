@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_response.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/controllers/schedule_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_response.dart';
@@ -14,6 +16,14 @@ class FormPenilaianController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
   final RxList<Student> studentList = <Student>[].obs;
   var selectedStudent = Rxn<Student>();
+  final RxList<SwimStyle> swimStyleList = <SwimStyle>[].obs;
+  var selectedSwimStyle = Rxn<SwimStyle>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchSwimStyle();
+  }
 
   Future<void> fetchSchedulesByDate({
     required String date,
@@ -65,6 +75,27 @@ class FormPenilaianController extends GetxController {
       }
     } catch (e) {
       print("Error fetching students: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchSwimStyle() async {
+    try {
+      isLoading.value = true;
+      final response = await apiService.getStyleSwim();
+
+      if (response.statusCode == 200) {
+        final decoded = response.body;
+        print("Response JSON: $decoded");
+        final swimStyleResponse = SwimStyleResponse.fromJson(decoded);
+
+        swimStyleList.value = swimStyleResponse.data;
+      } else {
+        print("Failed to fetch swim styles: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching swim styles: $e");
     } finally {
       isLoading.value = false;
     }
