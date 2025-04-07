@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
+import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/aspect_assessment_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/aspect_assessment_response.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
@@ -19,6 +20,7 @@ class FormPenilaianController extends GetxController {
   var selectedStudent = Rxn<Student>();
   final RxList<SwimStyle> swimStyleList = <SwimStyle>[].obs;
   var selectedSwimStyle = Rxn<SwimStyle>();
+  final RxList<AssessmentAspect> aspectList = <AssessmentAspect>[].obs;
 
   @override
   void onInit() {
@@ -88,7 +90,6 @@ class FormPenilaianController extends GetxController {
 
       if (response.statusCode == 200) {
         final decoded = response.body;
-        print("Response JSON: $decoded");
         final swimStyleResponse = SwimStyleResponse.fromJson(decoded);
 
         swimStyleList.value = swimStyleResponse.data;
@@ -117,6 +118,7 @@ class FormPenilaianController extends GetxController {
         final decoded = response.body;
         print("Response JSON: $decoded");
         final aspectResponse = AssessmentAspectResponse.fromJson(decoded);
+        aspectList.value = aspectResponse.data;
       } else {
         print("Failed to fetch swim styles: ${response.statusCode}");
       }

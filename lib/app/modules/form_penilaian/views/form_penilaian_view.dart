@@ -122,10 +122,6 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
 
   Widget _buildSwimStyleDropdown() {
     return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
       if (controller.swimStyleList.isEmpty) {
         return const Center(child: Text("Tidak ada gaya renang tersedia"));
       }
@@ -148,66 +144,65 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
             }).toList(),
         onChanged: (selectedSwimStyle) {
           controller.selectedSwimStyle.value = selectedSwimStyle;
+          controller.fetchAspectSwimStyle();
         },
       );
     });
   }
 
   Widget _buildAspectAssessment() {
-    final List<Map<String, dynamic>> aspekList = [
-      {
-        'id': 1,
-        'name': 'Kecepatan',
-        'desc': 'Seberapa cepat siswa berenang dalam gaya ini.',
-      },
-      {
-        'id': 2,
-        'name': 'Ketahanan',
-        'desc': 'Kemampuan siswa mempertahankan stamina.',
-      },
-    ];
+    return Obx(() {
+      if (controller.aspectList.isEmpty) {
+        return const Text("Belum ada aspek penilaian untuk gaya renang ini.");
+      }
 
-    final Map<int, TextEditingController> _controllers = {
-      1: TextEditingController(),
-      2: TextEditingController(),
-    };
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: controller.aspectList.length,
+        itemBuilder: (context, index) {
+          final aspect = controller.aspectList[index];
+          final TextEditingController valueController = TextEditingController();
+          final TextEditingController noteController = TextEditingController();
 
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: aspekList.length,
-      itemBuilder: (context, index) {
-        final aspek = aspekList[index];
-        return ExpansionTile(
-          title: Text(aspek['name']),
-          subtitle: Text(aspek['desc'] ?? ''),
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _controllers[aspek['id']],
-                    decoration: InputDecoration(
-                      labelText: "Nilai ${aspek['name']}",
-                      border: const OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: "Catatan ${aspek['name']}",
-                      border: const OutlineInputBorder(),
-                    ),
-                    maxLines: 3,
-                  ),
-                ],
-              ),
+          return ExpansionTile(
+            title: Text(aspect.name),
+            subtitle: Text(
+              aspect.desc ??
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             ),
-          ],
-        );
-      },
-    );
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: valueController,
+                      decoration: InputDecoration(
+                        labelText: "Nilai ${aspect.name}",
+                        border: const OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: noteController,
+                      decoration: InputDecoration(
+                        labelText: "Catatan ${aspect.name}",
+                        border: const OutlineInputBorder(),
+                      ),
+                      maxLines: 3,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 }
