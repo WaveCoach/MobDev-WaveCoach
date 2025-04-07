@@ -1,4 +1,3 @@
-// Model: schedule_model.dart
 class Schedule {
   final int id;
   final String date;
@@ -6,6 +5,7 @@ class Schedule {
   final String endTime;
   final String status;
   final String formattedDate;
+  final String? package;
 
   Schedule({
     required this.id,
@@ -14,6 +14,7 @@ class Schedule {
     required this.endTime,
     required this.status,
     required this.formattedDate,
+    this.package,
   });
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
@@ -24,6 +25,7 @@ class Schedule {
       endTime: json['end_time'],
       status: json['status'],
       formattedDate: json['formatted_date'],
+      package: json['package'],
     );
   }
 }
@@ -44,7 +46,6 @@ class Location {
   }
 }
 
-// Model: coach_model.dart
 class Coach {
   final int id;
   final String name;
@@ -61,7 +62,6 @@ class Coach {
   }
 }
 
-// Model: student_model.dart
 class Student {
   final int id;
   final String name;

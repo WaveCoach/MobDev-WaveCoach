@@ -23,6 +23,7 @@ class Schedule {
   final int id;
   final String date, startTime, endTime, status, formattedDate;
   final String coachName, locationName, locationAddress, locationMaps;
+  final String? package;
 
   Schedule(
     this.id,
@@ -35,6 +36,7 @@ class Schedule {
     this.locationName,
     this.locationAddress,
     this.locationMaps,
+    this.package,
   );
 
   Schedule.fromJson(Map<String, dynamic> json)
@@ -47,5 +49,6 @@ class Schedule {
       coachName = json["coach_name"],
       locationName = json["location_name"],
       locationAddress = json["location_address"],
-      locationMaps = json["location_maps"];
+      locationMaps = json["location_maps"],
+      package = json["package"];
 }

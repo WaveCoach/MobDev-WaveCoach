@@ -26,9 +26,13 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
             const SizedBox(height: 16),
             _buildStudentDropdown(),
             const SizedBox(height: 16),
+            // _buildSwimPackageDropdown(),
+            // const SizedBox(height: 16),
             _buildSwimStyleDropdown(),
             const SizedBox(height: 16),
             _buildAspectAssessment(),
+            const SizedBox(height: 16),
+            _buildSubmitButton(),
           ],
         ),
       ),
@@ -120,6 +124,36 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
     });
   }
 
+  // Widget _buildSwimPackageDropdown(){
+  //   return Obx(() {
+  //     if (controller.selectedStudent.value == null) {
+  //       return const Center(child: Text("Pilih siswa terlebih dahulu."));
+  //     }
+
+  //     final student = controller.selectedStudent.value!;
+  //     if (student.swimPackages.isEmpty) {
+  //       return const Center(child: Text("Tidak ada paket renang tersedia."));
+  //     }
+
+  //     return DropdownButtonFormField<SwimPackage>(
+  //       isExpanded: true,
+  //       value: student.swimPackages.first,
+  //       decoration: const InputDecoration(
+  //         labelText: "Pilih Paket Renang",
+  //         border: OutlineInputBorder(),
+  //       ),
+  //       items: student.swimPackages
+  //           .map<DropdownMenuItem<SwimPackage>>((swimPackage) {
+  //         return DropdownMenuItem<SwimPackage>(
+  //           value: swimPackage,
+  //           child: Text(swimPackage.name),
+  //         );
+  //       }).toList(),
+  //       onChanged: (selectedSwimPackage) {},
+  //     );
+  //   });
+  // }
+
   Widget _buildSwimStyleDropdown() {
     return Obx(() {
       if (controller.swimStyleList.isEmpty) {
@@ -204,5 +238,16 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
         },
       );
     });
+  }
+
+  Widget _buildSubmitButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          // Handle form submission
+        },
+        child: const Text("Kirim Penilaian"),
+      ),
+    );
   }
 }
