@@ -1,27 +1,32 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
-import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/aspect_assessment_model.dart';
-import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/aspect_assessment_response.dart';
-import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_model.dart';
-import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
-import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_response.dart';
-import 'package:mob_dev_wave_coach/app/modules/schedule/controllers/schedule_controller.dart';
-import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
-import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_response.dart';
+
+import '../../../core/services/api_service.dart';
+import '../../schedule/controllers/schedule_controller.dart';
+import '../../schedule/model/schedule_response.dart';
+import '../model/aspect_assessment_model.dart';
+import '../model/aspect_assessment_response.dart';
+import '../model/student_model.dart';
+import '../model/student_response.dart';
+import '../model/swim_style_model.dart';
+import '../model/swim_style_response.dart';
 
 class FormPenilaianController extends GetxController {
-  final ScheduleController scheduleController = Get.find<ScheduleController>();
-  final TextEditingController dateController = TextEditingController();
-  var isLoading = false.obs;
-  var selectedSchedule = Rxn<Schedule>();
-  final ApiService apiService = Get.find<ApiService>();
-  final RxList<Student> studentList = <Student>[].obs;
-  var selectedStudent = Rxn<Student>();
-  final RxList<SwimStyle> swimStyleList = <SwimStyle>[].obs;
-  var selectedSwimStyle = Rxn<SwimStyle>();
-  final RxList<AssessmentAspect> aspectList = <AssessmentAspect>[].obs;
-  final TextEditingController packageController = TextEditingController();
+  final scheduleController = Get.find<ScheduleController>();
+  final apiService = Get.find<ApiService>();
+
+  final isLoading = false.obs;
+
+  final dateController = TextEditingController();
+  final packageController = TextEditingController();
+
+  final selectedSchedule = Rxn<Schedule>();
+  final selectedStudent = Rxn<Student>();
+  final selectedSwimStyle = Rxn<SwimStyle>();
+
+  final studentList = <Student>[].obs;
+  final swimStyleList = <SwimStyle>[].obs;
+  final aspectList = <AssessmentAspect>[].obs;
 
   @override
   void onInit() {
@@ -34,106 +39,84 @@ class FormPenilaianController extends GetxController {
     String? month,
     bool? history,
   }) async {
-    try {
-      isLoading.value = true;
+    await _wrapLoading(() async {
       final response = await apiService.listSchedule(
+        date: date,
         month: month,
         history: history,
-        date: date,
       );
 
       if (response.statusCode == 200) {
-        final decoded = response.body;
-        final scheduleResponse = ScheduleResponse.fromJson(decoded);
-        final scheduleList = scheduleResponse.data.schedule;
-        print("Response JSON: $decoded");
-
-        scheduleController.scheduleList.value = scheduleList;
+        final data = ScheduleResponse.fromJson(response.body).data.schedule;
+        scheduleController.scheduleList.value = data;
       } else {
-        print("Error: ${response.statusCode}");
+        _logError("Fetch schedules", response.statusCode);
       }
-    } catch (e) {
-      print("Error fetching schedules: $e");
-    } finally {
-      isLoading.value = false;
-    }
+    });
   }
 
   Future<void> fetchStudentBySchedule() async {
     final schedule = selectedSchedule.value;
-    if (schedule == null) {
-      print("No schedule selected.");
-      return;
-    }
+    if (schedule == null) return;
 
-    try {
-      isLoading.value = true;
+    await _wrapLoading(() async {
       final response = await apiService.getStudentbySchedule(schedule.id);
 
       if (response.statusCode == 200) {
-        final decoded = response.body;
-        final studentResponse = StudentResponse.fromJson(decoded);
-
-        studentList.value = studentResponse.data;
+        studentList.value = StudentResponse.fromJson(response.body).data;
       } else {
-        print("Failed to fetch students: ${response.statusCode}");
+        _logError("Fetch students", response.statusCode);
       }
-    } catch (e) {
-      print("Error fetching students: $e");
-    } finally {
-      isLoading.value = false;
-    }
+    });
   }
 
   Future<void> fetchSwimStyle() async {
-    try {
-      isLoading.value = true;
+    await _wrapLoading(() async {
       final response = await apiService.getStyleSwim();
 
       if (response.statusCode == 200) {
-        final decoded = response.body;
-        final swimStyleResponse = SwimStyleResponse.fromJson(decoded);
-
-        swimStyleList.value = swimStyleResponse.data;
+        swimStyleList.value = SwimStyleResponse.fromJson(response.body).data;
       } else {
-        print("Failed to fetch swim styles: ${response.statusCode}");
+        _logError("Fetch swim styles", response.statusCode);
       }
-    } catch (e) {
-      print("Error fetching swim styles: $e");
-    } finally {
-      isLoading.value = false;
-    }
+    });
   }
 
   Future<void> fetchAspectSwimStyle() async {
     final swimStyle = selectedSwimStyle.value;
-    if (swimStyle == null) {
-      print("No swim style selected.");
-      return;
-    }
+    if (swimStyle == null) return;
 
-    try {
-      isLoading.value = true;
+    await _wrapLoading(() async {
       final response = await apiService.getStyleSwimAspect(swimStyle.id);
 
       if (response.statusCode == 200) {
-        final decoded = response.body;
-        print("Response JSON: $decoded");
-        final aspectResponse = AssessmentAspectResponse.fromJson(decoded);
-        aspectList.value = aspectResponse.data;
+        aspectList.value =
+            AssessmentAspectResponse.fromJson(response.body).data;
       } else {
-        print("Failed to fetch swim styles: ${response.statusCode}");
+        _logError("Fetch aspects", response.statusCode);
       }
+    });
+  }
+
+  Future<void> _wrapLoading(Future<void> Function() func) async {
+    try {
+      isLoading.value = true;
+      await func();
     } catch (e) {
-      print("Error fetching swim styles: $e");
+      print("Unexpected error: $e");
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void _logError(String context, dynamic statusCode) {
+    print("Failed to $context: $statusCode");
   }
 
   @override
   void onClose() {
     dateController.dispose();
+    packageController.dispose();
     super.onClose();
   }
 }
