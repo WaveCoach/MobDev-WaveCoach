@@ -5,7 +5,8 @@ class Schedule {
   final String endTime;
   final String status;
   final String formattedDate;
-  final String? package;
+  final int? packageId;
+  final String? packageName;
 
   Schedule({
     required this.id,
@@ -14,7 +15,8 @@ class Schedule {
     required this.endTime,
     required this.status,
     required this.formattedDate,
-    this.package,
+    this.packageId,
+    this.packageName,
   });
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
@@ -25,7 +27,8 @@ class Schedule {
       endTime: json['end_time'],
       status: json['status'],
       formattedDate: json['formatted_date'],
-      package: json['package'],
+      packageId: json['package_id'],
+      packageName: json['package_name'],
     );
   }
 }

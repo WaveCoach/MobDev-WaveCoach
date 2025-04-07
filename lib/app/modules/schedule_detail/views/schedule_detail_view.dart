@@ -88,7 +88,7 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               ),
               SizedBox(height: 20),
               Text(
-                controller.scheduleResponse.value?.schedule?.package ?? "",
+                controller.scheduleResponse.value?.schedule?.packageName ?? "",
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 20,
