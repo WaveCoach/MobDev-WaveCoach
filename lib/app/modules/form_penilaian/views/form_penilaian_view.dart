@@ -26,8 +26,6 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
             const SizedBox(height: 16),
             _buildStudentDropdown(),
             const SizedBox(height: 16),
-            // _buildSwimPackageDropdown(),
-            // const SizedBox(height: 16),
             _buildSwimStyleDropdown(),
             const SizedBox(height: 16),
             _buildAspectAssessment(),
@@ -75,28 +73,44 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
         return const Center(child: Text("Tidak ada jadwal tersedia"));
       }
 
-      return DropdownButtonFormField<Schedule>(
-        isExpanded: true,
-        value: controller.selectedSchedule.value,
-        decoration: const InputDecoration(
-          labelText: "Pilih Jadwal",
-          border: OutlineInputBorder(),
-        ),
-        items:
-            scheduleController.scheduleList.map<DropdownMenuItem<Schedule>>((
-              schedule,
-            ) {
-              return DropdownMenuItem<Schedule>(
-                value: schedule,
-                child: Text(
-                  "${schedule.date} | ${schedule.startTime} - ${schedule.endTime}",
-                ),
-              );
-            }).toList(),
-        onChanged: (selectedSchedule) {
-          controller.selectedSchedule.value = selectedSchedule;
-          controller.fetchStudentBySchedule();
-        },
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DropdownButtonFormField<Schedule>(
+            isExpanded: true,
+            value: controller.selectedSchedule.value,
+            decoration: const InputDecoration(
+              labelText: "Pilih Jadwal",
+              border: OutlineInputBorder(),
+            ),
+            items:
+                scheduleController.scheduleList.map<
+                  DropdownMenuItem<Schedule>
+                >((schedule) {
+                  return DropdownMenuItem<Schedule>(
+                    value: schedule,
+                    child: Text(
+                      "${schedule.date} | ${schedule.startTime} - ${schedule.endTime}",
+                    ),
+                  );
+                }).toList(),
+            onChanged: (selectedSchedule) {
+              controller.selectedSchedule.value = selectedSchedule;
+              controller.packageController.text =
+                  selectedSchedule?.packageName ?? '';
+              controller.fetchStudentBySchedule();
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: controller.packageController,
+            readOnly: true,
+            decoration: const InputDecoration(
+              labelText: "Nama Paket",
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
       );
     });
   }
@@ -123,36 +137,6 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
       );
     });
   }
-
-  // Widget _buildSwimPackageDropdown(){
-  //   return Obx(() {
-  //     if (controller.selectedStudent.value == null) {
-  //       return const Center(child: Text("Pilih siswa terlebih dahulu."));
-  //     }
-
-  //     final student = controller.selectedStudent.value!;
-  //     if (student.swimPackages.isEmpty) {
-  //       return const Center(child: Text("Tidak ada paket renang tersedia."));
-  //     }
-
-  //     return DropdownButtonFormField<SwimPackage>(
-  //       isExpanded: true,
-  //       value: student.swimPackages.first,
-  //       decoration: const InputDecoration(
-  //         labelText: "Pilih Paket Renang",
-  //         border: OutlineInputBorder(),
-  //       ),
-  //       items: student.swimPackages
-  //           .map<DropdownMenuItem<SwimPackage>>((swimPackage) {
-  //         return DropdownMenuItem<SwimPackage>(
-  //           value: swimPackage,
-  //           child: Text(swimPackage.name),
-  //         );
-  //       }).toList(),
-  //       onChanged: (selectedSwimPackage) {},
-  //     );
-  //   });
-  // }
 
   Widget _buildSwimStyleDropdown() {
     return Obx(() {
@@ -244,7 +228,7 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          // Handle form submission
+          // TODO: Handle form submission
         },
         child: const Text("Kirim Penilaian"),
       ),

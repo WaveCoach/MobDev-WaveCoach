@@ -21,6 +21,7 @@ class FormPenilaianController extends GetxController {
   final RxList<SwimStyle> swimStyleList = <SwimStyle>[].obs;
   var selectedSwimStyle = Rxn<SwimStyle>();
   final RxList<AssessmentAspect> aspectList = <AssessmentAspect>[].obs;
+  final TextEditingController packageController = TextEditingController();
 
   @override
   void onInit() {
@@ -45,6 +46,7 @@ class FormPenilaianController extends GetxController {
         final decoded = response.body;
         final scheduleResponse = ScheduleResponse.fromJson(decoded);
         final scheduleList = scheduleResponse.data.schedule;
+        print("Response JSON: $decoded");
 
         scheduleController.scheduleList.value = scheduleList;
       } else {
