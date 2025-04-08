@@ -171,7 +171,7 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
   Widget _buildAspectAssessment() {
     return Obx(() {
       if (controller.aspectList.isEmpty) {
-        return const Text("Belum ada aspek penilaian untuk gaya renang ini.");
+        return const Text(" ");
       }
 
       return ListView.builder(
@@ -180,15 +180,10 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
         itemCount: controller.aspectList.length,
         itemBuilder: (context, index) {
           final aspect = controller.aspectList[index];
-          final TextEditingController valueController = TextEditingController();
-          final TextEditingController noteController = TextEditingController();
 
           return ExpansionTile(
             title: Text(aspect.name),
-            subtitle: Text(
-              aspect.desc ??
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            ),
+            subtitle: Text(aspect.desc ?? 'Deskripsi tidak tersedia'),
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -198,21 +193,25 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
                 child: Column(
                   children: [
                     TextField(
-                      controller: valueController,
                       decoration: InputDecoration(
                         labelText: "Nilai ${aspect.name}",
                         border: const OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        aspect.score = int.tryParse(value)?.toDouble() ?? 0.0;
+                      },
                     ),
                     const SizedBox(height: 8),
                     TextField(
-                      controller: noteController,
                       decoration: InputDecoration(
                         labelText: "Catatan ${aspect.name}",
                         border: const OutlineInputBorder(),
                       ),
                       maxLines: 3,
+                      onChanged: (value) {
+                        aspect.remarks = value;
+                      },
                     ),
                   ],
                 ),
@@ -227,9 +226,7 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
   Widget _buildSubmitButton() {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          // TODO: Handle form submission
-        },
+        onPressed: controller.submitAssessment,
         child: const Text("Kirim Penilaian"),
       ),
     );

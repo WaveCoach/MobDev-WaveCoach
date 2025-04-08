@@ -4,11 +4,16 @@ class AssessmentAspect {
   final String name;
   final String? desc;
 
+  double? score;
+  String? remarks;
+
   AssessmentAspect({
     required this.id,
     required this.assessmentCategoriesId,
     required this.name,
     this.desc,
+    this.score,
+    this.remarks,
   });
 
   factory AssessmentAspect.fromJson(Map<String, dynamic> json) {

@@ -98,6 +98,56 @@ class FormPenilaianController extends GetxController {
     });
   }
 
+  Future<void> submitAssessment() async {
+    final student = selectedStudent.value;
+    final swimStyle = selectedSwimStyle.value;
+    final schedule = selectedSchedule.value;
+
+    if (student == null || swimStyle == null || schedule == null) {
+      print("Missing required selections");
+      return;
+    }
+
+    final body = {
+      "student_id": student.id,
+      "assessment_date": dateController.text,
+      "package_id": schedule.packageId,
+      "assessment_category_id": swimStyle.id,
+      "details":
+          aspectList.map((aspect) {
+            return {
+              "aspect_id": aspect.id,
+              "score": aspect.score,
+              "remarks": aspect.remarks ?? "",
+            };
+          }).toList(),
+    };
+
+    await _wrapLoading(() async {
+      final response = await apiService.postAssessment(body);
+
+      if (response.statusCode == 200) {
+        print("Assessment submitted successfully");
+        Get.snackbar(
+          "Success",
+          "Assessment submitted successfully",
+          snackPosition: SnackPosition.TOP,
+        );
+        Get.offAllNamed('/history-penilaian');
+      } else {
+        _logError(
+          "Submit assessment",
+          "${response.statusCode}: ${response.body}",
+        );
+        Get.snackbar(
+          "Error",
+          "Failed to submit assessment: ${response.body}",
+          snackPosition: SnackPosition.TOP,
+        );
+      }
+    });
+  }
+
   Future<void> _wrapLoading(Future<void> Function() func) async {
     try {
       isLoading.value = true;

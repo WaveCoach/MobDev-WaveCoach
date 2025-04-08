@@ -106,4 +106,8 @@ class ApiService extends GetConnect {
   Future<Response> getStyleSwimAspect(int CategoryId) {
     return get("$url/assessment-aspect/$CategoryId", headers: getHeaders());
   }
+
+  Future<Response> postAssessment(Map<String, dynamic> body) {
+    return post("$url/post-assessment", body, headers: getHeaders());
+  }
 }
