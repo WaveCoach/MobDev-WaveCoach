@@ -2,44 +2,37 @@ import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mob_dev_wave_coach/app/core/utils/loading_helper.dart';
 
 class ScheduleController extends GetxController {
-  var isLoading = false.obs;
-  var scheduleList = <Schedule>[].obs;
-  var name = ''.obs;
-  final ApiService apiService = Get.find<ApiService>();
+  final apiService = Get.find<ApiService>();
+
+  final isLoading = false.obs;
+  final scheduleList = <Schedule>[].obs;
+  final name = ''.obs;
 
   @override
   void onInit() {
-    name.value = GetStorage().read("name") ?? " ";
-    fetchSchedules();
     super.onInit();
+    name.value = GetStorage().read("name") ?? "";
+    fetchSchedules();
   }
 
-  void fetchSchedules() async {
-    try {
-      isLoading(true);
+  Future<void> fetchSchedules() async {
+    await wrapLoading(isLoading, () async {
       final response = await apiService.listSchedule();
 
       if (response.statusCode == 200 && response.body != null) {
-        var scheduleResponse = ScheduleResponse.fromJson(response.body);
-        scheduleList.assignAll(scheduleResponse.data.schedule);
+        final data = ScheduleResponse.fromJson(response.body).data.schedule;
+        scheduleList.value = data;
       } else {
-        Get.snackbar(
-          "Error",
-          "Failed to load schedules: ${response.statusText}",
-        );
+        logError("fetch schedules", response.statusText);
+        Get.snackbar("Error", "Failed to load schedules");
       }
-    } catch (e) {
-      Get.snackbar("Error", "An error occurred: $e");
-    } finally {
-      isLoading(false);
-    }
+    });
   }
 
   Future<void> refreshScheduleList() async {
-    isLoading(true);
-    fetchSchedules();
-    isLoading(false);
+    await fetchSchedules();
   }
 }

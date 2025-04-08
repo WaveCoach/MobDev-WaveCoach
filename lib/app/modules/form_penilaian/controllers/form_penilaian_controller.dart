@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-
 import '../../../core/services/api_service.dart';
 import '../../schedule/controllers/schedule_controller.dart';
 import '../../schedule/model/schedule_response.dart';
@@ -10,6 +9,7 @@ import '../model/student_model.dart';
 import '../model/student_response.dart';
 import '../model/swim_style_model.dart';
 import '../model/swim_style_response.dart';
+import '../../../core/utils/loading_helper.dart';
 
 class FormPenilaianController extends GetxController {
   final scheduleController = Get.find<ScheduleController>();
@@ -39,7 +39,7 @@ class FormPenilaianController extends GetxController {
     String? month,
     bool? history,
   }) async {
-    await _wrapLoading(() async {
+    await wrapLoading(isLoading, () async {
       final response = await apiService.listSchedule(
         date: date,
         month: month,
@@ -50,7 +50,7 @@ class FormPenilaianController extends GetxController {
         final data = ScheduleResponse.fromJson(response.body).data.schedule;
         scheduleController.scheduleList.value = data;
       } else {
-        _logError("Fetch schedules", response.statusCode);
+        logError("Fetch schedules", response.statusCode);
       }
     });
   }
@@ -59,25 +59,25 @@ class FormPenilaianController extends GetxController {
     final schedule = selectedSchedule.value;
     if (schedule == null) return;
 
-    await _wrapLoading(() async {
+    await wrapLoading(isLoading, () async {
       final response = await apiService.getStudentbySchedule(schedule.id);
 
       if (response.statusCode == 200) {
         studentList.value = StudentResponse.fromJson(response.body).data;
       } else {
-        _logError("Fetch students", response.statusCode);
+        logError("Fetch students", response.statusCode);
       }
     });
   }
 
   Future<void> fetchSwimStyle() async {
-    await _wrapLoading(() async {
+    await wrapLoading(isLoading, () async {
       final response = await apiService.getStyleSwim();
 
       if (response.statusCode == 200) {
         swimStyleList.value = SwimStyleResponse.fromJson(response.body).data;
       } else {
-        _logError("Fetch swim styles", response.statusCode);
+        logError("Fetch swim styles", response.statusCode);
       }
     });
   }
@@ -86,14 +86,14 @@ class FormPenilaianController extends GetxController {
     final swimStyle = selectedSwimStyle.value;
     if (swimStyle == null) return;
 
-    await _wrapLoading(() async {
+    await wrapLoading(isLoading, () async {
       final response = await apiService.getStyleSwimAspect(swimStyle.id);
 
       if (response.statusCode == 200) {
         aspectList.value =
             AssessmentAspectResponse.fromJson(response.body).data;
       } else {
-        _logError("Fetch aspects", response.statusCode);
+        logError("Fetch aspects", response.statusCode);
       }
     });
   }
@@ -104,7 +104,6 @@ class FormPenilaianController extends GetxController {
     final schedule = selectedSchedule.value;
 
     if (student == null || swimStyle == null || schedule == null) {
-      print("Missing required selections");
       return;
     }
 
@@ -123,11 +122,10 @@ class FormPenilaianController extends GetxController {
           }).toList(),
     };
 
-    await _wrapLoading(() async {
+    await wrapLoading(isLoading, () async {
       final response = await apiService.postAssessment(body);
 
       if (response.statusCode == 200) {
-        print("Assessment submitted successfully");
         Get.snackbar(
           "Success",
           "Assessment submitted successfully",
@@ -135,7 +133,7 @@ class FormPenilaianController extends GetxController {
         );
         Get.offAllNamed('/history-penilaian');
       } else {
-        _logError(
+        logError(
           "Submit assessment",
           "${response.statusCode}: ${response.body}",
         );
@@ -146,21 +144,6 @@ class FormPenilaianController extends GetxController {
         );
       }
     });
-  }
-
-  Future<void> _wrapLoading(Future<void> Function() func) async {
-    try {
-      isLoading.value = true;
-      await func();
-    } catch (e) {
-      print("Unexpected error: $e");
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  void _logError(String context, dynamic statusCode) {
-    print("Failed to $context: $statusCode");
   }
 
   @override

@@ -110,4 +110,12 @@ class ApiService extends GetConnect {
   Future<Response> postAssessment(Map<String, dynamic> body) {
     return post("$url/post-assessment", body, headers: getHeaders());
   }
+
+  Future<Response> getHistoryAssessment() {
+    return get("$url/history-assessment", headers: getHeaders());
+  }
+
+  Future<Response> getDetailHistoryAssessment(int id) {
+    return get("$url/history-assessment/$id", headers: getHeaders());
+  }
 }
