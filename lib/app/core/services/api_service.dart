@@ -111,8 +111,12 @@ class ApiService extends GetConnect {
     return post("$url/post-assessment", body, headers: getHeaders());
   }
 
-  Future<Response> getHistoryAssessment() {
-    return get("$url/history-assessment", headers: getHeaders());
+  Future<Response> getHistoryAssessment({String? search}) {
+    String urlString = "$url/history-assessment";
+    if (search != null && search.isNotEmpty) {
+      urlString += "?search=$search";
+    }
+    return get(urlString, headers: getHeaders());
   }
 
   Future<Response> getDetailHistoryAssessment(int id) {
