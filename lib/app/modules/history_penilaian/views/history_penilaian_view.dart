@@ -65,6 +65,12 @@ class HistoryPenilaianView extends GetView<HistoryPenilaianController> {
                           Text('Kategori: ${item.categoryName}'),
                         ],
                       ),
+                      onTap: () {
+                        Get.toNamed(
+                          '/history-penilaian-detail',
+                          arguments: item.id,
+                        );
+                      },
                     ),
                   );
                 },

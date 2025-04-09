@@ -18,6 +18,8 @@ import '../modules/form_penilaian/bindings/form_penilaian_binding.dart';
 import '../modules/form_penilaian/views/form_penilaian_view.dart';
 import '../modules/history_penilaian/bindings/history_penilaian_binding.dart';
 import '../modules/history_penilaian/views/history_penilaian_view.dart';
+import '../modules/history_penilaian_detail/bindings/history_penilaian_detail_binding.dart';
+import '../modules/history_penilaian_detail/views/history_penilaian_detail_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inventaris/bindings/inventaris_binding.dart';
@@ -176,6 +178,11 @@ class AppPages {
       name: _Paths.DETAIL_INVENTARIS,
       page: () => const DetailInventarisView(),
       binding: DetailInventarisBinding(),
+    ),
+    GetPage(
+      name: _Paths.HISTORY_PENILAIAN_DETAIL,
+      page: () => const HistoryPenilaianDetailView(),
+      binding: HistoryPenilaianDetailBinding(),
     ),
   ];
 }

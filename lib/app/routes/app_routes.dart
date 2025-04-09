@@ -26,6 +26,7 @@ abstract class Routes {
   static const AJUKAN_PENGEMBALIAN = _Paths.AJUKAN_PENGEMBALIAN;
   static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
   static const DETAIL_INVENTARIS = _Paths.DETAIL_INVENTARIS;
+  static const HISTORY_PENILAIAN_DETAIL = _Paths.HISTORY_PENILAIAN_DETAIL;
 }
 
 abstract class _Paths {
@@ -53,4 +54,5 @@ abstract class _Paths {
   static const AJUKAN_PENGEMBALIAN = '/ajukan-pengembalian';
   static const CHANGE_PASSWORD = '/change-password';
   static const DETAIL_INVENTARIS = '/detail-inventaris';
+  static const HISTORY_PENILAIAN_DETAIL = '/history-penilaian-detail';
 }
