@@ -17,6 +17,7 @@ class InventarisView extends StatefulWidget {
 class _InventarisViewState extends State<InventarisView> {
   final InventarisController controller = Get.put(InventarisController());
   String? dropdownValue;
+  String searchQuery = ""; // Tambahkan properti untuk menyimpan input pencarian
 
   @override
   void initState() {
@@ -177,8 +178,20 @@ class _InventarisViewState extends State<InventarisView> {
         return const Center(child: Text("Tidak ada stok barang."));
       }
 
+      // Filter daftar stok berdasarkan input pencarian
+      final filteredStockList = controller.stockList.where((stock) {
+        // Periksa apakah nama master coach atau nama barang mengandung query
+        final matchesMasterCoach = stock.mastercoachName
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase());
+        final matchesItems = stock.items.any((item) =>
+            item.inventoryName.toLowerCase().contains(searchQuery.toLowerCase()));
+        return matchesMasterCoach || matchesItems;
+      }).toList();
+
       return Column(
         children: [
+          // Search Bar
           Container(
             height: 50,
             width: double.infinity,
@@ -202,7 +215,7 @@ class _InventarisViewState extends State<InventarisView> {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: "Search by Keywords",
+                      hintText: "Search by Master Coach or Item Name",
                       border: InputBorder.none,
                       hintStyle: TextStyle(
                         fontSize: 16,
@@ -211,8 +224,9 @@ class _InventarisViewState extends State<InventarisView> {
                       ),
                     ),
                     onChanged: (value) {
-                      // Add your search logic here
-                      // controller.searchBorrowedItems(value);
+                      setState(() {
+                        searchQuery = value; // Perbarui input pencarian
+                      });
                     },
                   ),
                 ),
@@ -220,21 +234,30 @@ class _InventarisViewState extends State<InventarisView> {
             ),
           ),
           SizedBox(height: 25),
+          // Daftar stok yang difilter
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.only(bottom: 120),
-              itemCount: controller.stockList.length,
+              itemCount: filteredStockList.length,
               itemBuilder: (context, index) {
-                final stock = controller.stockList[index];
+                final stock = filteredStockList[index];
+
+                // Filter items dengan totalQty >= 1
+                final filteredItems =
+                    stock.items.where((item) => item.totalQty >= 1).toList();
+
+                if (filteredItems.isEmpty) {
+                  return SizedBox(); // Skip rendering jika tidak ada item yang memenuhi kondisi
+                }
+
                 return Column(
                   children: [
                     Card(
                       color: Colors.transparent,
                       elevation: 0,
                       child: Theme(
-                        data: Theme.of(
-                          context,
-                        ).copyWith(dividerColor: Colors.transparent),
+                        data: Theme.of(context)
+                            .copyWith(dividerColor: Colors.transparent),
                         child: ExpansionTile(
                           title: Row(
                             children: [
@@ -321,7 +344,7 @@ class _InventarisViewState extends State<InventarisView> {
                                     ),
                                   ],
                                 ),
-                                ...stock.items.asMap().entries.map((entry) {
+                                ...filteredItems.asMap().entries.map((entry) {
                                   final index = entry.key + 1;
                                   final item = entry.value;
                                   return TableRow(
@@ -332,12 +355,12 @@ class _InventarisViewState extends State<InventarisView> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
+                                          index.toString(),
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 16,
                                             color: AppColors.deepOceanBlue,
                                           ),
-                                          index.toString(),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -355,12 +378,12 @@ class _InventarisViewState extends State<InventarisView> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
+                                          item.totalQty.toString(),
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 16,
                                             color: AppColors.deepOceanBlue,
                                           ),
-                                          item.totalQty.toString(),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -377,11 +400,9 @@ class _InventarisViewState extends State<InventarisView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       child: Divider(
-                        color: Colors.black.withValues(
-                          alpha: 0.18,
-                        ), // Warna divider
-                        thickness: 1, // Ketebalan divider
-                        height: 1, // Tinggi divider
+                        color: Colors.black.withOpacity(0.18),
+                        thickness: 1,
+                        height: 1,
                       ),
                     ),
                   ],
@@ -612,6 +633,11 @@ class _InventarisViewState extends State<InventarisView> {
         return const Center(child: Text("Tidak ada data peminjaman"));
       }
 
+      // Filter daftar barang berdasarkan input pencarian
+      final filteredList = controller.borrowedList.where((item) {
+        return item.name.toLowerCase().contains(searchQuery.toLowerCase());
+      }).toList();
+
       return Column(
         children: [
           Container(
@@ -646,8 +672,9 @@ class _InventarisViewState extends State<InventarisView> {
                       ),
                     ),
                     onChanged: (value) {
-                      // Add your search logic here
-                      // controller.searchBorrowedItems(value);
+                      setState(() {
+                        searchQuery = value; // Perbarui input pencarian
+                      });
                     },
                   ),
                 ),
@@ -664,9 +691,9 @@ class _InventarisViewState extends State<InventarisView> {
                 childAspectRatio: 1,
               ),
               padding: EdgeInsets.only(bottom: 190),
-              itemCount: controller.borrowedList.length,
+              itemCount: filteredList.length, // Gunakan daftar yang sudah difilter
               itemBuilder: (context, index) {
-                var item = controller.borrowedList[index];
+                var item = filteredList[index];
                 return Stack(
                   children: [
                     Container(
@@ -681,9 +708,7 @@ class _InventarisViewState extends State<InventarisView> {
                             'assets/images/onboarding1.png', // Replace with your own image path
                             height: double.infinity,
                             width: double.infinity,
-                            fit:
-                                BoxFit
-                                    .cover, // Make the image cover the container
+                            fit: BoxFit.cover, // Make the image cover the container
                           ),
                         ),
                       ),
@@ -719,7 +744,7 @@ class _InventarisViewState extends State<InventarisView> {
                             child: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: Colors.white.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Container(

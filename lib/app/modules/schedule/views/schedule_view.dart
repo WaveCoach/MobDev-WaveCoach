@@ -14,6 +14,7 @@ class ScheduleView extends StatefulWidget {
 
 class _ScheduleViewState extends State<ScheduleView> {
   final List<String> monthNames = [
+    'Terdekat',
     'Semua',
     'Januari',
     'Februari',
@@ -118,6 +119,16 @@ class _ScheduleViewState extends State<ScheduleView> {
     }
 
     Widget monthAndHistoryButton() {
+      // Filter months that have schedules
+      List<int> availableMonths = [];
+      for (var schedule in controller.scheduleList) {
+        final scheduleDate = DateTime.parse(schedule.date); // Assuming `schedule.date` is in ISO format
+        final scheduleMonth = scheduleDate.month;
+        if (!availableMonths.contains(scheduleMonth)) {
+          availableMonths.add(scheduleMonth);
+        }
+      }
+
       return Row(
         children: [
           Expanded(
@@ -127,55 +138,53 @@ class _ScheduleViewState extends State<ScheduleView> {
                 children: [
                   SizedBox(width: 20),
                   Row(
-                    children: List.generate(13, (index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedMonthIndex = index;
-                          });
-                        },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(
-                            vertical: 15,
-                            horizontal: 2.5,
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 7,
-                          ),
-                          decoration: BoxDecoration(
-                            color:
-                                _selectedMonthIndex == index
-                                    ? AppColors.deepOceanBlue
-                                    : Colors.white,
-                            borderRadius: BorderRadius.circular(1000),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withValues(alpha: 0.5),
-                                spreadRadius: 0,
-                                blurRadius: 4,
-                                offset: Offset(
-                                  0,
-                                  4,
-                                ), // changes position of shadow
+                    children: List.generate(monthNames.length, (index) {
+                      // Show button only if the month is available or it's "Terdekat" or "Semua"
+                      if (index == 0 || index == 1 || availableMonths.contains(index - 1)) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedMonthIndex = index;
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: 15,
+                              horizontal: 2.5,
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 7,
+                            ),
+                            decoration: BoxDecoration(
+                              color: _selectedMonthIndex == index
+                                  ? AppColors.deepOceanBlue
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(1000),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 0,
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              monthNames[index],
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500, // Medium
+                                fontSize: 16,
+                                color: _selectedMonthIndex == index
+                                    ? Colors.white
+                                    : Colors.black,
                               ),
-                            ],
-                          ),
-                          child: Text(
-                            monthNames[index],
-                            style: GoogleFonts.poppins(
-                              fontWeight:
-                                  FontWeight
-                                      .w500, // Medium (sesuai dengan "poppins_medium")
-                              fontSize: 16,
-                              color:
-                                  _selectedMonthIndex == index
-                                      ? Colors.white
-                                      : Colors.black,
                             ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        return SizedBox.shrink(); // Hide button if the month is not available
+                      }
                     }),
                   ),
                 ],
@@ -194,7 +203,7 @@ class _ScheduleViewState extends State<ScheduleView> {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.5),
+                  color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 0,
                   blurRadius: 4,
                   offset: Offset(0, 4), // changes position of shadow
@@ -204,8 +213,7 @@ class _ScheduleViewState extends State<ScheduleView> {
             child: Text(
               'History',
               style: GoogleFonts.poppins(
-                fontWeight:
-                    FontWeight.w500, // Medium (sesuai dengan "poppins_medium")
+                fontWeight: FontWeight.w500, // Medium
                 fontSize: 16,
                 color: Colors.black,
               ),
@@ -225,6 +233,38 @@ class _ScheduleViewState extends State<ScheduleView> {
           return const Center(child: Text("No schedules available"));
         }
 
+        // Filter schedule list based on the selected month index
+        List filteredScheduleList = controller.scheduleList.where((schedule) {
+          if (_selectedMonthIndex == 0) {
+            // "Terdekat" - Filter schedules within the next 3 days
+            final now = DateTime.now();
+            final scheduleDate = DateTime.parse(schedule.date); // Assuming `schedule.date` is in ISO format
+            return scheduleDate.isAfter(now) &&
+                scheduleDate.isBefore(now.add(Duration(days: 3)));
+          } else if (_selectedMonthIndex == 1) {
+            // "Semua" - Show all schedules
+            return true;
+          } else {
+            // Specific month - Filter schedules by month
+            final scheduleMonth = DateTime.parse(schedule.date).month;
+            return scheduleMonth == _selectedMonthIndex - 1; // Adjust index for monthNames
+          }
+        }).toList();
+
+        // Check if "Terdekat" is selected and no schedules are available
+        if (_selectedMonthIndex == 0 && filteredScheduleList.isEmpty) {
+          return const Center(
+            child: Text(
+              "Tidak ada jadwal rentang 3 Hari terdekat",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
+              ),
+            ),
+          );
+        }
+
         return RefreshIndicator(
           onRefresh: () async {
             // Call your refresh function here
@@ -232,9 +272,9 @@ class _ScheduleViewState extends State<ScheduleView> {
           },
           child: ListView.builder(
             padding: EdgeInsets.only(bottom: 120), // Add padding to the bottom
-            itemCount: controller.scheduleList.length,
+            itemCount: filteredScheduleList.length,
             itemBuilder: (context, index) {
-              final schedule = controller.scheduleList[index];
+              final schedule = filteredScheduleList[index];
               return Padding(
                 padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
                 child: GestureDetector(
@@ -328,10 +368,10 @@ class _ScheduleViewState extends State<ScheduleView> {
                                           horizontal: 8,
                                         ),
                                         child: Text(
-                                          "${schedule.startTime.substring(0, 5)} - ${schedule.endTime.substring(0, 5)} WIB", // Jam Muali dan Akhir
+                                          "${schedule.startTime.substring(0, 5)} - ${schedule.endTime.substring(0, 5)} WIB", // Jam Mulai dan Akhir
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 15,
+                                            fontSize: 14,
                                             color: Colors.black,
                                           ),
                                         ),
@@ -351,7 +391,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                                           "Reschedule",
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 15,
+                                            fontSize: 14,
                                             color: Colors.black,
                                           ),
                                         ),
@@ -364,7 +404,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                                       .formattedDate, // Hari, Tanggal, Bulan, Tahun
                                   style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 15,
+                                    fontSize: 14,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -377,7 +417,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                                     schedule.locationName,
                                     style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       color: Colors.black,
                                     ),
                                   ),
