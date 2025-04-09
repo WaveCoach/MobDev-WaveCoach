@@ -22,7 +22,7 @@ class HistoryPenilaianDetailView extends StatelessWidget {
           return const Center(child: Text('Data tidak ditemukan'));
         }
 
-        return Padding(
+        return SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,34 +38,93 @@ class HistoryPenilaianDetailView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: TextEditingController(
+                  text:
+                      '${data.data.scheduleDate} | ${data.data.scheduleStartTime} - ${data.data.scheduleEndTime}',
+                ),
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: 'Jadwal',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: TextEditingController(text: data.data.packageName),
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: 'Nama Paket',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
                 controller: TextEditingController(text: data.data.studentName),
                 readOnly: true,
                 decoration: const InputDecoration(
-                  labelText: 'Input 2',
+                  labelText: 'Nama Siswa',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
               TextField(
+                controller: TextEditingController(text: data.data.categoryName),
+                readOnly: true,
                 decoration: const InputDecoration(
-                  labelText: 'Input 3',
+                  labelText: 'Nama Gaya',
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 16),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Input 4',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Input 5',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+              const SizedBox(height: 24),
+
+              const SizedBox(height: 8),
+              ...data.data.details.map((aspect) {
+                return ExpansionTile(
+                  title: Text(
+                    aspect.aspectName ?? 'Aspek',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  subtitle:
+                      aspect.aspectDesc != null
+                          ? Text(aspect.aspectDesc!)
+                          : null,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            controller: TextEditingController(
+                              text: aspect.score.toString(),
+                            ),
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Nilai',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          TextField(
+                            controller: TextEditingController(
+                              text: aspect.remarks,
+                            ),
+                            readOnly: true,
+                            decoration: const InputDecoration(
+                              labelText: 'Catatan',
+                              border: OutlineInputBorder(),
+                            ),
+                            maxLines: 3,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
             ],
           ),
         );

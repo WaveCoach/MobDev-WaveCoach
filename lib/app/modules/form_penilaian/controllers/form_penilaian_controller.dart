@@ -110,6 +110,7 @@ class FormPenilaianController extends GetxController {
     final body = {
       "student_id": student.id,
       "assessment_date": dateController.text,
+      "schedule_id": schedule.id,
       "package_id": schedule.packageId,
       "assessment_category_id": swimStyle.id,
       "details":
