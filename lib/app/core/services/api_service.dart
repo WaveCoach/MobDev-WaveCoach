@@ -130,4 +130,8 @@ class ApiService extends GetConnect {
   Future<Response> getInventoryManagementMastercoach(int mastercoachId) {
     return get("$url/inventory-list/$mastercoachId", headers: getHeaders());
   }
+
+  Future<Response> postRequestBorrow(Map<String, dynamic> body) {
+    return post("$url/request-loan", body, headers: getHeaders());
+  }
 }

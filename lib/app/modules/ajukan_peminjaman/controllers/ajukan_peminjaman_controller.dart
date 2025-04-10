@@ -15,6 +15,7 @@ class AjukanPeminjamanController extends GetxController {
 
   final dateBorrowController = TextEditingController();
   final dateReturnController = TextEditingController();
+  final descController = TextEditingController();
 
   final selectedMatercoach = Rxn<MasterCoach>();
   final masterCoachList = <MasterCoach>[].obs;
@@ -49,16 +50,56 @@ class AjukanPeminjamanController extends GetxController {
   Future<void> fetchInventory() async {
     final mastercoachId = selectedMatercoach.value?.id;
     if (mastercoachId == null) return;
-    print("Selected Mastercoach ID: $mastercoachId 🎯");
     await wrapLoading(isLoading, () async {
       final response = await apiService.getInventoryManagementMastercoach(
         mastercoachId,
       );
       if (response.statusCode == 200) {
         stuffList.value = InventoryResponse.fromJson(response.body).data;
-        print(stuffList);
       } else {
         logError("fetch inventory", response.statusText);
+      }
+    });
+  }
+
+  Future<void> submitPengajuan() async {
+    final mastercoachId = selectedMatercoach.value?.id;
+    final dateBorrow = dateBorrowController.text.trim();
+    final dateReturn = dateReturnController.text.trim();
+
+    final body = {
+      "mastercoach_id": mastercoachId,
+      "date_borrow": dateBorrow,
+      "date_return": dateReturn,
+      "inventory":
+          stuffFormList.map((stuff) {
+            return {
+              "inventory_id": stuff['selectedStuff']?.id,
+              "qty_requested": stuff['quantity'],
+            };
+          }).toList(),
+    };
+
+    await wrapLoading(isLoading, () async {
+      final response = await apiService.postAssessment(body);
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Success",
+          "Assessment submitted successfully",
+          snackPosition: SnackPosition.TOP,
+        );
+        Get.offAllNamed('/inventaris');
+      } else {
+        logError(
+          "Submit assessment",
+          "${response.statusCode}: ${response.body}",
+        );
+        Get.snackbar(
+          "Error",
+          "Failed to submit assessment: ${response.body}",
+          snackPosition: SnackPosition.TOP,
+        );
       }
     });
   }

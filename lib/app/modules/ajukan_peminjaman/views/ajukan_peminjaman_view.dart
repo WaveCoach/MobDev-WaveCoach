@@ -156,6 +156,7 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
 
   Widget _buildBorrowDateInput() {
     return TextFormField(
+      controller: controller.dateBorrowController,
       decoration: const InputDecoration(
         labelText: "Tanggal Peminjaman",
         border: OutlineInputBorder(),
@@ -169,8 +170,8 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
           lastDate: DateTime(2101),
         );
         if (pickedDate != null) {
-          // controller.borrowDateController.text =
-          //     "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+          controller.dateBorrowController.text =
+              "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
         }
       },
     );
@@ -178,7 +179,7 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
 
   Widget _buildReturnDateInput() {
     return TextFormField(
-      // controller: controller.returnDateController,
+      controller: controller.dateReturnController,
       decoration: const InputDecoration(
         labelText: "Tanggal Pengembalian",
         border: OutlineInputBorder(),
@@ -192,8 +193,8 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
           lastDate: DateTime(2101),
         );
         if (pickedDate != null) {
-          // controller.returnDateController.text =
-          //     "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+          controller.dateReturnController.text =
+              "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
         }
       },
     );
@@ -201,7 +202,7 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
 
   Widget _buildDescInput() {
     return TextFormField(
-      // controller: controller.descController,
+      controller: controller.descController,
       decoration: const InputDecoration(
         labelText: "Deskripsi",
         border: OutlineInputBorder(),
