@@ -28,6 +28,8 @@ class FormPenilaianController extends GetxController {
   final swimStyleList = <SwimStyle>[].obs;
   final aspectList = <AssessmentAspect>[].obs;
 
+  var isDateSelected = false.obs;
+
   @override
   void onInit() {
     super.onInit();

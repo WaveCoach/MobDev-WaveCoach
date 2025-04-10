@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/history_penilaian/controllers/history_penilaian_controller.dart';
 
 class HistoryPenilaianView extends GetView<HistoryPenilaianController> {
@@ -8,30 +11,93 @@ class HistoryPenilaianView extends GetView<HistoryPenilaianController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Riwayat Penilaian')),
+      appBar: AppBar(
+        titleSpacing: 0, // Adjust spacing between back icon and title
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
+      backgroundColor: AppColors.skyBlue,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: controller.searchController,
-              decoration: InputDecoration(
-                hintText: 'Cari...',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    controller.searchController.clear();
-                    controller.fetchHistoryPenilaian();
-                  },
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+          Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.deepOceanBlue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                "History\nPenilaian",
+                textAlign: TextAlign.center, // Set text alignment to center
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  height: 1,
+                  letterSpacing: -0.5,
                 ),
               ),
-              onSubmitted: (value) {
-                controller.fetchHistoryPenilaian(query: value);
-              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              height: 50,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.search, color: Colors.black54),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: controller.searchController,
+                      decoration: InputDecoration(
+                        hintText: "Search by Keywords",
+                        border: InputBorder.none,
+                        hintStyle: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          color: Colors.black54,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        controller.fetchHistoryPenilaian(query: value);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -50,19 +116,74 @@ class HistoryPenilaianView extends GetView<HistoryPenilaianController> {
                   final item = controller.historyPenilaianList[index];
 
                   return Card(
+                    color: AppColors.lightBlue,
                     margin: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 8,
                     ),
                     child: ListTile(
-                      title: Text(item.studentName),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Tanggal: ${item.date}'),
-                          Text('Assessor: ${item.assessorName}'),
-                          Text('Paket: ${item.packageName}'),
-                          Text('Kategori: ${item.categoryName}'),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.goldenAmber,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              //Tanggal Penilaian
+                              child: Text(
+                                item.date,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              //Paket Renang
+                              Text(
+                                item.packageName,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Container(
+                                width: 1,
+                                height: 16,
+                                color: Colors.black,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                              ),
+                              //Kategori Gaya
+                              Text(
+                                item.categoryName,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                          //Nama Siswa
+                          Text(
+                            item.studentName,
+                            style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
                       onTap: () {
