@@ -181,10 +181,8 @@ class _InventarisViewState extends State<InventarisView> {
         return const Center(child: Text("Tidak ada stok barang."));
       }
 
-      // Filter daftar stok berdasarkan input pencarian
       final filteredStockList =
           controller.stockList.where((stock) {
-            // Periksa apakah nama master coach atau nama barang mengandung query
             final matchesMasterCoach = stock.mastercoachName
                 .toLowerCase()
                 .contains(searchQuery.toLowerCase());
@@ -704,105 +702,111 @@ class _InventarisViewState extends State<InventarisView> {
                   filteredList.length, // Gunakan daftar yang sudah difilter
               itemBuilder: (context, index) {
                 var item = filteredList[index];
-                return Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 50),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            'assets/images/onboarding1.png', // Replace with your own image path
-                            height: double.infinity,
-                            width: double.infinity,
-                            fit:
-                                BoxFit
-                                    .cover, // Make the image cover the container
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: Container(
+                return GestureDetector(
+                  onTap: () {
+                    // Navigasi ke halaman lain dengan parameter item
+                    Get.toNamed(Routes.DETAIL_INVENTARIS, arguments: item);
+                  },
+                  child: Stack(
+                    children: [
+                      Container(
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.center,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0xFF8AC4FF).withOpacity(0.0),
-                              AppColors.deepOceanBlue.withOpacity(1.0),
-                            ],
-                          ),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          bottom: 10,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 50),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              'assets/images/onboarding1.png', // Replace with your own image path
+                              height: double.infinity,
+                              width: double.infinity,
+                              fit:
+                                  BoxFit
+                                      .cover, // Make the image cover the container
+                            ),
+                          ),
                         ),
-                        child: ClipRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                      ),
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.center,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color(0xFF8AC4FF).withOpacity(0.0),
+                                AppColors.deepOceanBlue.withOpacity(1.0),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                            right: 10,
+                            bottom: 10,
+                          ),
+                          child: ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                               child: Container(
+                                alignment: Alignment.center,
                                 decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                padding: EdgeInsets.all(8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      item.name,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20,
-                                        color: AppColors.midnightNavy,
-                                        letterSpacing: -0.3,
-                                        height: 1,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text(
-                                      "Jumlah: ${item.totalQtyBorrowed}",
-                                      style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                        color: const Color.fromARGB(
-                                          255,
-                                          32,
-                                          66,
-                                          94,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        item.name,
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20,
+                                          color: AppColors.midnightNavy,
+                                          letterSpacing: -0.3,
+                                          height: 1,
                                         ),
-                                        letterSpacing: -0.3,
-                                        height: 1,
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(height: 8),
+                                      Text(
+                                        "Jumlah: ${item.totalQtyBorrowed}",
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13,
+                                          color: const Color.fromARGB(
+                                            255,
+                                            32,
+                                            66,
+                                            94,
+                                          ),
+                                          letterSpacing: -0.3,
+                                          height: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               },
             ),
