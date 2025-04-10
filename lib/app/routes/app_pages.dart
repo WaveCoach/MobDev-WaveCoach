@@ -1,4 +1,6 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:map_camera_flutter/map_camera_flutter.dart';
 
 import '../modules/ajukan_peminjaman/bindings/ajukan_peminjaman_binding.dart';
 import '../modules/ajukan_peminjaman/views/ajukan_peminjaman_view.dart';
@@ -161,7 +163,16 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.AJUKAN_PEMINJAMAN,
-      page: () => const AjukanPeminjamanView(),
+      page: () {
+        try {
+          debugPrint("Navigating to AJUKAN_PEMINJAMAN");
+          return const AjukanPeminjamanView();
+        } catch (e, stackTrace) {
+          debugPrint("ERROR DI AJUKAN_PEMINJAMAN: $e");
+          debugPrint("STACKTRACE: $stackTrace");
+          return Scaffold(body: Center(child: Text("Terjadi error: $e")));
+        }
+      },
       binding: AjukanPeminjamanBinding(),
     ),
     GetPage(

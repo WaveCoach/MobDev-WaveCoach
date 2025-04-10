@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
+import 'package:mob_dev_wave_coach/app/routes/app_pages.dart';
 import '../controllers/inventaris_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -26,42 +27,6 @@ class _InventarisViewState extends State<InventarisView> {
   }
 
   Widget build(BuildContext context) {
-    Widget ajukanPeminjaman() {
-      return Positioned(
-        bottom: 120,
-        left: 20,
-        right: 20,
-        child: ElevatedButton(
-          onPressed: () {
-            // Add your onPressed code here!
-          },
-          style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            backgroundColor: AppColors.honeyGold,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.edit, color: Colors.white, size: 24),
-              SizedBox(width: 8),
-              Text(
-                'Ajukan Peminjaman',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 22,
-                  color: Colors.white,
-                  letterSpacing: -0.3,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: AppColors.skyBlue,
       body: Stack(
@@ -87,8 +52,46 @@ class _InventarisViewState extends State<InventarisView> {
               ],
             ),
           ),
-          if (dropdownValue == "Barang") ajukanPeminjaman(),
+          if (dropdownValue != null && dropdownValue == "Barang")
+            ajukanPeminjaman(),
         ],
+      ),
+    );
+  }
+
+  Widget ajukanPeminjaman() {
+    return Positioned(
+      bottom: 120,
+      left: 20,
+      right: 20,
+      child: ElevatedButton(
+        onPressed: () {
+          Get.toNamed(Routes.AJUKAN_PEMINJAMAN);
+          // debugPrint("Ajukan Peminjaman button pressed");
+        },
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 8),
+          backgroundColor: AppColors.honeyGold,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.edit, color: Colors.white, size: 24),
+            SizedBox(width: 8),
+            Text(
+              'Ajukan Peminjaman',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 22,
+                color: Colors.white,
+                letterSpacing: -0.3,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -179,15 +182,19 @@ class _InventarisViewState extends State<InventarisView> {
       }
 
       // Filter daftar stok berdasarkan input pencarian
-      final filteredStockList = controller.stockList.where((stock) {
-        // Periksa apakah nama master coach atau nama barang mengandung query
-        final matchesMasterCoach = stock.mastercoachName
-            .toLowerCase()
-            .contains(searchQuery.toLowerCase());
-        final matchesItems = stock.items.any((item) =>
-            item.inventoryName.toLowerCase().contains(searchQuery.toLowerCase()));
-        return matchesMasterCoach || matchesItems;
-      }).toList();
+      final filteredStockList =
+          controller.stockList.where((stock) {
+            // Periksa apakah nama master coach atau nama barang mengandung query
+            final matchesMasterCoach = stock.mastercoachName
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase());
+            final matchesItems = stock.items.any(
+              (item) => item.inventoryName.toLowerCase().contains(
+                searchQuery.toLowerCase(),
+              ),
+            );
+            return matchesMasterCoach || matchesItems;
+          }).toList();
 
       return Column(
         children: [
@@ -256,8 +263,9 @@ class _InventarisViewState extends State<InventarisView> {
                       color: Colors.transparent,
                       elevation: 0,
                       child: Theme(
-                        data: Theme.of(context)
-                            .copyWith(dividerColor: Colors.transparent),
+                        data: Theme.of(
+                          context,
+                        ).copyWith(dividerColor: Colors.transparent),
                         child: ExpansionTile(
                           title: Row(
                             children: [
@@ -634,9 +642,10 @@ class _InventarisViewState extends State<InventarisView> {
       }
 
       // Filter daftar barang berdasarkan input pencarian
-      final filteredList = controller.borrowedList.where((item) {
-        return item.name.toLowerCase().contains(searchQuery.toLowerCase());
-      }).toList();
+      final filteredList =
+          controller.borrowedList.where((item) {
+            return item.name.toLowerCase().contains(searchQuery.toLowerCase());
+          }).toList();
 
       return Column(
         children: [
@@ -691,7 +700,8 @@ class _InventarisViewState extends State<InventarisView> {
                 childAspectRatio: 1,
               ),
               padding: EdgeInsets.only(bottom: 190),
-              itemCount: filteredList.length, // Gunakan daftar yang sudah difilter
+              itemCount:
+                  filteredList.length, // Gunakan daftar yang sudah difilter
               itemBuilder: (context, index) {
                 var item = filteredList[index];
                 return Stack(
@@ -708,7 +718,9 @@ class _InventarisViewState extends State<InventarisView> {
                             'assets/images/onboarding1.png', // Replace with your own image path
                             height: double.infinity,
                             width: double.infinity,
-                            fit: BoxFit.cover, // Make the image cover the container
+                            fit:
+                                BoxFit
+                                    .cover, // Make the image cover the container
                           ),
                         ),
                       ),
