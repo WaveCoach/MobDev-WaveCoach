@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:mob_dev_wave_coach/app/modules/ajukan_peminjaman/model/inventory_matercoach_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/ajukan_peminjaman/model/mastercoach_model.dart';
 
 import '../controllers/ajukan_peminjaman_controller.dart';
 
@@ -18,11 +20,11 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildNameInput(),
+            _buildNameInput(controller),
             const SizedBox(height: 16),
-            _buildMasterCoachInput(),
+            _buildMasterCoachInput(controller),
             const SizedBox(height: 16),
-            _buildStuffDropdown(),
+            _buildStuffDropdown(controller),
             const SizedBox(height: 16),
             _buildBorrowDateInput(),
             const SizedBox(height: 16),
@@ -37,110 +39,123 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
     );
   }
 
-  Widget _buildNameInput() {
-    return TextFormField(
-      // controller: controller.nameController,
-      decoration: const InputDecoration(
-        labelText: "Nama Lengkap",
-        border: OutlineInputBorder(),
+  Widget _buildNameInput(AjukanPeminjamanController controller) {
+    return Obx(
+      () => TextFormField(
+        initialValue: controller.name.value,
+        readOnly: true,
+        decoration: const InputDecoration(
+          labelText: "Nama Lengkap",
+          border: OutlineInputBorder(),
+        ),
       ),
     );
   }
 
-  Widget _buildMasterCoachInput() {
-    return TextFormField(
-      // controller: controller.masterCoachController,
-      decoration: const InputDecoration(
-        labelText: "Nama Master Coach",
-        border: OutlineInputBorder(),
+  Widget _buildMasterCoachInput(AjukanPeminjamanController controller) {
+    return Obx(
+      () => DropdownButtonFormField<MasterCoach>(
+        value: controller.selectedMatercoach.value,
+        decoration: const InputDecoration(
+          labelText: "Nama Master Coach",
+          border: OutlineInputBorder(),
+        ),
+        isExpanded: true,
+        items:
+            controller.masterCoachList
+                .map(
+                  (masterCoach) => DropdownMenuItem<MasterCoach>(
+                    value: masterCoach,
+                    child: Text(masterCoach.name ?? "-"),
+                  ),
+                )
+                .toList(),
+        onChanged: (value) {
+          controller.selectedMatercoach.value = value;
+          controller.fetchInventory();
+        },
       ),
     );
   }
 
-  Widget _buildStuffDropdown() {
-    List<Map<String, dynamic>> stuffList = [
-      {'selectedStuff': null, 'quantity': ''},
-    ];
+  Widget _buildStuffDropdown(AjukanPeminjamanController controller) {
+    return Obx(() {
+      return Column(
+        children: [
+          ...controller.stuffFormList.asMap().entries.map((entry) {
+            int index = entry.key;
+            Map<String, dynamic> stuff = entry.value;
 
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Column(
-          children: [
-            ...stuffList.asMap().entries.map((entry) {
-              int index = entry.key;
-              Map<String, dynamic> stuff = entry.value;
-              return Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: "Pilih Stuff",
-                        border: OutlineInputBorder(),
-                      ),
-                      value: stuff['selectedStuff'],
-                      items:
-                          ["Stuff 1", "Stuff 2", "Stuff 3"].map((item) {
-                            return DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(item),
-                            );
-                          }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          stuff['selectedStuff'] = value;
-                        });
-                      },
+            return Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: DropdownButtonFormField<InventoryItem>(
+                    decoration: const InputDecoration(
+                      labelText: "Pilih Stuff",
+                      border: OutlineInputBorder(),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    flex: 1,
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Jumlah",
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      initialValue: stuff['quantity'],
-                      onChanged: (value) {
-                        setState(() {
-                          stuff['quantity'] = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  IconButton(
-                    icon: const Icon(Icons.remove_circle),
-                    color: Colors.red,
-                    onPressed: () {
-                      setState(() {
-                        stuffList.removeAt(index);
-                      });
+                    isExpanded: true,
+                    value: stuff['selectedStuff'],
+                    items:
+                        controller.stuffList.map((item) {
+                          return DropdownMenuItem<InventoryItem>(
+                            value: item,
+                            child: Text(item.inventoryName ?? "-"),
+                          );
+                        }).toList(),
+                    onChanged: (value) {
+                      stuff['selectedStuff'] = value;
+                      controller.stuffFormList[index] = {
+                        ...stuff,
+                      }; // trigger Obx update
                     },
                   ),
-                ],
-              );
-            }).toList(),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  stuffList.add({'selectedStuff': null, 'quantity': ''});
-                });
-              },
-              child: const Text("Tambah Stuff"),
-            ),
-          ],
-        );
-      },
-    );
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 1,
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Jumlah",
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    initialValue: stuff['quantity'],
+                    onChanged: (value) {
+                      stuff['quantity'] = value;
+                      controller.stuffFormList[index] = {...stuff};
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                IconButton(
+                  icon: const Icon(Icons.remove_circle),
+                  color: Colors.red,
+                  onPressed: () {
+                    controller.stuffFormList.removeAt(index);
+                  },
+                ),
+              ],
+            );
+          }).toList(),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              controller.stuffFormList.add({
+                'selectedStuff': null,
+                'quantity': '',
+              });
+            },
+            child: const Text("Tambah Stuff"),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildBorrowDateInput() {
     return TextFormField(
-      // controller: controller.borrowDateController,
       decoration: const InputDecoration(
         labelText: "Tanggal Peminjaman",
         border: OutlineInputBorder(),

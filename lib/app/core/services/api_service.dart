@@ -122,4 +122,12 @@ class ApiService extends GetConnect {
   Future<Response> getDetailHistoryAssessment(int id) {
     return get("$url/history-assessment/$id", headers: getHeaders());
   }
+
+  Future<Response> getMastercoach() {
+    return get("$url/list-mastercoach-inventory", headers: getHeaders());
+  }
+
+  Future<Response> getInventoryManagementMastercoach(int mastercoachId) {
+    return get("$url/inventory-list/$mastercoachId", headers: getHeaders());
+  }
 }
