@@ -86,57 +86,63 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
             int index = entry.key;
             Map<String, dynamic> stuff = entry.value;
 
-            return Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: DropdownButtonFormField<InventoryItem>(
-                    decoration: const InputDecoration(
-                      labelText: "Pilih Stuff",
-                      border: OutlineInputBorder(),
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: DropdownButtonFormField<InventoryItem>(
+                      decoration: const InputDecoration(
+                        labelText: "Pilih Stuff",
+                        border: OutlineInputBorder(),
+                      ),
+                      isExpanded: true,
+                      value: stuff['selectedStuff'],
+                      items:
+                          controller.stuffList.map((item) {
+                            return DropdownMenuItem<InventoryItem>(
+                              value: item,
+                              child: Text(item.inventoryName ?? "-"),
+                            );
+                          }).toList(),
+                      onChanged: (value) {
+                        stuff['selectedStuff'] = value;
+                        controller.stuffFormList[index] = {
+                          ...stuff,
+                        }; // trigger Obx
+                      },
                     ),
-                    isExpanded: true,
-                    value: stuff['selectedStuff'],
-                    items:
-                        controller.stuffList.map((item) {
-                          return DropdownMenuItem<InventoryItem>(
-                            value: item,
-                            child: Text(item.inventoryName ?? "-"),
-                          );
-                        }).toList(),
-                    onChanged: (value) {
-                      stuff['selectedStuff'] = value;
-                      controller.stuffFormList[index] = {
-                        ...stuff,
-                      }; // trigger Obx update
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 1,
+                    child: TextFormField(
+                      key: ValueKey(
+                        "qty-${stuff['selectedStuff']?.id ?? index}",
+                      ),
+                      decoration: const InputDecoration(
+                        labelText: "Jumlah",
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      initialValue: stuff['quantity']?.toString(),
+                      onChanged: (value) {
+                        stuff['quantity'] = value;
+                        controller.stuffFormList[index] = {...stuff};
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  IconButton(
+                    icon: const Icon(Icons.remove_circle),
+                    color: Colors.red,
+                    onPressed: () {
+                      controller.stuffFormList.removeAt(index);
                     },
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  flex: 1,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: "Jumlah",
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    initialValue: stuff['quantity'],
-                    onChanged: (value) {
-                      stuff['quantity'] = value;
-                      controller.stuffFormList[index] = {...stuff};
-                    },
-                  ),
-                ),
-                const SizedBox(width: 16),
-                IconButton(
-                  icon: const Icon(Icons.remove_circle),
-                  color: Colors.red,
-                  onPressed: () {
-                    controller.stuffFormList.removeAt(index);
-                  },
-                ),
-              ],
+                ],
+              ),
             );
           }).toList(),
           const SizedBox(height: 16),
@@ -171,7 +177,7 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
         );
         if (pickedDate != null) {
           controller.dateBorrowController.text =
-              "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
         }
       },
     );
@@ -194,7 +200,7 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
         );
         if (pickedDate != null) {
           controller.dateReturnController.text =
-              "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
         }
       },
     );
@@ -215,7 +221,7 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          // controller.submitForm();
+          controller.submitPengajuan();
         },
         child: const Text("Ajukan Peminjaman"),
       ),

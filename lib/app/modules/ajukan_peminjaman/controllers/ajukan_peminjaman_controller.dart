@@ -64,40 +64,56 @@ class AjukanPeminjamanController extends GetxController {
 
   Future<void> submitPengajuan() async {
     final mastercoachId = selectedMatercoach.value?.id;
-    final dateBorrow = dateBorrowController.text.trim();
-    final dateReturn = dateReturnController.text.trim();
+    final tanggalPinjam = dateBorrowController.text.trim();
+    final tanggalKembali = dateReturnController.text.trim();
+    final alasanPinjam = descController.text.trim();
+
+    final items =
+        stuffFormList
+            .map((stuff) {
+              final selected = stuff['selectedStuff'];
+              final qty = stuff['quantity'];
+
+              if (selected == null || qty == null || qty.toString().isEmpty) {
+                return null;
+              }
+
+              return {
+                "inventory_id": selected.id,
+                "qty_requested": int.tryParse(qty.toString()) ?? 0,
+              };
+            })
+            .where((item) => item != null)
+            .toList();
 
     final body = {
       "mastercoach_id": mastercoachId,
-      "date_borrow": dateBorrow,
-      "date_return": dateReturn,
-      "inventory":
-          stuffFormList.map((stuff) {
-            return {
-              "inventory_id": stuff['selectedStuff']?.id,
-              "qty_requested": stuff['quantity'],
-            };
-          }).toList(),
+      "tanggal_pinjam": tanggalPinjam,
+      "tanggal_kembali": tanggalKembali,
+      "alasan_pinjam": alasanPinjam,
+      "items": items,
     };
 
-    await wrapLoading(isLoading, () async {
-      final response = await apiService.postAssessment(body);
+    print("body: $body");
 
-      if (response.statusCode == 200) {
+    await wrapLoading(isLoading, () async {
+      final response = await apiService.postRequestBorrow(body);
+
+      if (response.statusCode == 201) {
         Get.snackbar(
           "Success",
-          "Assessment submitted successfully",
+          "request borrow submitted successfully",
           snackPosition: SnackPosition.TOP,
         );
         Get.offAllNamed('/inventaris');
       } else {
         logError(
-          "Submit assessment",
+          "Submit request borrow",
           "${response.statusCode}: ${response.body}",
         );
         Get.snackbar(
           "Error",
-          "Failed to submit assessment: ${response.body}",
+          "Failed to submit request borrow: ${response.body}",
           snackPosition: SnackPosition.TOP,
         );
       }
