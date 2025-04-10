@@ -1,16 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/history_penilaian_detail/controllers/history_penilaian_detail_controller.dart';
 
-class HistoryPenilaianDetailView extends StatelessWidget {
+class HistoryPenilaianDetailView extends StatefulWidget {
   const HistoryPenilaianDetailView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.find<HistoryPenilaianDetailController>();
+  State<HistoryPenilaianDetailView> createState() =>
+      _HistoryPenilaianDetailViewState();
+}
 
+class _HistoryPenilaianDetailViewState
+    extends State<HistoryPenilaianDetailView> {
+  late HistoryPenilaianDetailController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<HistoryPenilaianDetailController>();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('History Penilaian Detail')),
+      appBar: AppBar(
+        titleSpacing: 0, // Adjust spacing between back icon and title
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: AppColors.deepOceanBlue,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.skyBlue,
+        iconTheme: const IconThemeData(color: AppColors.deepOceanBlue),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
+      backgroundColor: AppColors.skyBlue,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -27,6 +61,41 @@ class HistoryPenilaianDetailView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //Nama Siswa
+              Text(
+                data.data.studentName,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 16),
+              //Nama Paket
+              Text(
+                data.data.packageName,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 16),
+              //Gaya Renang
+              Text(
+                data.data.categoryName,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 16),
+              //Tanggal Penilaian
+              Text(
+                data.data.date,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               const SizedBox(height: 16),
               TextField(
                 controller: TextEditingController(text: data.data.date),
@@ -48,36 +117,8 @@ class HistoryPenilaianDetailView extends StatelessWidget {
                   border: OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: TextEditingController(text: data.data.packageName),
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Paket',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: TextEditingController(text: data.data.studentName),
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Siswa',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: TextEditingController(text: data.data.categoryName),
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Gaya',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 24),
 
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               ...data.data.details.map((aspect) {
                 return ExpansionTile(
                   title: Text(

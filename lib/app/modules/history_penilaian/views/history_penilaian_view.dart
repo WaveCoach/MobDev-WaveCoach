@@ -5,8 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/history_penilaian/controllers/history_penilaian_controller.dart';
 
-class HistoryPenilaianView extends GetView<HistoryPenilaianController> {
+class HistoryPenilaianView extends StatefulWidget {
   const HistoryPenilaianView({super.key});
+
+  @override
+  _HistoryPenilaianViewState createState() => _HistoryPenilaianViewState();
+}
+
+class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
+  final HistoryPenilaianController controller = Get.find<HistoryPenilaianController>();
 
   @override
   Widget build(BuildContext context) {
