@@ -119,7 +119,7 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                     flex: 1,
                     child: TextFormField(
                       key: ValueKey(
-                        "qty-${stuff['selectedStuff']?.id ?? index}",
+                        "qty-${stuff['selectedStuff']?.inventoryId ?? index}",
                       ),
                       decoration: const InputDecoration(
                         labelText: "Jumlah",

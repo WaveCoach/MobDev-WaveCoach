@@ -71,15 +71,17 @@ class AjukanPeminjamanController extends GetxController {
     final items =
         stuffFormList
             .map((stuff) {
-              final selected = stuff['selectedStuff'];
+              final selectedItem = stuff['selectedStuff'];
               final qty = stuff['quantity'];
 
-              if (selected == null || qty == null || qty.toString().isEmpty) {
+              if (selectedItem == null ||
+                  qty == null ||
+                  qty.toString().isEmpty) {
                 return null;
               }
 
               return {
-                "inventory_id": selected.id,
+                "inventory_id": selectedItem.inventoryId,
                 "qty_requested": int.tryParse(qty.toString()) ?? 0,
               };
             })
@@ -94,7 +96,7 @@ class AjukanPeminjamanController extends GetxController {
       "items": items,
     };
 
-    print("body: $body");
+    print("body: ${body}");
 
     await wrapLoading(isLoading, () async {
       final response = await apiService.postRequestBorrow(body);
