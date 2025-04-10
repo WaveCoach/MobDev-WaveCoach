@@ -1,65 +1,191 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/controllers/schedule_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 import '../controllers/form_penilaian_controller.dart';
 
-class FormPenilaianView extends GetView<FormPenilaianController> {
-  FormPenilaianView({Key? key}) : super(key: key);
+class FormPenilaianView extends StatefulWidget {
+  const FormPenilaianView({Key? key}) : super(key: key);
+
+  @override
+  State<FormPenilaianView> createState() => _FormPenilaianViewState();
+}
+
+class _FormPenilaianViewState extends State<FormPenilaianView> {
+  final FormPenilaianController controller =
+      Get.find<FormPenilaianController>();
   final ScheduleController scheduleController = Get.find<ScheduleController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Form Penilaian")),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildDatePicker(context),
-            const SizedBox(height: 16),
-            _buildScheduleDropdown(),
-            const SizedBox(height: 16),
-            _buildStudentDropdown(),
-            const SizedBox(height: 16),
-            _buildSwimStyleDropdown(),
-            const SizedBox(height: 16),
-            _buildAspectAssessment(),
-            const SizedBox(height: 16),
-            _buildSubmitButton(),
-          ],
+      appBar: AppBar(
+        titleSpacing: 0, // Adjust spacing between back icon and title
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
         ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
+      backgroundColor: AppColors.skyBlue,
+      body: Column(
+        children: [
+          Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.deepOceanBlue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                "Form\nPenilaian",
+                textAlign: TextAlign.center, // Set text alignment to center
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  height: 1,
+                  letterSpacing: -0.5,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      "Tanggal Latihan",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  _buildDatePicker(context),
+                  const SizedBox(height: 16),
+                  Obx(() {
+                    // Tampilkan opsi lainnya hanya jika tanggal telah dipilih
+                    if (!controller.isDateSelected.value) {
+                      return const SizedBox(); // Kosongkan jika belum dipilih
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Jadwal Latihan",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        _buildScheduleDropdown(),
+                        const SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Nama Siswa",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        _buildStudentDropdown(),
+                        const SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Tipe Gaya Renang",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        _buildSwimStyleDropdown(),
+                        const SizedBox(height: 16),
+                        _buildAspectAssessment(),
+                        const SizedBox(height: 30),
+                        _buildSubmitButton(),
+                      ],
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildDatePicker(BuildContext context) {
-    return TextFormField(
-      controller: controller.dateController,
-      decoration: const InputDecoration(
-        labelText: "Tanggal",
-        border: OutlineInputBorder(),
-        suffixIcon: Icon(Icons.calendar_today),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.grey),
       ),
-      readOnly: true,
-      onTap: () async {
-        final pickedDate = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2101),
-        );
-        if (pickedDate != null) {
-          final formattedDate =
-              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-          controller.dateController.text = formattedDate;
-          await controller.fetchSchedulesByDate(date: formattedDate);
-        }
-      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: TextFormField(
+          controller: controller.dateController,
+          decoration: const InputDecoration(
+            labelText: "Tanggal",
+            labelStyle: TextStyle(color: Colors.grey),
+            border: InputBorder.none,
+            suffixIcon: Icon(Icons.calendar_today),
+          ),
+          readOnly: true,
+          onTap: () async {
+            final pickedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2101),
+            );
+            if (pickedDate != null) {
+              final formattedDate =
+                  "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+              controller.dateController.text = formattedDate;
+              await controller.fetchSchedulesByDate(date: formattedDate);
+              controller.isDateSelected.value =
+                  true; // Tandai tanggal telah dipilih
+            }
+          },
+        ),
+      ),
     );
   }
 
@@ -73,67 +199,122 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
         return const Center(child: Text("Tidak ada jadwal tersedia"));
       }
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          DropdownButtonFormField<Schedule>(
-            isExpanded: true,
-            value: controller.selectedSchedule.value,
-            decoration: const InputDecoration(
-              labelText: "Pilih Jadwal",
-              border: OutlineInputBorder(),
-            ),
-            items:
-                scheduleController.scheduleList.map<
-                  DropdownMenuItem<Schedule>
-                >((schedule) {
-                  return DropdownMenuItem<Schedule>(
-                    value: schedule,
-                    child: Text(
-                      "${schedule.date} | ${schedule.startTime} - ${schedule.endTime}",
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          border: Border.all(color: Colors.black.withOpacity(0.2)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DropdownButtonFormField<Schedule>(
+                isExpanded: true,
+                value: controller.selectedSchedule.value,
+                decoration: const InputDecoration(
+                  labelText: "Pilih Jadwal",
+                  labelStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+                items:
+                    scheduleController.scheduleList.map<
+                      DropdownMenuItem<Schedule>
+                    >((schedule) {
+                      return DropdownMenuItem<Schedule>(
+                        value: schedule,
+                        child: Text(
+                          "${schedule.date} | ${schedule.startTime} - ${schedule.endTime}",
+                        ),
+                      );
+                    }).toList(),
+                onChanged: (selectedSchedule) {
+                  setState(() {
+                    controller.selectedSchedule.value = selectedSchedule;
+                    controller.packageController.text =
+                        selectedSchedule?.packageName ?? '';
+                    controller.selectedStudent.value = null; // Reset nama siswa
+                    controller.studentList.clear(); // Kosongkan daftar siswa
+                    controller
+                        .fetchStudentBySchedule(); // Ambil daftar siswa baru
+                  });
+                },
+              ),
+              const SizedBox(height: 5),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.deepOceanBlue,
+                  border: Border.all(color: Colors.black.withOpacity(0.2)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: TextFormField(
+                    controller: controller.packageController,
+                    readOnly: true,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: "Nama Paket",
+                      labelStyle: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      border: InputBorder.none,
                     ),
-                  );
-                }).toList(),
-            onChanged: (selectedSchedule) {
-              controller.selectedSchedule.value = selectedSchedule;
-              controller.packageController.text =
-                  selectedSchedule?.packageName ?? '';
-              controller.fetchStudentBySchedule();
-            },
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: controller.packageController,
-            readOnly: true,
-            decoration: const InputDecoration(
-              labelText: "Nama Paket",
-              border: OutlineInputBorder(),
-            ),
-          ),
-        ],
+        ),
       );
     });
   }
 
   Widget _buildStudentDropdown() {
     return Obx(() {
-      return DropdownButtonFormField<Student>(
-        isExpanded: true,
-        value: controller.selectedStudent.value,
-        decoration: const InputDecoration(
-          labelText: "Pilih Siswa",
-          border: OutlineInputBorder(),
+      // Pastikan nilai `selectedStudent` valid
+      final selectedStudent = controller.selectedStudent.value;
+      final studentList = controller.studentList;
+
+      // Jika `selectedStudent` tidak ada dalam daftar, reset ke null
+      if (selectedStudent != null &&
+          !studentList.any((student) => student == selectedStudent)) {
+        controller.selectedStudent.value = null;
+      }
+
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          border: Border.all(color: Colors.black.withOpacity(0.2)),
         ),
-        items:
-            controller.studentList.map<DropdownMenuItem<Student>>((student) {
-              return DropdownMenuItem<Student>(
-                value: student,
-                child: Text(student.name),
-              );
-            }).toList(),
-        onChanged: (selectedStudent) {
-          controller.selectedStudent.value = selectedStudent;
-        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: DropdownButtonFormField<Student>(
+            isExpanded: true,
+            value: controller.selectedStudent.value,
+            decoration: const InputDecoration(
+              labelText: "Pilih Siswa",
+              labelStyle: TextStyle(color: Colors.grey),
+              border: InputBorder.none,
+            ),
+            items:
+                controller.studentList.map<DropdownMenuItem<Student>>((
+                  student,
+                ) {
+                  return DropdownMenuItem<Student>(
+                    value: student,
+                    child: Text(student.name),
+                  );
+                }).toList(),
+            onChanged: (selectedStudent) {
+              setState(() {
+                controller.selectedStudent.value = selectedStudent;
+              });
+            },
+          ),
+        ),
       );
     });
   }
@@ -144,26 +325,39 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
         return const Center(child: Text("Tidak ada gaya renang tersedia"));
       }
 
-      return DropdownButtonFormField<SwimStyle>(
-        isExpanded: true,
-        value: controller.selectedSwimStyle.value,
-        decoration: const InputDecoration(
-          labelText: "Pilih Gaya Renang",
-          border: OutlineInputBorder(),
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          border: Border.all(color: Colors.black.withOpacity(0.2)),
         ),
-        items:
-            controller.swimStyleList.map<DropdownMenuItem<SwimStyle>>((
-              swimStyle,
-            ) {
-              return DropdownMenuItem<SwimStyle>(
-                value: swimStyle,
-                child: Text(swimStyle.name),
-              );
-            }).toList(),
-        onChanged: (selectedSwimStyle) {
-          controller.selectedSwimStyle.value = selectedSwimStyle;
-          controller.fetchAspectSwimStyle();
-        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: DropdownButtonFormField<SwimStyle>(
+            isExpanded: true,
+            value: controller.selectedSwimStyle.value,
+            decoration: const InputDecoration(
+              labelText: "Pilih Gaya Renang",
+              labelStyle: TextStyle(color: Colors.grey),
+              border: InputBorder.none,
+            ),
+            items:
+                controller.swimStyleList.map<DropdownMenuItem<SwimStyle>>((
+                  swimStyle,
+                ) {
+                  return DropdownMenuItem<SwimStyle>(
+                    value: swimStyle,
+                    child: Text(swimStyle.name),
+                  );
+                }).toList(),
+            onChanged: (selectedSwimStyle) {
+              setState(() {
+                controller.selectedSwimStyle.value = selectedSwimStyle;
+                controller.fetchAspectSwimStyle();
+              });
+            },
+          ),
+        ),
       );
     });
   }
@@ -174,60 +368,165 @@ class FormPenilaianView extends GetView<FormPenilaianController> {
         return const Text(" ");
       }
 
-      return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.aspectList.length,
-        itemBuilder: (context, index) {
-          final aspect = controller.aspectList[index];
-
-          return ExpansionTile(
-            title: Text(aspect.name),
-            subtitle: Text(aspect.desc ?? 'Deskripsi tidak tersedia'),
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Column(
-                  children: [
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: "Nilai ${aspect.name}",
-                        border: const OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        aspect.score = int.tryParse(value)?.toDouble() ?? 0.0;
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: "Catatan ${aspect.name}",
-                        border: const OutlineInputBorder(),
-                      ),
-                      maxLines: 3,
-                      onChanged: (value) {
-                        aspect.remarks = value;
-                      },
-                    ),
-                  ],
+      return Column(
+        children: controller.aspectList.map((aspect) {
+          return Container(
+            margin: const EdgeInsets.only(
+              bottom: 12,
+            ), // Add spacing between items
+            decoration: BoxDecoration(
+              color: AppColors.deepOceanBlue,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ExpansionTile(
+              title: Text(
+                aspect.name,
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Colors.white,
                 ),
               ),
-            ],
+              subtitle: Text(
+                aspect.desc ?? 'Deskripsi tidak tersedia',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.grey, width: 0),
+              ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Nilai",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 150),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                            ),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: "Masukkan Nilai",
+                                hintStyle: const TextStyle(
+                                  color: Colors.black54,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(color: Colors.black),
+                              onChanged: (value) {
+                                setState(() {
+                                  aspect.score =
+                                      int.tryParse(value)?.toDouble() ?? 0.0;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Komentar",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.black.withOpacity(0.2),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText:
+                                  "Catatan ${aspect.name}", // Ubah menjadi hint text
+                              hintStyle: const TextStyle(
+                                color: Colors.black54,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            maxLines: 3,
+                            style: const TextStyle(color: Colors.black),
+                            onChanged: (value) {
+                              setState(() {
+                                aspect.remarks = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
-        },
+        }).toList(),
       );
     });
   }
 
   Widget _buildSubmitButton() {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
       child: ElevatedButton(
         onPressed: controller.submitAssessment,
-        child: const Text("Kirim Penilaian"),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.goldenAmber,
+          minimumSize: Size(double.infinity, 64),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: Text(
+          "Submit Penilaian",
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w500,
+            fontSize: 18,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }
