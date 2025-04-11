@@ -34,8 +34,11 @@ class _PenilaianViewState extends State<PenilaianView> {
               ),
             ),
             SizedBox(height: 30),
-            SvgPicture.asset('assets/images/GroupPeople.svg', width: 340),
-            SizedBox(height: 50),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: SvgPicture.asset('assets/images/GroupPeople.svg'),
+            ),
+            Spacer(), // Menambahkan spacer untuk mendorong tombol ke bawah
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFFDC373),
@@ -137,6 +140,7 @@ class _PenilaianViewState extends State<PenilaianView> {
                 ],
               ),
             ),
+            SizedBox(height: 120), // Memberikan jarak 120 dari bawah layar
           ],
         ),
       ),

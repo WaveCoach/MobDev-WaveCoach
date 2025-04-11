@@ -13,8 +13,7 @@ class SplashScreenView extends GetView<SplashScreenController> {
       backgroundColor: AppColors.deepOceanBlue,
       body: Center(
         child: Container(
-          width: 130,
-          height: 150,
+          width: 250,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/LatinWaveCoach.png'),

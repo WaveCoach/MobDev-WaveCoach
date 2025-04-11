@@ -248,7 +248,7 @@ class _HistoryPenilaianDetailViewState
                               title: Text(
                                 aspect.aspectName ?? 'Aspek',
                                 style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 18,
                                   color: Colors.white,
                                 ),
@@ -284,34 +284,25 @@ class _HistoryPenilaianDetailViewState
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          right: 280,
-                                        ),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            color: Colors.white,
-                                            border: Border.all(
-                                              color: Colors.black.withOpacity(
-                                                0.2,
-                                              ),
-                                            ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width * 0.5, // Setengah lebar layar
+                                        alignment: Alignment.centerLeft, // Rata kiri
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black.withOpacity(0.2),
                                           ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                                          child: TextField(
+                                            controller: TextEditingController(
+                                              text: aspect.score.toString(),
                                             ),
-                                            child: TextField(
-                                              controller: TextEditingController(
-                                                text: aspect.score.toString(),
-                                              ),
-                                              readOnly: true,
-                                              decoration: InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
+                                            readOnly: true,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
                                             ),
                                           ),
                                         ),
@@ -365,6 +356,78 @@ class _HistoryPenilaianDetailViewState
                             ),
                           );
                         }).toList(),
+                        const SizedBox(height: 16),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: AppColors.deepOceanBlue,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Rata-rata nilai
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Rata-rata Nilai",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    controller.historyDetailResponse.value?.data.details.isNotEmpty ?? false
+                                        ? (controller.historyDetailResponse.value!.data.details
+                                                .map((aspect) => aspect.score)
+                                                .reduce((a, b) => a + b) /
+                                            controller.historyDetailResponse.value!.data.details.length)
+                                            .toStringAsFixed(2)
+                                        : "Tidak ada data nilai",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // Status Lulus/Tidak Lulus
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: (controller.historyDetailResponse.value?.data.details.isNotEmpty ?? false) &&
+                                          (controller.historyDetailResponse.value!.data.details
+                                                  .map((aspect) => aspect.score)
+                                                  .reduce((a, b) => a + b) /
+                                              controller.historyDetailResponse.value!.data.details.length) >
+                                              80
+                                      ? Colors.green
+                                      : Colors.red,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  (controller.historyDetailResponse.value?.data.details.isNotEmpty ?? false) &&
+                                          (controller.historyDetailResponse.value!.data.details
+                                                  .map((aspect) => aspect.score)
+                                                  .reduce((a, b) => a + b) /
+                                              controller.historyDetailResponse.value!.data.details.length) >
+                                              80
+                                      ? "Lulus"
+                                      : "Tidak Lulus",
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
