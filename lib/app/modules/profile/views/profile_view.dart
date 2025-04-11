@@ -221,7 +221,8 @@ class _ProfileViewState extends State<ProfileView> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/contact-admin');
+                      Navigator.pushNamed(context, '/ajukan-peminjaman');
+                      // Navigator.pushNamed(context, '/contact-admin');
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(20),
