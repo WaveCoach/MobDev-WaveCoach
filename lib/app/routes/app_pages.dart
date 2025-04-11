@@ -187,7 +187,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.DETAIL_INVENTARIS,
-      page: () => const DetailInventarisView(),
+      page: () => DetailInventarisView(),
       binding: DetailInventarisBinding(),
     ),
     GetPage(

@@ -704,7 +704,10 @@ class _InventarisViewState extends State<InventarisView> {
                 var item = filteredList[index];
                 return GestureDetector(
                   onTap: () {
-                    Get.toNamed(Routes.DETAIL_INVENTARIS, arguments: item);
+                    Get.toNamed(
+                      Routes.DETAIL_INVENTARIS,
+                      arguments: item.inventoryId,
+                    );
                   },
                   child: Stack(
                     children: [

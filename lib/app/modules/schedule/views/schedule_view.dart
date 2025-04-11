@@ -122,7 +122,9 @@ class _ScheduleViewState extends State<ScheduleView> {
       // Filter months that have schedules
       List<int> availableMonths = [];
       for (var schedule in controller.scheduleList) {
-        final scheduleDate = DateTime.parse(schedule.date); // Assuming `schedule.date` is in ISO format
+        final scheduleDate = DateTime.parse(
+          schedule.date,
+        ); // Assuming `schedule.date` is in ISO format
         final scheduleMonth = scheduleDate.month;
         if (!availableMonths.contains(scheduleMonth)) {
           availableMonths.add(scheduleMonth);
@@ -140,7 +142,9 @@ class _ScheduleViewState extends State<ScheduleView> {
                   Row(
                     children: List.generate(monthNames.length, (index) {
                       // Show button only if the month is available or it's "Terdekat" or "Semua"
-                      if (index == 0 || index == 1 || availableMonths.contains(index - 1)) {
+                      if (index == 0 ||
+                          index == 1 ||
+                          availableMonths.contains(index - 1)) {
                         return GestureDetector(
                           onTap: () {
                             setState(() {
@@ -157,16 +161,20 @@ class _ScheduleViewState extends State<ScheduleView> {
                               vertical: 7,
                             ),
                             decoration: BoxDecoration(
-                              color: _selectedMonthIndex == index
-                                  ? AppColors.deepOceanBlue
-                                  : Colors.white,
+                              color:
+                                  _selectedMonthIndex == index
+                                      ? AppColors.deepOceanBlue
+                                      : Colors.white,
                               borderRadius: BorderRadius.circular(1000),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.5),
                                   spreadRadius: 0,
                                   blurRadius: 4,
-                                  offset: Offset(0, 4), // changes position of shadow
+                                  offset: Offset(
+                                    0,
+                                    4,
+                                  ), // changes position of shadow
                                 ),
                               ],
                             ),
@@ -175,9 +183,10 @@ class _ScheduleViewState extends State<ScheduleView> {
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w500, // Medium
                                 fontSize: 16,
-                                color: _selectedMonthIndex == index
-                                    ? Colors.white
-                                    : Colors.black,
+                                color:
+                                    _selectedMonthIndex == index
+                                        ? Colors.white
+                                        : Colors.black,
                               ),
                             ),
                           ),
@@ -234,22 +243,26 @@ class _ScheduleViewState extends State<ScheduleView> {
         }
 
         // Filter schedule list based on the selected month index
-        List filteredScheduleList = controller.scheduleList.where((schedule) {
-          if (_selectedMonthIndex == 0) {
-            // "Terdekat" - Filter schedules within the next 3 days
-            final now = DateTime.now();
-            final scheduleDate = DateTime.parse(schedule.date); // Assuming `schedule.date` is in ISO format
-            return scheduleDate.isAfter(now) &&
-                scheduleDate.isBefore(now.add(Duration(days: 3)));
-          } else if (_selectedMonthIndex == 1) {
-            // "Semua" - Show all schedules
-            return true;
-          } else {
-            // Specific month - Filter schedules by month
-            final scheduleMonth = DateTime.parse(schedule.date).month;
-            return scheduleMonth == _selectedMonthIndex - 1; // Adjust index for monthNames
-          }
-        }).toList();
+        List filteredScheduleList =
+            controller.scheduleList.where((schedule) {
+              if (_selectedMonthIndex == 0) {
+                // "Terdekat" - Filter schedules within the next 3 days
+                final now = DateTime.now();
+                final scheduleDate = DateTime.parse(
+                  schedule.date,
+                ); // Assuming `schedule.date` is in ISO format
+                return scheduleDate.isAfter(now) &&
+                    scheduleDate.isBefore(now.add(Duration(days: 3)));
+              } else if (_selectedMonthIndex == 1) {
+                // "Semua" - Show all schedules
+                return true;
+              } else {
+                // Specific month - Filter schedules by month
+                final scheduleMonth = DateTime.parse(schedule.date).month;
+                return scheduleMonth ==
+                    _selectedMonthIndex - 1; // Adjust index for monthNames
+              }
+            }).toList();
 
         // Check if "Terdekat" is selected and no schedules are available
         if (_selectedMonthIndex == 0 && filteredScheduleList.isEmpty) {
@@ -387,14 +400,14 @@ class _ScheduleViewState extends State<ScheduleView> {
                                         padding: EdgeInsets.symmetric(
                                           horizontal: 8,
                                         ),
-                                        child: Text(
-                                          "Reschedule",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14,
-                                            color: Colors.black,
-                                          ),
-                                        ),
+                                        // child: Text(
+                                        //   "Reschedule",
+                                        //   style: GoogleFonts.poppins(
+                                        //     fontWeight: FontWeight.w500,
+                                        //     fontSize: 14,
+                                        //     color: Colors.black,
+                                        //   ),
+                                        // ),
                                       ),
                                     ],
                                   ),
