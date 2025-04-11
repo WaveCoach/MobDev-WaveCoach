@@ -704,7 +704,6 @@ class _InventarisViewState extends State<InventarisView> {
                 var item = filteredList[index];
                 return GestureDetector(
                   onTap: () {
-                    // Navigasi ke halaman lain dengan parameter item
                     Get.toNamed(Routes.DETAIL_INVENTARIS, arguments: item);
                   },
                   child: Stack(
@@ -718,12 +717,10 @@ class _InventarisViewState extends State<InventarisView> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Image.asset(
-                              'assets/images/onboarding1.png', // Replace with your own image path
+                              'assets/images/onboarding1.png',
                               height: double.infinity,
                               width: double.infinity,
-                              fit:
-                                  BoxFit
-                                      .cover, // Make the image cover the container
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
