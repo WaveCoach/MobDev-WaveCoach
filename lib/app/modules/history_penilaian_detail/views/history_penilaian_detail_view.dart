@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/history_penilaian_detail/controllers/history_penilaian_detail_controller.dart';
+import 'package:intl/date_symbol_data_local.dart'; // Tambahkan ini
 
 class HistoryPenilaianDetailView extends StatefulWidget {
   const HistoryPenilaianDetailView({Key? key}) : super(key: key);
@@ -21,6 +23,9 @@ class _HistoryPenilaianDetailViewState
   void initState() {
     super.initState();
     controller = Get.find<HistoryPenilaianDetailController>();
+
+    // Inisialisasi locale untuk DateFormat
+    initializeDateFormatting('id_ID', null);
   }
 
   @override
@@ -56,116 +61,315 @@ class _HistoryPenilaianDetailViewState
           return const Center(child: Text('Data tidak ditemukan'));
         }
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+        return Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //Nama Siswa
+              // Bagian statis (tidak ikut scroll)
               Text(
                 data.data.studentName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                style: GoogleFonts.poppins(
+                  color: Color(0xFF4C4C4C),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  height: 1,
                 ),
               ),
               const SizedBox(height: 16),
-              //Nama Paket
               Text(
                 data.data.packageName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  height: 1,
                 ),
               ),
               const SizedBox(height: 16),
-              //Gaya Renang
               Text(
                 data.data.categoryName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                style: GoogleFonts.poppins(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  height: 1,
                 ),
               ),
               const SizedBox(height: 16),
-              //Tanggal Penilaian
               Text(
-                data.data.date,
-                style: const TextStyle(
+                DateFormat(
+                  'd MMMM yyyy',
+                  'id_ID',
+                ).format(DateTime.parse(data.data.date)),
+                style: GoogleFonts.poppins(
+                  color: AppColors.deepOceanBlue,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(height: 16),
-              TextField(
-                controller: TextEditingController(text: data.data.date),
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Tanggal',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: TextEditingController(
-                  text:
-                      '${data.data.scheduleDate} | ${data.data.scheduleStartTime} - ${data.data.scheduleEndTime}',
-                ),
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Jadwal',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+              Divider(color: Colors.black.withOpacity(0.2), thickness: 1),
+              // Bagian scrollable
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Nama Siswa",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text:
+                                    data.data.studentName,
+                              ),
+                              style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                              decoration: const InputDecoration(
+                                labelText: "Nama Siswa",
+                                labelStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                              ),
+                              readOnly: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Jadwal Latihan",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text:
+                                    '${DateFormat('dd-MM-yyyy').format(DateTime.parse(data.data.scheduleDate))} | ${DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(data.data.scheduleStartTime))} - ${DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(data.data.scheduleEndTime))}',
+                              ),
+                              style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                              decoration: const InputDecoration(
+                                labelText: "Jadwal",
+                                labelStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                              ),
+                              readOnly: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Gaya Renang",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text:
+                                    data.data.categoryName,
+                              ),
+                              style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                              decoration: const InputDecoration(
+                                labelText: "Gaya Renang",
+                                labelStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                              ),
+                              readOnly: true,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ...data.data.details.map((aspect) {
+                          return Container(
+                            margin: const EdgeInsets.only(
+                              bottom: 12,
+                            ), // Add spacing between items
+                            decoration: BoxDecoration(
+                              color: AppColors.deepOceanBlue,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ExpansionTile(
+                              title: Text(
+                                aspect.aspectName ?? 'Aspek',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              subtitle: Text(
+                                aspect.aspectDesc ?? 'Deskripsi tidak tersedia',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              iconColor: Colors.white,
+                              collapsedIconColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.grey, width: 0),
+                              ),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          "Nilai",
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 280,
+                                        ),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: Colors.black.withOpacity(
+                                                0.2,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                            ),
+                                            child: TextField(
+                                              controller: TextEditingController(
+                                                text: aspect.score.toString(),
+                                              ),
+                                              readOnly: true,
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
 
-              const SizedBox(height: 16),
-              ...data.data.details.map((aspect) {
-                return ExpansionTile(
-                  title: Text(
-                    aspect.aspectName ?? 'Aspek',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                                      const SizedBox(height: 8),
+
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          "Komentar",
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black.withOpacity(
+                                              0.2,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                          ),
+                                          child: TextField(
+                                            controller: TextEditingController(
+                                              text: aspect.remarks,
+                                            ),
+                                            readOnly: true,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                            maxLines: 3,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ],
                     ),
                   ),
-                  subtitle:
-                      aspect.aspectDesc != null
-                          ? Text(aspect.aspectDesc!)
-                          : null,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextField(
-                            controller: TextEditingController(
-                              text: aspect.score.toString(),
-                            ),
-                            readOnly: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Nilai',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          TextField(
-                            controller: TextEditingController(
-                              text: aspect.remarks,
-                            ),
-                            readOnly: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Catatan',
-                              border: OutlineInputBorder(),
-                            ),
-                            maxLines: 3,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
+                ),
+              ),
             ],
           ),
         );

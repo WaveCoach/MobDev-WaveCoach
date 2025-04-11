@@ -453,19 +453,6 @@ class _ScheduleViewState extends State<ScheduleView> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.deepOceanBlue,
-        title: Text(
-          'Jadwal Latihan',
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
       backgroundColor: AppColors.skyBlue,
       body: Stack(
         children: [

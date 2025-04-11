@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/ajukan_peminjaman/model/inventory_matercoach_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/ajukan_peminjaman/model/mastercoach_model.dart';
 
@@ -12,29 +15,72 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AjukanPeminjamanView'),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildNameInput(controller),
-            const SizedBox(height: 16),
-            _buildMasterCoachInput(controller),
-            const SizedBox(height: 16),
-            _buildStuffDropdown(controller),
-            const SizedBox(height: 16),
-            _buildBorrowDateInput(),
-            const SizedBox(height: 16),
-            _buildReturnDateInput(),
-            const SizedBox(height: 16),
-            _buildDescInput(),
-            const SizedBox(height: 16),
-            _buildSubmitButton(),
-          ],
+        titleSpacing: 0, // Adjust spacing between back icon and title
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
         ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
+      backgroundColor: AppColors.skyBlue,
+      body: Column(
+        children: [
+          Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.deepOceanBlue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                "Ajukan\nPeminjaman",
+                textAlign: TextAlign.center, // Set text alignment to center
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
+                  letterSpacing: -0.5,
+                ),
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNameInput(controller),
+                const SizedBox(height: 16),
+                _buildMasterCoachInput(controller),
+                const SizedBox(height: 16),
+                _buildStuffDropdown(controller),
+                const SizedBox(height: 16),
+                _buildBorrowDateInput(),
+                const SizedBox(height: 16),
+                _buildReturnDateInput(),
+                const SizedBox(height: 16),
+                _buildDescInput(),
+                const SizedBox(height: 16),
+                _buildSubmitButton(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
