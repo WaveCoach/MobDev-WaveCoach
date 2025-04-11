@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart'; // Ensure this is imported
+import 'package:image_picker/image_picker.dart';
+import 'dart:convert'; // Import for base64Encode
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import '../controllers/profile_controller.dart';
 
@@ -13,6 +15,12 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   final ProfileController controller = Get.put(ProfileController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +46,84 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 135,
-                          height: 135,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/coachSarah.jpg'),
-                              fit: BoxFit.cover,
+                        GestureDetector(
+                          onTap: () async {
+                            final ImagePicker picker = ImagePicker();
+                            final XFile? image = await showDialog<XFile?>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Pilih Sumber Gambar'),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(Icons.camera_alt),
+                                        title: Text('Kamera'),
+                                        onTap: () async {
+                                          final XFile? pickedImage =
+                                              await picker.pickImage(
+                                                source: ImageSource.camera,
+                                              );
+                                          Navigator.pop(context, pickedImage);
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: Icon(Icons.photo_library),
+                                        title: Text('Galeri'),
+                                        onTap: () async {
+                                          final XFile? pickedImage =
+                                              await picker.pickImage(
+                                                source: ImageSource.gallery,
+                                              );
+                                          Navigator.pop(context, pickedImage);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+
+                            if (image != null) {
+                              final bytes = await image.readAsBytes();
+                              final base64Image = base64Encode(bytes);
+                              final fileExtension =
+                                  image.path.split('.').last.toLowerCase();
+
+                              final mimeType =
+                                  fileExtension == 'png'
+                                      ? 'image/png'
+                                      : fileExtension == 'jpg' ||
+                                          fileExtension == 'jpeg'
+                                      ? 'image/jpeg'
+                                      : 'application/octet-stream';
+
+                              controller.imageController.text =
+                                  'data:$mimeType;base64,$base64Image';
+
+                              await controller.updateProfile();
+                            }
+                          },
+                          child: Obx(
+                            () => Container(
+                              width: 135,
+                              height: 135,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image:
+                                      controller.imageUrl.value.isNotEmpty
+                                          ? NetworkImage(
+                                            controller.imageUrl.value,
+                                          )
+                                          : const AssetImage(
+                                                'assets/images/coachSarah.jpg',
+                                              )
+                                              as ImageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -171,7 +249,33 @@ class _ProfileViewState extends State<ProfileView> {
             left: 40,
             right: 40,
             child: ElevatedButton(
-              onPressed: controller.logout,
+              onPressed: () async {
+                final shouldLogout = await showDialog<bool>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Konfirmasi Logout'),
+                      content: Text(
+                        'Apakah Anda yakin ingin keluar dari aplikasi?',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text('Batal'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text('Keluar'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (shouldLogout == true) {
+                  controller.logout();
+                }
+              },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 backgroundColor: AppColors.redPastel,

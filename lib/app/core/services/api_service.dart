@@ -23,6 +23,14 @@ class ApiService extends GetConnect {
     return post("$url/login", body, headers: getHeaders(withAuth: false));
   }
 
+  Future<Response> updateProfile(Map<String, dynamic> body) {
+    return post("$url/update-profile", body, headers: getHeaders());
+  }
+
+  Future<Response> getProfile() {
+    return get("$url/profile", headers: getHeaders());
+  }
+
   Future<Response> listAdmin() {
     return get("$url/list-admin", headers: getHeaders(withAuth: false));
   }
