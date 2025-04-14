@@ -7,6 +7,7 @@ import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_mode
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/controllers/schedule_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
+import 'package:intl/intl.dart'; // Tambahkan import ini
 import '../controllers/form_penilaian_controller.dart';
 
 class FormPenilaianView extends StatefulWidget {
@@ -161,12 +162,16 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: TextFormField(
           controller: controller.dateController,
-          decoration: const InputDecoration(
-            labelText: "Tanggal",
-            labelStyle: TextStyle(color: Colors.grey),
+            decoration: const InputDecoration(
+            hintText: "Tanggal",
+            hintStyle: TextStyle(color: Colors.grey),
             border: InputBorder.none,
             suffixIcon: Icon(Icons.calendar_today),
-          ),
+            contentPadding: EdgeInsets.symmetric(vertical: 16), // Adjust vertical padding
+            alignLabelWithHint: true, // Align hint text vertically
+            ),
+            textAlign: TextAlign.left, // Align text to the left
+            textAlignVertical: TextAlignVertical.center, // Center text vertically
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w400,
             fontSize: 15,
@@ -181,9 +186,16 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
               lastDate: DateTime(2101),
             );
             if (pickedDate != null) {
-              final formattedDate =
-                  "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+              // Format tanggal menjadi "14 April 2025"
+              final formattedDate = DateFormat('d MMMM yyyy', 'id_ID').format(pickedDate);
               controller.dateController.text = formattedDate;
+
+              // Reset selectedSchedule, packageController, and selectedStudent
+              controller.selectedSchedule.value = null;
+              controller.packageController.text = ""; // Reset Kategori Kelas
+              controller.selectedStudent.value = null; // Reset Nama Siswa
+              controller.studentList.clear(); // Kosongkan daftar siswa
+
               await controller.fetchSchedulesByDate(date: formattedDate);
               controller.isDateSelected.value = true;
 
@@ -224,8 +236,8 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                 isExpanded: true,
                 value: controller.selectedSchedule.value,
                 decoration: const InputDecoration(
-                  labelText: "Pilih Jadwal",
-                  labelStyle: TextStyle(color: Colors.grey),
+                  hintText: "Pilih Jadwal",
+                  hintStyle: TextStyle(color: Colors.grey),
                   border: InputBorder.none,
                 ),
                 style: GoogleFonts.poppins(
@@ -271,21 +283,37 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: TextFormField(
-                    controller: controller.packageController,
-                    readOnly: true,
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15,
-                      color: Colors.white,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: "Kategori Kelas",
-                      labelStyle: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 8,),
+                        Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Kategori Kelas",
+                          style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          color: Colors.white,
+                          ),
+                        ),
+                        ),
+                      TextFormField(
+                        controller: controller.packageController,
+                        readOnly: true,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: "Tidak ada kategori",
+                          hintStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.5),
+                          ),
+                          border: InputBorder.none,
+                        ),
                       ),
-                      border: InputBorder.none,
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -318,8 +346,8 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
             isExpanded: true,
             value: controller.selectedStudent.value,
             decoration: const InputDecoration(
-              labelText: "Pilih Siswa",
-              labelStyle: TextStyle(color: Colors.grey),
+              hintText: "Pilih Siswa",
+              hintStyle: TextStyle(color: Colors.grey),
               border: InputBorder.none,
             ),
             style: GoogleFonts.poppins(
@@ -375,8 +403,8 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
             value:
                 isStudentSelected ? controller.selectedSwimStyle.value : null,
             decoration: InputDecoration(
-              labelText: "Pilih Gaya Renang",
-              labelStyle: TextStyle(
+              hintText: "Pilih Gaya Renang",
+              hintStyle: TextStyle(
                 color: Colors.grey, // Ubah warna label jika tidak aktif
               ),
               border: InputBorder.none,

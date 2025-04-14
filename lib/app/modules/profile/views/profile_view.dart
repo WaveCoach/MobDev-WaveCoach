@@ -102,28 +102,110 @@ class _ProfileViewState extends State<ProfileView> {
                               controller.imageController.text =
                                   'data:$mimeType;base64,$base64Image';
 
+                              // Update the imageUrl to trigger UI refresh
+                              controller.imageUrl.value = image.path;
+
                               await controller.updateProfile();
                             }
                           },
                           child: Obx(
-                            () => Container(
-                              width: 135,
-                              height: 135,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image:
-                                      controller.imageUrl.value.isNotEmpty
-                                          ? NetworkImage(
-                                            controller.imageUrl.value,
-                                          )
-                                          : const AssetImage(
-                                                'assets/images/coachSarah.jpg',
-                                              )
-                                              as ImageProvider,
-                                  fit: BoxFit.cover,
+                            () => Stack(
+                              children: [
+                                Container(
+                                  width: 135,
+                                  height: 135,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: controller.imageUrl.value.startsWith('data:image')
+                                          ? MemoryImage(base64Decode(controller.imageUrl.value.split(',').last))
+                                          : controller.imageUrl.value.isNotEmpty
+                                              ? NetworkImage(controller.imageUrl.value)
+                                              : const AssetImage('assets/images/coachSarah.jpg') as ImageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      final ImagePicker picker = ImagePicker();
+                                      final XFile? image = await showDialog<XFile?>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('Pilih Sumber Gambar'),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  leading: Icon(Icons.camera_alt),
+                                                  title: Text('Kamera'),
+                                                  onTap: () async {
+                                                    final XFile? pickedImage =
+                                                        await picker.pickImage(
+                                                          source: ImageSource.camera,
+                                                        );
+                                                    Navigator.pop(context, pickedImage);
+                                                  },
+                                                ),
+                                                ListTile(
+                                                  leading: Icon(Icons.photo_library),
+                                                  title: Text('Galeri'),
+                                                  onTap: () async {
+                                                    final XFile? pickedImage =
+                                                        await picker.pickImage(
+                                                          source: ImageSource.gallery,
+                                                        );
+                                                    Navigator.pop(context, pickedImage);
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+
+                                      if (image != null) {
+                                        final bytes = await image.readAsBytes();
+                                        final base64Image = base64Encode(bytes);
+                                        final fileExtension =
+                                            image.path.split('.').last.toLowerCase();
+
+                                        final mimeType = fileExtension == 'png'
+                                            ? 'image/png'
+                                            : fileExtension == 'jpg' ||
+                                                    fileExtension == 'jpeg'
+                                                ? 'image/jpeg'
+                                                : 'application/octet-stream';
+
+                                        controller.imageController.text =
+                                            'data:$mimeType;base64,$base64Image';
+
+                                        // Update the imageUrl to trigger UI refresh
+                                        controller.imageUrl.value = image.path;
+
+                                        await controller.updateProfile();
+                                      }
+                                    },
+                                    child: Container(
+                                      width: 35,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Colors.black,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

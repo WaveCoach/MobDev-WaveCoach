@@ -59,25 +59,27 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
               ),
             ),
           ),
-          SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildNameInput(controller),
-                const SizedBox(height: 16),
-                _buildMasterCoachInput(controller),
-                const SizedBox(height: 16),
-                _buildStuffDropdown(controller),
-                const SizedBox(height: 16),
-                _buildBorrowDateInput(),
-                const SizedBox(height: 16),
-                _buildReturnDateInput(),
-                const SizedBox(height: 16),
-                _buildDescInput(),
-                const SizedBox(height: 16),
-                _buildSubmitButton(),
-              ],
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildNameInput(controller),
+                  const SizedBox(height: 16),
+                  _buildMasterCoachInput(controller),
+                  const SizedBox(height: 16),
+                  _buildStuffDropdown(controller),
+                  const SizedBox(height: 16),
+                  _buildBorrowDateInput(),
+                  const SizedBox(height: 16),
+                  _buildReturnDateInput(),
+                  const SizedBox(height: 16),
+                  _buildDescInput(),
+                  const SizedBox(height: 16),
+                  _buildSubmitButton(),
+                ],
+              ),
             ),
           ),
         ],
@@ -87,12 +89,29 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
 
   Widget _buildNameInput(AjukanPeminjamanController controller) {
     return Obx(
-      () => TextFormField(
-        initialValue: controller.name.value,
-        readOnly: true,
-        decoration: const InputDecoration(
-          labelText: "Nama Lengkap",
-          border: OutlineInputBorder(),
+      () => Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          border: Border.all(color: Colors.grey),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TextFormField(
+            controller: TextEditingController(text: controller.name.value),
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w400,
+              fontSize: 16,
+              color: Colors.black,
+            ),
+            decoration: const InputDecoration(
+              labelText: "Gaya Renang",
+              labelStyle: TextStyle(color: Colors.grey),
+              border: InputBorder.none,
+            ),
+
+            readOnly: true,
+          ),
         ),
       ),
     );
@@ -100,26 +119,42 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
 
   Widget _buildMasterCoachInput(AjukanPeminjamanController controller) {
     return Obx(
-      () => DropdownButtonFormField<MasterCoach>(
-        value: controller.selectedMatercoach.value,
-        decoration: const InputDecoration(
-          labelText: "Nama Master Coach",
-          border: OutlineInputBorder(),
+      () => Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          border: Border.all(color: Colors.black.withOpacity(0.2)),
         ),
-        isExpanded: true,
-        items:
-            controller.masterCoachList
-                .map(
-                  (masterCoach) => DropdownMenuItem<MasterCoach>(
-                    value: masterCoach,
-                    child: Text(masterCoach.name ?? "-"),
-                  ),
-                )
-                .toList(),
-        onChanged: (value) {
-          controller.selectedMatercoach.value = value;
-          controller.fetchInventory();
-        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: DropdownButtonFormField<MasterCoach>(
+            value: controller.selectedMatercoach.value,
+            decoration: const InputDecoration(
+              labelText: "Nama Master Coach",
+              labelStyle: TextStyle(color: Colors.grey),
+              border: InputBorder.none,
+            ),
+            style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              color: Colors.black,
+            ),
+            isExpanded: true,
+            items:
+                controller.masterCoachList
+                    .map(
+                      (masterCoach) => DropdownMenuItem<MasterCoach>(
+                        value: masterCoach,
+                        child: Text(masterCoach.name ?? "-"),
+                      ),
+                    )
+                    .toList(),
+            onChanged: (value) {
+              controller.selectedMatercoach.value = value;
+              controller.fetchInventory();
+            },
+          ),
+        ),
       ),
     );
   }
@@ -138,45 +173,69 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: DropdownButtonFormField<InventoryItem>(
-                      decoration: const InputDecoration(
-                        labelText: "Pilih Stuff",
-                        border: OutlineInputBorder(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.2),
+                        ),
                       ),
-                      isExpanded: true,
-                      value: stuff['selectedStuff'],
-                      items:
-                          controller.stuffList.map((item) {
-                            return DropdownMenuItem<InventoryItem>(
-                              value: item,
-                              child: Text(item.inventoryName ?? "-"),
-                            );
-                          }).toList(),
-                      onChanged: (value) {
-                        stuff['selectedStuff'] = value;
-                        controller.stuffFormList[index] = {
-                          ...stuff,
-                        }; // trigger Obx
-                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: DropdownButtonFormField<InventoryItem>(
+                          decoration: const InputDecoration(
+                            labelText: "Pilih Stuff",
+                            border: InputBorder.none,
+                          ),
+                          isExpanded: true,
+                          value: stuff['selectedStuff'],
+                          items:
+                              controller.stuffList.map((item) {
+                                return DropdownMenuItem<InventoryItem>(
+                                  value: item,
+                                  child: Text(item.inventoryName ?? "-"),
+                                );
+                              }).toList(),
+                          onChanged: (value) {
+                            stuff['selectedStuff'] = value;
+                            controller.stuffFormList[index] = {
+                              ...stuff,
+                            }; // trigger Obx
+                          },
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     flex: 1,
-                    child: TextFormField(
-                      key: ValueKey(
-                        "qty-${stuff['selectedStuff']?.inventoryId ?? index}",
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.2),
+                        ),
                       ),
-                      decoration: const InputDecoration(
-                        labelText: "Jumlah",
-                        border: OutlineInputBorder(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: TextFormField(
+                          key: ValueKey(
+                            "qty-${stuff['selectedStuff']?.inventoryId ?? index}",
+                          ),
+                          decoration: const InputDecoration(
+                            labelText: "Jumlah",
+                            border: InputBorder.none,
+                          ),
+                          keyboardType: TextInputType.number,
+                          initialValue: stuff['quantity']?.toString(),
+                          onChanged: (value) {
+                            stuff['quantity'] = value;
+                            controller.stuffFormList[index] = {...stuff};
+                          },
+                        ),
                       ),
-                      keyboardType: TextInputType.number,
-                      initialValue: stuff['quantity']?.toString(),
-                      onChanged: (value) {
-                        stuff['quantity'] = value;
-                        controller.stuffFormList[index] = {...stuff};
-                      },
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -191,7 +250,6 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
               ),
             );
           }).toList(),
-          const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               controller.stuffFormList.add({
@@ -199,77 +257,160 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                 'quantity': '',
               });
             },
-            child: const Text("Tambah Stuff"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.goldenAmber,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Padding untuk menyesuaikan ukuran
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min, // Adjust size to fit content
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: const BoxDecoration(
+                    color: Colors.white, // White circle background
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.add, // Icon "+"
+                    color: Colors.black,
+                    size: 14, // Adjust icon size
+                  ),
+                ),
+                const SizedBox(width: 8), // Space between icon and text
+                const Text(
+                  "Tambah Stuff",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
           ),
+          const SizedBox(height: 16),
         ],
       );
     });
   }
 
   Widget _buildBorrowDateInput() {
-    return TextFormField(
-      controller: controller.dateBorrowController,
-      decoration: const InputDecoration(
-        labelText: "Tanggal Peminjaman",
-        border: OutlineInputBorder(),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.black.withOpacity(0.2)),
       ),
-      readOnly: true,
-      onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
-          context: Get.context!,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2101),
-        );
-        if (pickedDate != null) {
-          controller.dateBorrowController.text =
-              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-        }
-      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: TextFormField(
+          controller: controller.dateBorrowController,
+          decoration: const InputDecoration(
+            labelText: "Tanggal Peminjaman",
+            border: InputBorder.none,
+          ),
+          readOnly: true,
+          onTap: () async {
+            DateTime? pickedDate = await showDatePicker(
+              context: Get.context!,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2101),
+            );
+            if (pickedDate != null) {
+              controller.dateBorrowController.text =
+                  "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+            }
+          },
+        ),
+      ),
     );
   }
 
   Widget _buildReturnDateInput() {
-    return TextFormField(
-      controller: controller.dateReturnController,
-      decoration: const InputDecoration(
-        labelText: "Tanggal Pengembalian",
-        border: OutlineInputBorder(),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.black.withOpacity(0.2)),
       ),
-      readOnly: true,
-      onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
-          context: Get.context!,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2101),
-        );
-        if (pickedDate != null) {
-          controller.dateReturnController.text =
-              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-        }
-      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: TextFormField(
+          controller: controller.dateReturnController,
+          decoration: const InputDecoration(
+            labelText: "Tanggal Pengembalian",
+            border: InputBorder.none,
+          ),
+          readOnly: true,
+          onTap: () async {
+            DateTime? pickedDate = await showDatePicker(
+              context: Get.context!,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2101),
+            );
+            if (pickedDate != null) {
+              controller.dateReturnController.text =
+                  "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+            }
+          },
+        ),
+      ),
     );
   }
 
   Widget _buildDescInput() {
-    return TextFormField(
-      controller: controller.descController,
-      decoration: const InputDecoration(
-        labelText: "Deskripsi",
-        border: OutlineInputBorder(),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.black.withOpacity(0.2)),
       ),
-      maxLines: 3,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: TextFormField(
+          controller: controller.descController,
+          decoration: const InputDecoration(
+            labelText: "Deskripsi",
+            border: InputBorder.none,
+            alignLabelWithHint: true, // Align label with the top-left corner
+          ),
+          maxLines: 3,
+          textAlign: TextAlign.start, // Align text to the top-left corner
+        ),
+      ),
     );
   }
 
   Widget _buildSubmitButton() {
     return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          controller.submitPengajuan();
-        },
-        child: const Text("Ajukan Peminjaman"),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: ElevatedButton(
+          onPressed: () {
+            controller.submitPengajuan();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.goldenAmber,
+            minimumSize: Size(double.infinity, 64),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          child: const Text(
+            "Submit",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+        ),
       ),
     );
   }
