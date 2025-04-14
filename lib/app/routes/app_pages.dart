@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import 'package:get/get.dart';
 import 'package:map_camera_flutter/map_camera_flutter.dart';
 
@@ -12,6 +13,8 @@ import '../modules/change_password/bindings/change_password_binding.dart';
 import '../modules/change_password/views/change_password_view.dart';
 import '../modules/contact_admin/bindings/contact_admin_binding.dart';
 import '../modules/contact_admin/views/contact_admin_view.dart';
+import '../modules/detail_history_pengajuan/bindings/detail_history_pengajuan_binding.dart';
+import '../modules/detail_history_pengajuan/views/detail_history_pengajuan_view.dart';
 import '../modules/detail_inventaris/bindings/detail_inventaris_binding.dart';
 import '../modules/detail_inventaris/views/detail_inventaris_view.dart';
 import '../modules/forget_pass/bindings/forget_pass_binding.dart';
@@ -194,6 +197,11 @@ class AppPages {
       name: _Paths.HISTORY_PENILAIAN_DETAIL,
       page: () => const HistoryPenilaianDetailView(),
       binding: HistoryPenilaianDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_HISTORY_PENGAJUAN,
+      page: () => const DetailHistoryPengajuanView(),
+      binding: DetailHistoryPengajuanBinding(),
     ),
   ];
 }
