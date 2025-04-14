@@ -182,191 +182,148 @@ class _InventarisViewState extends State<InventarisView> {
         return const Center(child: Text("Tidak ada stok barang."));
       }
 
-      final filteredStockList =
-          controller.stockList.where((stock) {
-            final matchesMasterCoach = stock.mastercoachName
-                .toLowerCase()
-                .contains(searchQuery.toLowerCase());
-            final matchesItems = stock.items.any(
-              (item) => item.inventoryName.toLowerCase().contains(
-                searchQuery.toLowerCase(),
-              ),
-            );
-            return matchesMasterCoach || matchesItems;
-          }).toList();
-
-      return Column(
-        children: [
-          // Search Bar
-          Container(
-            height: 50,
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.search, color: Colors.black54),
-                SizedBox(width: 8),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search by Master Coach or Item Name",
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        searchQuery = value; // Perbarui input pencarian
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
+      final filteredStockList = controller.stockList.where((stock) {
+        final matchesMasterCoach = stock.mastercoachName
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase());
+        final matchesItems = stock.items.any(
+          (item) => item.inventoryName.toLowerCase().contains(
+            searchQuery.toLowerCase(),
           ),
-          SizedBox(height: 25),
-          // Daftar stok yang difilter
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.only(bottom: 120),
-              itemCount: filteredStockList.length,
-              itemBuilder: (context, index) {
-                final stock = filteredStockList[index];
+        );
+        return matchesMasterCoach || matchesItems;
+      }).toList();
 
-                // Filter items dengan totalQty >= 1
-                final filteredItems =
-                    stock.items.where((item) => item.totalQty >= 1).toList();
+      return RefreshIndicator(
+        onRefresh: () async {
+          controller.stockList(); // Panggil fungsi untuk memuat ulang data
+        },
+        child: Column(
+          children: [
+            // Search Bar
+            Container(
+              height: 50,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.search, color: Colors.black54),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Search by Master Coach or Item Name",
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          searchQuery = value; // Perbarui input pencarian
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 25),
+            // Daftar stok yang difilter
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.only(bottom: 120),
+                itemCount: filteredStockList.length,
+                itemBuilder: (context, index) {
+                  final stock = filteredStockList[index];
 
-                if (filteredItems.isEmpty) {
-                  return SizedBox(); // Skip rendering jika tidak ada item yang memenuhi kondisi
-                }
+                  // Filter items dengan totalQty >= 1
+                  final filteredItems =
+                      stock.items.where((item) => item.totalQty >= 1).toList();
 
-                return Column(
-                  children: [
-                    Card(
-                      color: Colors.transparent,
-                      elevation: 0,
-                      child: Theme(
-                        data: Theme.of(
-                          context,
-                        ).copyWith(dividerColor: Colors.transparent),
-                        child: ExpansionTile(
-                          title: Row(
-                            children: [
-                              Icon(
-                                Icons.person,
-                                color: Colors.black54,
-                                size: 40,
-                              ),
-                              SizedBox(width: 20),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Master Coach",
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      letterSpacing: -0.3,
-                                    ),
-                                  ),
-                                  Text(
-                                    stock.mastercoachName,
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                      letterSpacing: -0.3,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          children: [
-                            Table(
-                              border: TableBorder.all(color: Colors.white),
-                              columnWidths: const {
-                                0: FixedColumnWidth(40),
-                                1: FlexColumnWidth(),
-                                2: FixedColumnWidth(90),
-                              },
+                  if (filteredItems.isEmpty) {
+                    return SizedBox(); // Skip rendering jika tidak ada item yang memenuhi kondisi
+                  }
+
+                  return Column(
+                    children: [
+                      Card(
+                        color: Colors.transparent,
+                        elevation: 0,
+                        child: Theme(
+                          data: Theme.of(
+                            context,
+                          ).copyWith(dividerColor: Colors.transparent),
+                          child: ExpansionTile(
+                            title: Row(
                               children: [
-                                TableRow(
-                                  decoration: BoxDecoration(
-                                    color: AppColors.deepOceanBlue,
-                                  ),
+                                Icon(
+                                  Icons.person,
+                                  color: Colors.black54,
+                                  size: 40,
+                                ),
+                                SizedBox(width: 20),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "No",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                        ),
-                                        textAlign: TextAlign.center,
+                                    Text(
+                                      "Master Coach",
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                        letterSpacing: -0.3,
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Nama Barang",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Jumlah",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                        ),
-                                        textAlign: TextAlign.center,
+                                    Text(
+                                      stock.mastercoachName,
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        letterSpacing: -0.3,
                                       ),
                                     ),
                                   ],
                                 ),
-                                ...filteredItems.asMap().entries.map((entry) {
-                                  final index = entry.key + 1;
-                                  final item = entry.value;
-                                  return TableRow(
+                              ],
+                            ),
+                            children: [
+                              Table(
+                                border: TableBorder.all(color: Colors.white),
+                                columnWidths: const {
+                                  0: FixedColumnWidth(40),
+                                  1: FlexColumnWidth(),
+                                  2: FixedColumnWidth(90),
+                                },
+                                children: [
+                                  TableRow(
                                     decoration: BoxDecoration(
-                                      color: AppColors.mildBlue,
+                                      color: AppColors.deepOceanBlue,
                                     ),
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          index.toString(),
+                                          "No",
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 16,
-                                            color: AppColors.deepOceanBlue,
+                                            color: Colors.white,
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
@@ -374,50 +331,97 @@ class _InventarisViewState extends State<InventarisView> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          item.inventoryName,
+                                          "Nama Barang",
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 16,
-                                            color: AppColors.deepOceanBlue,
+                                            color: Colors.white,
                                           ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          item.totalQty.toString(),
+                                          "Jumlah",
                                           style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 16,
-                                            color: AppColors.deepOceanBlue,
+                                            color: Colors.white,
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
                                     ],
-                                  );
-                                }),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                          ],
+                                  ),
+                                  ...filteredItems.asMap().entries.map((entry) {
+                                    final index = entry.key + 1;
+                                    final item = entry.value;
+                                    return TableRow(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.mildBlue,
+                                      ),
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            index.toString(),
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                              color: AppColors.deepOceanBlue,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            item.inventoryName,
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                              color: AppColors.deepOceanBlue,
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            item.totalQty.toString(),
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                              color: AppColors.deepOceanBlue,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      child: Divider(
-                        color: Colors.black.withOpacity(0.18),
-                        thickness: 1,
-                        height: 1,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Divider(
+                          color: Colors.black.withOpacity(0.18),
+                          thickness: 1,
+                          height: 1,
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     });
   }
