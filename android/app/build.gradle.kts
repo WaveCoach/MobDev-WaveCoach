@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "WaveCoach"
+    namespace = "wavecoach.com.mob_dev_wave_coach"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 

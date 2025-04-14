@@ -26,6 +26,7 @@ class _InventarisViewState extends State<InventarisView> {
     dropdownValue = 'Barang';
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.skyBlue,

@@ -7,7 +7,6 @@ import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_mode
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/controllers/schedule_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
-import 'package:intl/intl.dart'; // Tambahkan import ini
 import '../controllers/form_penilaian_controller.dart';
 
 class FormPenilaianView extends StatefulWidget {
@@ -186,8 +185,8 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
               lastDate: DateTime(2101),
             );
             if (pickedDate != null) {
-              // Format tanggal menjadi "14 April 2025"
-              final formattedDate = DateFormat('d MMMM yyyy', 'id_ID').format(pickedDate);
+              final formattedDate =
+                  "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
               controller.dateController.text = formattedDate;
 
               // Reset selectedSchedule, packageController, and selectedStudent

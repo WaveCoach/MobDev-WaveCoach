@@ -65,16 +65,82 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      "Nama Peminjam",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   _buildNameInput(controller),
                   const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      "Nama Master Coach",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   _buildMasterCoachInput(controller),
                   const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      "Nama Barang",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   _buildStuffDropdown(controller),
                   const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      "Tanggal Peminjaman",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   _buildBorrowDateInput(),
                   const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      "Tanggal Pengembalian",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   _buildReturnDateInput(),
                   const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      "Deskripsi",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   _buildDescInput(),
                   const SizedBox(height: 16),
                   _buildSubmitButton(),
@@ -105,8 +171,8 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
               color: Colors.black,
             ),
             decoration: const InputDecoration(
-              labelText: "Gaya Renang",
-              labelStyle: TextStyle(color: Colors.grey),
+              hintText: "Nama Coach",
+              hintStyle: TextStyle(color: Colors.grey),
               border: InputBorder.none,
             ),
 
@@ -130,8 +196,8 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
           child: DropdownButtonFormField<MasterCoach>(
             value: controller.selectedMatercoach.value,
             decoration: const InputDecoration(
-              labelText: "Nama Master Coach",
-              labelStyle: TextStyle(color: Colors.grey),
+              hintText: "Pilih Master Coach",
+              hintStyle: TextStyle(color: Colors.grey),
               border: InputBorder.none,
             ),
             style: GoogleFonts.poppins(
@@ -140,18 +206,24 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
               color: Colors.black,
             ),
             isExpanded: true,
-            items:
-                controller.masterCoachList
-                    .map(
-                      (masterCoach) => DropdownMenuItem<MasterCoach>(
-                        value: masterCoach,
-                        child: Text(masterCoach.name ?? "-"),
-                      ),
-                    )
-                    .toList(),
+            items: controller.masterCoachList
+                .map(
+                  (masterCoach) => DropdownMenuItem<MasterCoach>(
+                    value: masterCoach,
+                    child: Text(masterCoach.name ?? "-"),
+                  ),
+                )
+                .toList(),
             onChanged: (value) {
               controller.selectedMatercoach.value = value;
               controller.fetchInventory();
+              
+              // Clear the list but ensure one empty item remains
+              controller.stuffFormList.clear();
+              controller.stuffFormList.add({
+                'selectedStuff': null,
+                'quantity': '',
+              });
             },
           ),
         ),
@@ -166,6 +238,13 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
           ...controller.stuffFormList.asMap().entries.map((entry) {
             int index = entry.key;
             Map<String, dynamic> stuff = entry.value;
+
+            // Filter barang yang sudah dipilih
+            List<InventoryItem> availableItems = controller.stuffList.where((item) {
+              return !controller.stuffFormList.any((form) =>
+                  form['selectedStuff']?.inventoryId == item.inventoryId &&
+                  form != stuff); // Exclude the current item
+            }).toList();
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
@@ -185,18 +264,18 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: DropdownButtonFormField<InventoryItem>(
                           decoration: const InputDecoration(
-                            labelText: "Pilih Stuff",
+                            hintText: "Pilih Barang",
+                            hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
                           isExpanded: true,
                           value: stuff['selectedStuff'],
-                          items:
-                              controller.stuffList.map((item) {
-                                return DropdownMenuItem<InventoryItem>(
-                                  value: item,
-                                  child: Text(item.inventoryName ?? "-"),
-                                );
-                              }).toList(),
+                          items: availableItems.map((item) {
+                            return DropdownMenuItem<InventoryItem>(
+                              value: item,
+                              child: Text(item.inventoryName ?? "-"),
+                            );
+                          }).toList(),
                           onChanged: (value) {
                             stuff['selectedStuff'] = value;
                             controller.stuffFormList[index] = {
@@ -225,7 +304,8 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                             "qty-${stuff['selectedStuff']?.inventoryId ?? index}",
                           ),
                           decoration: const InputDecoration(
-                            labelText: "Jumlah",
+                            hintText: "Jumlah",
+                            hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                           ),
                           keyboardType: TextInputType.number,
@@ -242,9 +322,11 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                   IconButton(
                     icon: const Icon(Icons.remove_circle),
                     color: Colors.red,
-                    onPressed: () {
-                      controller.stuffFormList.removeAt(index);
-                    },
+                    onPressed: controller.stuffFormList.length > 1
+                        ? () {
+                            controller.stuffFormList.removeAt(index);
+                          }
+                        : null, // Disable button if only one item remains
                   ),
                 ],
               ),
@@ -259,7 +341,10 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.goldenAmber,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Padding untuk menyesuaikan ukuran
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ), // Padding untuk menyesuaikan ukuran
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -307,25 +392,36 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: TextFormField(
-          controller: controller.dateBorrowController,
-          decoration: const InputDecoration(
-            labelText: "Tanggal Peminjaman",
-            border: InputBorder.none,
-          ),
-          readOnly: true,
-          onTap: () async {
-            DateTime? pickedDate = await showDatePicker(
-              context: Get.context!,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2101),
-            );
-            if (pickedDate != null) {
-              controller.dateBorrowController.text =
-                  "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-            }
-          },
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: controller.dateBorrowController,
+                decoration: const InputDecoration(
+                  hintText: "Pilih Tanggal Peminjaman",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: Get.context!,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    controller.dateBorrowController.text =
+                        "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+                  }
+                },
+              ),
+            ),
+            const Icon(
+              Icons.calendar_today, // Ikon kalender
+              color: Colors.black,
+            ),
+          ],
         ),
       ),
     );
@@ -340,25 +436,36 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: TextFormField(
-          controller: controller.dateReturnController,
-          decoration: const InputDecoration(
-            labelText: "Tanggal Pengembalian",
-            border: InputBorder.none,
-          ),
-          readOnly: true,
-          onTap: () async {
-            DateTime? pickedDate = await showDatePicker(
-              context: Get.context!,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2101),
-            );
-            if (pickedDate != null) {
-              controller.dateReturnController.text =
-                  "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-            }
-          },
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: controller.dateReturnController,
+                decoration: const InputDecoration(
+                  hintText: "Pilih Tanggal Pengembalian",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  border: InputBorder.none,
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: Get.context!,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    controller.dateReturnController.text =
+                        "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+                  }
+                },
+              ),
+            ),
+            const Icon(
+              Icons.calendar_today, // Ikon kalender
+              color: Colors.black,
+            ),
+          ],
         ),
       ),
     );
@@ -376,8 +483,9 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
         child: TextFormField(
           controller: controller.descController,
           decoration: const InputDecoration(
-            labelText: "Deskripsi",
-            border: InputBorder.none,
+              hintText: "Ketik Disini",
+              hintStyle: TextStyle(color: Colors.grey),
+              border: InputBorder.none,
             alignLabelWithHint: true, // Align label with the top-left corner
           ),
           maxLines: 3,
