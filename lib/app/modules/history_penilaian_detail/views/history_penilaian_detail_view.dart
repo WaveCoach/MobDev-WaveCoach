@@ -139,14 +139,13 @@ class _HistoryPenilaianDetailViewState
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: TextFormField(
                               controller: TextEditingController(
-                                text:
-                                    data.data.studentName,
+                                text: data.data.studentName,
                               ),
                               style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                               decoration: const InputDecoration(
                                 labelText: "Nama Siswa",
                                 labelStyle: TextStyle(color: Colors.grey),
@@ -182,10 +181,10 @@ class _HistoryPenilaianDetailViewState
                                     '${DateFormat('dd-MM-yyyy').format(DateTime.parse(data.data.scheduleDate))} | ${DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(data.data.scheduleStartTime))} - ${DateFormat('HH:mm').format(DateFormat('HH:mm:ss').parse(data.data.scheduleEndTime))}',
                               ),
                               style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                               decoration: const InputDecoration(
                                 labelText: "Jadwal",
                                 labelStyle: TextStyle(color: Colors.grey),
@@ -217,14 +216,13 @@ class _HistoryPenilaianDetailViewState
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: TextFormField(
                               controller: TextEditingController(
-                                text:
-                                    data.data.categoryName,
+                                text: data.data.categoryName,
                               ),
                               style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                               decoration: const InputDecoration(
                                 labelText: "Gaya Renang",
                                 labelStyle: TextStyle(color: Colors.grey),
@@ -285,17 +283,26 @@ class _HistoryPenilaianDetailViewState
                                         ),
                                       ),
                                       Container(
-                                        width: MediaQuery.of(context).size.width * 0.5, // Setengah lebar layar
-                                        alignment: Alignment.centerLeft, // Rata kiri
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                            0.5, // Setengah lebar layar
+                                        alignment:
+                                            Alignment.centerLeft, // Rata kiri
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                           color: Colors.white,
                                           border: Border.all(
-                                            color: Colors.black.withOpacity(0.2),
+                                            color: Colors.black.withOpacity(
+                                              0.2,
+                                            ),
                                           ),
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                          ),
                                           child: TextField(
                                             controller: TextEditingController(
                                               text: aspect.score.toString(),
@@ -380,11 +387,28 @@ class _HistoryPenilaianDetailViewState
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    controller.historyDetailResponse.value?.data.details.isNotEmpty ?? false
-                                        ? (controller.historyDetailResponse.value!.data.details
-                                                .map((aspect) => aspect.score)
-                                                .reduce((a, b) => a + b) /
-                                            controller.historyDetailResponse.value!.data.details.length)
+                                    controller
+                                                .historyDetailResponse
+                                                .value
+                                                ?.data
+                                                .details
+                                                .isNotEmpty ??
+                                            false
+                                        ? (controller
+                                                    .historyDetailResponse
+                                                    .value!
+                                                    .data
+                                                    .details
+                                                    .map(
+                                                      (aspect) => aspect.score,
+                                                    )
+                                                    .reduce((a, b) => a + b) /
+                                                controller
+                                                    .historyDetailResponse
+                                                    .value!
+                                                    .data
+                                                    .details
+                                                    .length)
                                             .toStringAsFixed(2)
                                         : "Tidak ada data nilai",
                                     style: GoogleFonts.poppins(
@@ -397,24 +421,66 @@ class _HistoryPenilaianDetailViewState
                               ),
                               // Status Lulus/Tidak Lulus
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: (controller.historyDetailResponse.value?.data.details.isNotEmpty ?? false) &&
-                                          (controller.historyDetailResponse.value!.data.details
-                                                  .map((aspect) => aspect.score)
-                                                  .reduce((a, b) => a + b) /
-                                              controller.historyDetailResponse.value!.data.details.length) >
-                                              80
-                                      ? Colors.green
-                                      : Colors.red,
+                                  color:
+                                      (controller
+                                                      .historyDetailResponse
+                                                      .value
+                                                      ?.data
+                                                      .details
+                                                      .isNotEmpty ??
+                                                  false) &&
+                                              (controller
+                                                          .historyDetailResponse
+                                                          .value!
+                                                          .data
+                                                          .details
+                                                          .map(
+                                                            (aspect) =>
+                                                                aspect.score,
+                                                          )
+                                                          .reduce(
+                                                            (a, b) => a + b,
+                                                          ) /
+                                                      controller
+                                                          .historyDetailResponse
+                                                          .value!
+                                                          .data
+                                                          .details
+                                                          .length) >
+                                                  80
+                                          ? Colors.green
+                                          : Colors.red,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
-                                  (controller.historyDetailResponse.value?.data.details.isNotEmpty ?? false) &&
-                                          (controller.historyDetailResponse.value!.data.details
-                                                  .map((aspect) => aspect.score)
-                                                  .reduce((a, b) => a + b) /
-                                              controller.historyDetailResponse.value!.data.details.length) >
+                                  (controller
+                                                  .historyDetailResponse
+                                                  .value
+                                                  ?.data
+                                                  .details
+                                                  .isNotEmpty ??
+                                              false) &&
+                                          (controller
+                                                      .historyDetailResponse
+                                                      .value!
+                                                      .data
+                                                      .details
+                                                      .map(
+                                                        (aspect) =>
+                                                            aspect.score,
+                                                      )
+                                                      .reduce((a, b) => a + b) /
+                                                  controller
+                                                      .historyDetailResponse
+                                                      .value!
+                                                      .data
+                                                      .details
+                                                      .length) >
                                               80
                                       ? "Lulus"
                                       : "Tidak Lulus",

@@ -35,7 +35,7 @@ class _PenilaianViewState extends State<PenilaianView> {
             ),
             SizedBox(height: 30),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: SvgPicture.asset('assets/images/GroupPeople.svg'),
             ),
             Spacer(), // Menambahkan spacer untuk mendorong tombol ke bawah

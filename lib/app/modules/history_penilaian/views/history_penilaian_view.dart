@@ -108,102 +108,108 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
             ),
           ),
           Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
-              }
+            child: RefreshIndicator(
+              onRefresh: () async {
+                // Panggil fungsi untuk memuat ulang data
+                await controller.fetchHistoryPenilaian();
+              },
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              if (controller.historyPenilaianList.isEmpty) {
-                return const Center(child: Text('Belum ada data.'));
-              }
+                if (controller.historyPenilaianList.isEmpty) {
+                  return const Center(child: Text('Belum ada data.'));
+                }
 
-              return ListView.builder(
-                itemCount: controller.historyPenilaianList.length,
-                itemBuilder: (context, index) {
-                  final item = controller.historyPenilaianList[index];
+                return ListView.builder(
+                  itemCount: controller.historyPenilaianList.length,
+                  itemBuilder: (context, index) {
+                    final item = controller.historyPenilaianList[index];
 
-                  return Card(
-                    color: AppColors.lightBlue,
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: ListTile(
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.goldenAmber,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
+                    return Card(
+                      color: AppColors.lightBlue,
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: ListTile(
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.goldenAmber,
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              //Tanggal Penilaian
-                              child: Text(
-                                item.date,
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              //Paket Renang
-                              Text(
-                                item.packageName,
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Container(
-                                width: 1,
-                                height: 16,
-                                color: Colors.black,
-                                margin: const EdgeInsets.symmetric(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
                                 ),
-                              ),
-                              //Kategori Gaya
-                              Text(
-                                item.categoryName,
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                                //Tanggal Penilaian
+                                child: Text(
+                                  item.date,
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
-                          //Nama Siswa
-                          Text(
-                            item.studentName,
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
                             ),
-                          ),
-                        ],
+                            Row(
+                              children: [
+                                //Paket Renang
+                                Text(
+                                  item.packageName,
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Container(
+                                  width: 1,
+                                  height: 16,
+                                  color: Colors.black,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                  ),
+                                ),
+                                //Kategori Gaya
+                                Text(
+                                  item.categoryName,
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            //Nama Siswa
+                            Text(
+                              item.studentName,
+                              style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          Get.toNamed(
+                            '/history-penilaian-detail',
+                            arguments: item.id,
+                          );
+                        },
                       ),
-                      onTap: () {
-                        Get.toNamed(
-                          '/history-penilaian-detail',
-                          arguments: item.id,
-                        );
-                      },
-                    ),
-                  );
-                },
-              );
-            }),
+                    );
+                  },
+                );
+              }),
+            ),
           ),
         ],
       ),
