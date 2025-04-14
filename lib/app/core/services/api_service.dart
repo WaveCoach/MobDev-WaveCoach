@@ -75,8 +75,13 @@ class ApiService extends GetConnect {
   }
 
   //mengambil history inventaris
-  Future<Response> historyPeminjamanInventaris() {
-    return get("$url/request-history-inventory", headers: getHeaders());
+  Future<Response> historyPeminjamanInventaris({String? filter}) {
+    final query =
+        (filter != null && filter.toLowerCase() != 'semua')
+            ? "?filter=${filter.toLowerCase()}"
+            : "";
+
+    return get("$url/request-history-inventory$query", headers: getHeaders());
   }
 
   Future<Response> absensiCoach(Map<String, dynamic> body) {

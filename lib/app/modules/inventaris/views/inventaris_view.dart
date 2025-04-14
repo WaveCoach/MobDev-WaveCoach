@@ -423,43 +423,61 @@ class _InventarisViewState extends State<InventarisView> {
 
   Widget _historyPeminjamanInventaris() {
     return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      if (controller.historyList.isEmpty) {
-        return const Center(child: Text("Tidak ada data history."));
-      }
-
       final filterOptions = ["Semua", "Masuk", "Keluar"];
 
       return Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children:
-                filterOptions.map((filter) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 8),
-                    width: 80,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(100),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
+          Obx(() {
+            if (controller.roleId.value == '3') {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children:
+                    filterOptions.map((filter) {
+                      final isSelected =
+                          controller.selectedFilter.value == filter;
+                      return GestureDetector(
+                        onTap: () {
+                          controller.selectedFilter.value = filter;
+                          controller.fetchInventaris(
+                            'History Pengajuan',
+                            filter: filter,
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(right: 8),
+                          width: 80,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color:
+                                isSelected
+                                    ? AppColors.deepOceanBlue
+                                    : Colors.white,
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              filter,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: isSelected ? Colors.white : Colors.black,
+                              ),
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(filter, style: TextStyle(fontSize: 16)),
-                    ),
-                  );
-                }).toList(),
-          ),
+                      );
+                    }).toList(),
+              );
+            } else {
+              return SizedBox.shrink(); // Return an empty widget if roleId is not '3'
+            }
+          }),
           SizedBox(height: 20),
           Container(
             height: 50,
@@ -503,126 +521,149 @@ class _InventarisViewState extends State<InventarisView> {
             ),
           ),
           SizedBox(height: 25),
+
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.only(bottom: 110),
-              itemCount: controller.historyList.length,
-              itemBuilder: (context, index) {
-                final history = controller.historyList[index];
-                return Container(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          width: 80,
-                          decoration: BoxDecoration(
-                            color: AppColors.deepOceanBlue,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              bottomLeft: Radius.circular(12),
-                            ),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.description,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                          ),
+            child:
+                controller.historyList.isEmpty
+                    ? Center(
+                      child: Text(
+                        "Data kosong",
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          color: Colors.black54,
                         ),
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: AppColors.lightBlue,
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                    )
+                    : ListView.builder(
+                      padding: EdgeInsets.only(bottom: 110),
+                      itemCount: controller.historyList.length,
+                      itemBuilder: (context, index) {
+                        final history = controller.historyList[index];
+                        return Container(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.goldenAmber,
-                                        borderRadius: BorderRadius.circular(
-                                          100,
-                                        ),
-                                      ),
-                                      child: Text(
-                                        DateFormat(
-                                          'dd MMMM yyyy, HH:mm',
-                                        ).format(
-                                          DateTime.parse(history.createdAt),
-                                        ),
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          letterSpacing: -0.5,
-                                        ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
+                                Container(
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.deepOceanBlue,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.description,
+                                      color: Colors.white,
+                                      size: 50,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.lightBlue,
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(12),
+                                        bottomRight: Radius.circular(12),
                                       ),
                                     ),
-                                    Icon(Icons.home, color: Colors.black),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  history.type == 'request'
-                                      ? 'Pengajuan Peminjaman Inventaris'
-                                      : 'Pengajuan Pengembalian Inventaris',
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Icon(Icons.person, color: Colors.black),
-                                    SizedBox(width: 6),
-                                    Row(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 2,
+                                                  ),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.goldenAmber,
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              child: Text(
+                                                DateFormat(
+                                                  'dd MMMM yyyy, HH:mm',
+                                                ).format(
+                                                  DateTime.parse(
+                                                    history.createdAt,
+                                                  ),
+                                                ),
+                                                style: GoogleFonts.poppins(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 14,
+                                                  color: Colors.black,
+                                                  letterSpacing: -0.5,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.home,
+                                              color: Colors.black,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
                                         Text(
-                                          history.coachName,
+                                          history.type == 'request'
+                                              ? 'Pengajuan Peminjaman Inventaris'
+                                              : 'Pengajuan Pengembalian Inventaris',
                                           style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w600,
                                             fontSize: 14,
                                             color: Colors.black,
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
+                                        SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.person,
+                                              color: Colors.black,
+                                            ),
+                                            SizedBox(width: 6),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  history.coachName,
+                                                  style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  ),
-                );
-              },
-            ),
           ),
         ],
       );

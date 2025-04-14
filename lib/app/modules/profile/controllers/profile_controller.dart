@@ -31,6 +31,7 @@ class ProfileController extends GetxController {
         final responseData = UserProfileResponse.fromJson(response.body);
         final user = responseData.data.user;
 
+        // Fallback jika null
         name.value = user.name;
         email.value = user.email;
         imageUrl.value = user.profileImage;

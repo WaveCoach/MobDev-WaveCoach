@@ -105,27 +105,31 @@ class _ProfileViewState extends State<ProfileView> {
                               await controller.updateProfile();
                             }
                           },
-                          child: Obx(
-                            () => Container(
+                          child: Obx(() {
+                            ImageProvider profileImage;
+
+                            if (controller.imageUrl.value.isNotEmpty) {
+                              profileImage = NetworkImage(
+                                controller.imageUrl.value,
+                              );
+                            } else {
+                              profileImage = const AssetImage(
+                                'assets/images/coachSarah.jpg',
+                              );
+                            }
+
+                            return Container(
                               width: 135,
                               height: 135,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image:
-                                      controller.imageUrl.value.isNotEmpty
-                                          ? NetworkImage(
-                                            controller.imageUrl.value,
-                                          )
-                                          : const AssetImage(
-                                                'assets/images/coachSarah.jpg',
-                                              )
-                                              as ImageProvider,
+                                  image: profileImage,
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
-                          ),
+                            );
+                          }),
                         ),
                         const SizedBox(height: 10),
                         Obx(

@@ -33,24 +33,32 @@ class SignInController extends GetxController {
       signInResponse.value = SignInResponse.fromJson(response.body);
 
       if (signInResponse.value?.success == true) {
-        String token = signInResponse.value!.token;
-        storage.write("token", token);
-        storage.write("name", signInResponse.value!.user.name);
-        storage.write("email", signInResponse.value!.user.email);
-        storage.write("profile_image", signInResponse.value!.user.profileImage);
+        final user = signInResponse.value!.user;
+
+        // Pastikan nilai tidak null sebelum disimpan
+        storage.write("token", signInResponse.value!.token ?? '');
+        storage.write("name", user.name ?? '');
+        storage.write("email", user.email ?? '');
+        storage.write("profile_image", user.profileImage ?? '');
+        storage.write("roleId", user.roleId?.toString() ?? '');
 
         Get.offAllNamed(Routes.HOME);
       } else {
         Get.snackbar(
-          "Error",
-          signInResponse.value?.message ?? "Sign In Failed",
+          "Sign In Failed",
+          signInResponse.value?.message ?? "An error occurred during sign in",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
         );
       }
     } else {
       Get.snackbar(
-        "Error",
         "Sign In Failed",
+        "An error occurred during sign in",
         snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
       );
     }
   }
