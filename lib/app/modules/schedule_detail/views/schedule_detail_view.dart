@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import '../controllers/schedule_detail_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class ScheduleDetailView extends StatefulWidget {
   const ScheduleDetailView({super.key});
@@ -96,22 +97,55 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                   height: 1,
                 ),
               ),
-              Text(
-                day,
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 150,
-                  fontWeight: FontWeight.w700,
-                  height: 1,
+              SizedBox(
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    ColorizeAnimatedText(
+                      day,
+                      textStyle: GoogleFonts.poppins(
+                        fontSize: 150,
+                        fontWeight: FontWeight.w700,
+                        height: 1,
+                      ),
+                      colors: [
+                        Colors.white,
+                        Colors.white,
+                        AppColors.deepOceanBlue,
+                        Colors.white,
+                        Colors.white,
+                      ],
+                      speed: Duration(milliseconds: 1500), // Durasi animasi
+                    ),
+                  ],
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                  pause: Duration(milliseconds: 2000), // Jeda antar animasi
                 ),
               ),
-              Text(
-                monthYear,
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 40,
-                  fontWeight: FontWeight.w700,
-                  height: 1,
+              SizedBox(
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    ColorizeAnimatedText(
+                      monthYear,
+                      textStyle: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.w700,
+                        height: 1,
+                      ),
+                      colors: [
+                        Colors.white,
+                        Colors.white,
+                        AppColors.deepOceanBlue,
+                        Colors.white,
+                        Colors.white,
+                      ],
+                      speed: Duration(milliseconds: 480), // Durasi animasi sama
+                    ),
+                  ],
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                  pause: Duration(milliseconds: 150), // Jeda antar animasi sama
                 ),
               ),
               SizedBox(height: 20),

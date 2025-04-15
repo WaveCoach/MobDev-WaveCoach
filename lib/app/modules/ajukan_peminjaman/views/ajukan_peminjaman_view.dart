@@ -206,18 +206,19 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
               color: Colors.black,
             ),
             isExpanded: true,
-            items: controller.masterCoachList
-                .map(
-                  (masterCoach) => DropdownMenuItem<MasterCoach>(
-                    value: masterCoach,
-                    child: Text(masterCoach.name ?? "-"),
-                  ),
-                )
-                .toList(),
+            items:
+                controller.masterCoachList
+                    .map(
+                      (masterCoach) => DropdownMenuItem<MasterCoach>(
+                        value: masterCoach,
+                        child: Text(masterCoach.name ?? "-"),
+                      ),
+                    )
+                    .toList(),
             onChanged: (value) {
               controller.selectedMatercoach.value = value;
               controller.fetchInventory();
-              
+
               // Clear the list but ensure one empty item remains
               controller.stuffFormList.clear();
               controller.stuffFormList.add({
@@ -240,11 +241,15 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
             Map<String, dynamic> stuff = entry.value;
 
             // Filter barang yang sudah dipilih
-            List<InventoryItem> availableItems = controller.stuffList.where((item) {
-              return !controller.stuffFormList.any((form) =>
-                  form['selectedStuff']?.inventoryId == item.inventoryId &&
-                  form != stuff); // Exclude the current item
-            }).toList();
+            List<InventoryItem> availableItems =
+                controller.stuffList.where((item) {
+                  return !controller.stuffFormList.any(
+                    (form) =>
+                        form['selectedStuff']?.inventoryId ==
+                            item.inventoryId &&
+                        form != stuff,
+                  ); // Exclude the current item
+                }).toList();
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
@@ -270,12 +275,13 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                           ),
                           isExpanded: true,
                           value: stuff['selectedStuff'],
-                          items: availableItems.map((item) {
-                            return DropdownMenuItem<InventoryItem>(
-                              value: item,
-                              child: Text(item.inventoryName ?? "-"),
-                            );
-                          }).toList(),
+                          items:
+                              availableItems.map((item) {
+                                return DropdownMenuItem<InventoryItem>(
+                                  value: item,
+                                  child: Text(item.inventoryName ?? "-"),
+                                );
+                              }).toList(),
                           onChanged: (value) {
                             stuff['selectedStuff'] = value;
                             controller.stuffFormList[index] = {
@@ -322,11 +328,12 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                   IconButton(
                     icon: const Icon(Icons.remove_circle),
                     color: Colors.red,
-                    onPressed: controller.stuffFormList.length > 1
-                        ? () {
-                            controller.stuffFormList.removeAt(index);
-                          }
-                        : null, // Disable button if only one item remains
+                    onPressed:
+                        controller.stuffFormList.length > 1
+                            ? () {
+                              controller.stuffFormList.removeAt(index);
+                            }
+                            : null, // Disable button if only one item remains
                   ),
                 ],
               ),
@@ -483,9 +490,9 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
         child: TextFormField(
           controller: controller.descController,
           decoration: const InputDecoration(
-              hintText: "Ketik Disini",
-              hintStyle: TextStyle(color: Colors.grey),
-              border: InputBorder.none,
+            hintText: "Ketik Disini",
+            hintStyle: TextStyle(color: Colors.grey),
+            border: InputBorder.none,
             alignLabelWithHint: true, // Align label with the top-left corner
           ),
           maxLines: 3,
