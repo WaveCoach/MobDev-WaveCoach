@@ -166,4 +166,8 @@ class ApiService extends GetConnect {
       headers: getHeaders(),
     );
   }
+
+  Future<Response> postRequestReturn(int landingId, Map<String, dynamic> body) {
+    return post("$url/return/$landingId", body, headers: getHeaders());
+  }
 }

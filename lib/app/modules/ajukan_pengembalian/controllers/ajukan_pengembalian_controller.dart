@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
@@ -9,12 +12,18 @@ class AjukanPengembalianController extends GetxController {
 
   final isLoading = false.obs;
   final detailPinjaman = Rxn<InventoryLandingDetail>();
-  RxString selectedImage = ''.obs;
+  final landingId = Rx<int?>(
+    null,
+  ); // Define landingId as an observable variable
+
+  final qtyReturnedController = TextEditingController();
+  final damagedController = TextEditingController();
+  final missingController = TextEditingController();
+  final returnedAtController = TextEditingController();
+
+  final selectedImage = Rx<File?>(null); // Jika memakai File
   final isDamaged = false.obs;
-  final damagedCountController = TextEditingController();
   final isMissing = false.obs;
-  final missingCountController = TextEditingController();
-  final returnDateController = TextEditingController();
 
   @override
   void onInit() {
@@ -33,10 +42,74 @@ class AjukanPengembalianController extends GetxController {
         detailPinjaman.value = InventoryLandingDetail.fromJson(
           response.body['data'],
         );
+        print(detailPinjaman.value.toString());
       } else {
-        logError("fetch detail pinjaman", response.statusText);
+        log("fetch detail pinjaman error: ${response.statusText}");
         Get.snackbar("Error", "Gagal memuat detail pinjaman");
       }
     });
+  }
+
+  // Fungsi untuk konversi gambar ke base64
+  Future<String?> imageToBase64(File image) async {
+    try {
+      final bytes = await image.readAsBytes();
+      final base64Image = base64Encode(bytes);
+      final ext = image.path.split('.').last.toLowerCase();
+
+      final mime =
+          ext == 'png'
+              ? 'image/png'
+              : ext == 'jpg' || ext == 'jpeg'
+              ? 'image/jpeg'
+              : 'application/octet-stream';
+
+      return 'data:$mime;base64,$base64Image';
+    } catch (e) {
+      Get.snackbar("Error", "Gagal mengonversi gambar: $e");
+      return null;
+    }
+  }
+
+  Future<void> submitReturnRequest(int landingId) async {
+    try {
+      final qtyReturned = int.tryParse(qtyReturnedController.text) ?? 0;
+      final damagedCount = int.tryParse(damagedController.text) ?? 0;
+      final missingCount = int.tryParse(missingController.text) ?? 0;
+      final returnedAt = returnedAtController.text;
+
+      String? base64Image;
+      if (selectedImage.value != null) {
+        base64Image = await imageToBase64(selectedImage.value!);
+      }
+
+      final payload = {
+        "qty_returned": qtyReturned,
+        "damaged_count": damagedCount,
+        "missing_count": missingCount,
+        "returned_at": returnedAt,
+        if (base64Image != null) "img": base64Image,
+      };
+
+      final response = await apiService.postRequestReturn(landingId, payload);
+
+      if (response.status.isOk) {
+        Get.snackbar("Sukses", "Pengajuan pengembalian berhasil");
+        Get.offAllNamed('/profile');
+      } else {
+        Get.snackbar("Gagal", response.body?['message'] ?? "Pengajuan gagal");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Terjadi kesalahan: $e");
+    }
+  }
+
+  @override
+  void onClose() {
+    qtyReturnedController.dispose();
+    damagedController.dispose();
+    missingController.dispose();
+    returnedAtController.dispose();
+    super.onClose();
   }
 }
