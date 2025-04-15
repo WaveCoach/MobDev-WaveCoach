@@ -1,23 +1,7 @@
 import 'package:get/get.dart';
+import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 
 class AjukanPengembalianController extends GetxController {
-  //TODO: Implement AjukanPengembalianController
-
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
+  final ApiService apiService = Get.find<ApiService>();
+  final isLoading = false.obs;
 }

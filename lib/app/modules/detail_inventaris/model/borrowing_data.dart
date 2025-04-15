@@ -25,7 +25,7 @@ class BorrowingData {
       tanggalPinjam: json['tanggal_pinjam'],
       tanggalKembali: json['tanggal_kembali'],
       status: json['status'],
-      qtyOut: json['qty_out'],
+      qtyOut: json['qty_borrowed'],
       coachName: json['coach_name'],
       mastercoachName: json['mastercoach_name'],
       inventoryName: json['inventory_name'],
