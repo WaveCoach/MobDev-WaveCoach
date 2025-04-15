@@ -189,7 +189,10 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       if (item.status == "borrowed") {
-                                        Get.toNamed('/form-ajuan-pengembalian');
+                                        Get.toNamed(
+                                          '/ajukan-pengembalian',
+                                          arguments: {'landingId': item.id},
+                                        );
                                       } else if (item.status == "returned") {
                                         Get.toNamed('/bukti-pengembalian');
                                       }

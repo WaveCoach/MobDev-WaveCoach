@@ -30,11 +30,9 @@ class DetailHistoryPengajuanController extends GetxController {
     final response = await apiService.getDetailRequest(id);
 
     if (response.statusCode == 200 && response.body != null) {
-      print("Response: ${response.body}");
       historyRequestResponse.value = HistoryInventoryRequestResponse.fromJson(
         response.body,
       );
-      print("History Request: ${historyRequestResponse.value}");
     } else {
       logError("fetch history request", response.statusText);
       Get.snackbar("Error", "Failed to load history request");

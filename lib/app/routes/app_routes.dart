@@ -28,7 +28,6 @@ abstract class Routes {
   static const DETAIL_INVENTARIS = _Paths.DETAIL_INVENTARIS;
   static const HISTORY_PENILAIAN_DETAIL = _Paths.HISTORY_PENILAIAN_DETAIL;
   static const DETAIL_HISTORY_PENGAJUAN = _Paths.DETAIL_HISTORY_PENGAJUAN;
-  static const FORM_AJUAN_PENGEMBALIAN = _Paths.FORM_AJUAN_PENGEMBALIAN;
   static const BUKTI_PENGEMBALIAN = _Paths.BUKTI_PENGEMBALIAN;
 }
 
@@ -59,6 +58,5 @@ abstract class _Paths {
   static const DETAIL_INVENTARIS = '/detail-inventaris';
   static const HISTORY_PENILAIAN_DETAIL = '/history-penilaian-detail';
   static const DETAIL_HISTORY_PENGAJUAN = '/detail-history-pengajuan';
-  static const FORM_AJUAN_PENGEMBALIAN = '/form-ajuan-pengembalian';
   static const BUKTI_PENGEMBALIAN = '/bukti-pengembalian';
 }
