@@ -47,6 +47,10 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                 "Nama Inventaris: ${detail.inventoryName}",
                 style: const TextStyle(fontSize: 18),
               ),
+              Text(
+                "Jumlah Inventaris: ${detail.qtyBorrow}",
+                style: const TextStyle(fontSize: 18),
+              ),
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () async {
@@ -116,6 +120,39 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                       ),
                     ),
                   ],
+                );
+              }),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Text(
+                    "Terdapat barang rusak?",
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(width: 8),
+                  Obx(() {
+                    return Checkbox(
+                      value: controller.isDamaged.value,
+                      onChanged: (bool? value) {
+                        if (value != null) {
+                          controller.isDamaged.value = value;
+                        }
+                      },
+                    );
+                  }),
+                ],
+              ),
+              const SizedBox(height: 8),
+              // 👇 Ini hanya muncul jika checkbox dicentang
+              Obx(() {
+                if (!controller.isDamaged.value) return const SizedBox();
+                return TextField(
+                  controller: controller.damagedCountController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "Jumlah barang rusak",
+                    border: OutlineInputBorder(),
+                  ),
                 );
               }),
             ],

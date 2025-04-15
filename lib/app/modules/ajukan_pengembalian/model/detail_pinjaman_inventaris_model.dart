@@ -7,6 +7,7 @@ class InventoryLandingDetail {
   final String tanggalPinjam;
   final int inventoryId;
   final String inventoryName;
+  final int? qtyBorrow;
 
   InventoryLandingDetail({
     required this.id,
@@ -17,6 +18,7 @@ class InventoryLandingDetail {
     required this.tanggalPinjam,
     required this.inventoryId,
     required this.inventoryName,
+    required this.qtyBorrow,
   });
 
   factory InventoryLandingDetail.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class InventoryLandingDetail {
       tanggalPinjam: json['tanggal_pinjam'],
       inventoryId: json['inventory_id'],
       inventoryName: json['inventory_name'],
+      qtyBorrow: json['qty_borrowed'] ?? 0,
     );
   }
 
@@ -42,6 +45,7 @@ class InventoryLandingDetail {
       'tanggal_pinjam': tanggalPinjam,
       'inventory_id': inventoryId,
       'inventory_name': inventoryName,
+      'qty_borrow': qtyBorrow,
     };
   }
 }
