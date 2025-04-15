@@ -182,17 +182,18 @@ class _InventarisViewState extends State<InventarisView> {
         return const Center(child: Text("Tidak ada stok barang."));
       }
 
-      final filteredStockList = controller.stockList.where((stock) {
-        final matchesMasterCoach = stock.mastercoachName
-            .toLowerCase()
-            .contains(searchQuery.toLowerCase());
-        final matchesItems = stock.items.any(
-          (item) => item.inventoryName.toLowerCase().contains(
-            searchQuery.toLowerCase(),
-          ),
-        );
-        return matchesMasterCoach || matchesItems;
-      }).toList();
+      final filteredStockList =
+          controller.stockList.where((stock) {
+            final matchesMasterCoach = stock.mastercoachName
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase());
+            final matchesItems = stock.items.any(
+              (item) => item.inventoryName.toLowerCase().contains(
+                searchQuery.toLowerCase(),
+              ),
+            );
+            return matchesMasterCoach || matchesItems;
+          }).toList();
 
       return RefreshIndicator(
         onRefresh: () async {
@@ -549,7 +550,10 @@ class _InventarisViewState extends State<InventarisView> {
                           onTap: () {
                             Get.toNamed(
                               Routes.DETAIL_HISTORY_PENGAJUAN,
-                              arguments: history.id,
+                              arguments: {
+                                'id': history.id,
+                                'type': history.type,
+                              },
                             );
                           },
                           child: Container(

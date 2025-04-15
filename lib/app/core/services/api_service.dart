@@ -151,4 +151,12 @@ class ApiService extends GetConnect {
   Future<Response> getDetailBorrowingList(int inventoryId) {
     return get("$url/inventory-landing/$inventoryId", headers: getHeaders());
   }
+
+  Future<Response> getDetailRequest(int id) {
+    return get("$url/inventory-request-history/$id", headers: getHeaders());
+  }
+
+  Future<Response> getDetailReturn(int id) {
+    return get("$url/inventory-return-history/$id", headers: getHeaders());
+  }
 }

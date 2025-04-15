@@ -18,7 +18,7 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0, // Adjust spacing between back icon and title
+        titleSpacing: 0,
         title: Text(
           "Kembali",
           style: GoogleFonts.poppins(
@@ -79,7 +79,10 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                   itemBuilder: (context, index) {
                     final item = controller.borrowingList[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 5,
+                      ),
                       child: Card(
                         margin: const EdgeInsets.symmetric(
                           horizontal: 16,
@@ -93,101 +96,104 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                              children: [
                                 Text(
                                   "Nama Master Coach",
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 Text(
                                   item.mastercoachName,
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   "Tanggal Pinjam",
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 Text(
                                   item.tanggalPinjam,
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   "Tanggal Kembali",
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 Text(
                                   item.tanggalKembali,
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   "Jumlah",
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 Text(
                                   "${item.qtyOut}",
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   "Kondisi",
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 Text(
                                   item.status,
                                   style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 SizedBox(height: 20),
                                 SizedBox(
-                                  width: double.infinity, // Memenuhi ruang antara kiri dan kanan
+                                  width:
+                                      double
+                                          .infinity, // Memenuhi ruang antara kiri dan kanan
                                   child: ElevatedButton(
                                     onPressed: () {
                                       // Add your logic for "Ajukan Pengembalian" here
                                     },
                                     style: ElevatedButton.styleFrom(
                                       foregroundColor: Colors.black,
-                                      backgroundColor: AppColors.goldenAmber, // Text color
+                                      backgroundColor:
+                                          AppColors.goldenAmber, // Text color
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),

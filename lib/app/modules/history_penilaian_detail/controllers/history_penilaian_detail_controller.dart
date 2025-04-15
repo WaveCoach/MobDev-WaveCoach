@@ -23,7 +23,6 @@ class HistoryPenilaianDetailController extends GetxController {
         historyDetailResponse.value = HistoryDetailResponse.fromJson(
           response.body,
         );
-        print(response.body);
       } else {
         logError("fetch history detail", response.statusText);
         Get.snackbar("Error", "Failed to load history detail");
