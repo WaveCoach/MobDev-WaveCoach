@@ -31,6 +31,7 @@ class DetailHistoryPengajuanView
               Text("Tanggal kembali: ${data.data.tanggalKembali}"),
               Text("alasan pinjam: ${data.data.alasanPinjam}"),
               Text("status: ${data.data.status}"),
+              Text("alasan ditolak: ${data.data.rejectionReason}"),
 
               // Tambahkan field lain sesuai kebutuhan
             ],
@@ -50,6 +51,7 @@ class DetailHistoryPengajuanView
               Text("Tanggal kembali: ${data.data.landingTanggalKembali}"),
               Text("alasan pinjam: ${data.data.landingAlasanPinjam}"),
               Text("status: ${data.data.status}"),
+              Text("alasan ditolak: ${data.data.rejectionReason}"),
               // Tambahkan field lain sesuai kebutuhan
             ],
           );

@@ -16,6 +16,7 @@ class InventoryReturn {
   final int requestId;
   final String requestTanggalPinjam;
   final String requestTanggalKembali;
+  final String rejectionReason;
 
   InventoryReturn({
     required this.id,
@@ -35,6 +36,7 @@ class InventoryReturn {
     required this.requestId,
     required this.requestTanggalPinjam,
     required this.requestTanggalKembali,
+    required this.rejectionReason,
   });
 
   factory InventoryReturn.fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class InventoryReturn {
       requestId: json['request_id'] ?? 0,
       requestTanggalPinjam: json['request_tanggal_pinjam'] ?? '',
       requestTanggalKembali: json['request_tanggal_kembali'] ?? '',
+      rejectionReason: json['rejection_reason'] ?? '',
     );
   }
 }

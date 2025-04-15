@@ -8,6 +8,7 @@ class InventoryRequest {
   final String mastercoachName;
   final int coachId;
   final String coachName;
+  final String rejectionReason;
   final List<InventoryItem> items;
 
   InventoryRequest({
@@ -20,6 +21,7 @@ class InventoryRequest {
     required this.mastercoachName,
     required this.coachId,
     required this.coachName,
+    required this.rejectionReason,
     required this.items,
   });
 
@@ -34,6 +36,7 @@ class InventoryRequest {
       mastercoachName: json['mastercoach_name'] ?? '',
       coachId: json['coach_id'] ?? 0,
       coachName: json['coach_name'] ?? '',
+      rejectionReason: json['rejection_reason'] ?? '',
       items:
           (json['items'] as List? ?? [])
               .map((item) => InventoryItem.fromJson(item))
