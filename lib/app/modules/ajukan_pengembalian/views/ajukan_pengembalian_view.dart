@@ -155,6 +155,72 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                   ),
                 );
               }),
+
+              Row(
+                children: [
+                  Text(
+                    "Terdapat barang hilang?",
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(width: 8),
+                  Obx(() {
+                    return Checkbox(
+                      value: controller.isMissing.value,
+                      onChanged: (bool? value) {
+                        if (value != null) {
+                          controller.isMissing.value = value;
+                        }
+                      },
+                    );
+                  }),
+                ],
+              ),
+              const SizedBox(height: 8),
+              // 👇 Ini hanya muncul jika checkbox dicentang
+              Obx(() {
+                if (!controller.isMissing.value) return const SizedBox();
+                return TextField(
+                  controller: controller.damagedCountController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: "Jumlah barang rusak",
+                    border: OutlineInputBorder(),
+                  ),
+                );
+              }),
+
+              const SizedBox(height: 16),
+              TextField(
+                controller: controller.returnDateController,
+                readOnly: true,
+                decoration: InputDecoration(
+                  labelText: "Tanggal Kembali",
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.calendar_today),
+                    onPressed: () async {
+                      final DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (pickedDate != null) {
+                        controller.returnDateController.text =
+                            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+                      }
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  // Tambahkan logika untuk mengajukan pengembalian di sini
+                  // controller.submitPengembalian();
+                },
+                child: const Text("Ajukan Pengembalian"),
+              ),
             ],
           ),
         );

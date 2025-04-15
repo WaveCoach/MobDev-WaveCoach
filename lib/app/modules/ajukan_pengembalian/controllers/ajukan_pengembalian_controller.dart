@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 import 'package:mob_dev_wave_coach/app/core/utils/loading_helper.dart';
 import 'package:mob_dev_wave_coach/app/modules/ajukan_pengembalian/model/detail_pinjaman_inventaris_model.dart';
@@ -13,6 +12,9 @@ class AjukanPengembalianController extends GetxController {
   RxString selectedImage = ''.obs;
   final isDamaged = false.obs;
   final damagedCountController = TextEditingController();
+  final isMissing = false.obs;
+  final missingCountController = TextEditingController();
+  final returnDateController = TextEditingController();
 
   @override
   void onInit() {
