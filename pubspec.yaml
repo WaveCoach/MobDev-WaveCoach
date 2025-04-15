@@ -49,6 +49,7 @@ dependencies:
   flutter_image_compress: ^2.0.3
   url_launcher: ^6.1.14
   dropdown_search: ^6.0.2
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
