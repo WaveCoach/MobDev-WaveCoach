@@ -188,18 +188,27 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                           .infinity, // Memenuhi ruang antara kiri dan kanan
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      // Add your logic for "Ajukan Pengembalian" here
+                                      if (item.status == "borrowed") {
+                                        Get.toNamed('/form-ajuan-pengembalian');
+                                      } else if (item.status == "returned") {
+                                        Get.toNamed('/bukti-pengembalian');
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       foregroundColor: Colors.black,
                                       backgroundColor:
-                                          AppColors.goldenAmber, // Text color
+                                          item.status == "borrowed"
+                                              ? AppColors.goldenAmber
+                                              : Colors
+                                                  .green, // Change color based on status
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
                                     child: Text(
-                                      "Ajukan Pengembalian",
+                                      item.status == "borrowed"
+                                          ? "Ajukan Pengembalian"
+                                          : "Bukti Pengembalian", // Change text based on status
                                       style: GoogleFonts.poppins(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
