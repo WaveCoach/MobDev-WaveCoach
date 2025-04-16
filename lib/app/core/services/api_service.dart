@@ -170,4 +170,26 @@ class ApiService extends GetConnect {
   Future<Response> postRequestReturn(int landingId, Map<String, dynamic> body) {
     return post("$url/return/$landingId", body, headers: getHeaders());
   }
+
+  Future<Response> updateRequestInventory(
+    int requestId,
+    Map<String, dynamic> body,
+  ) {
+    return patch(
+      "$url/update-loan-status/$requestId",
+      body,
+      headers: getHeaders(),
+    );
+  }
+
+  Future<Response> updateReturnInventory(
+    int requestId,
+    Map<String, dynamic> body,
+  ) {
+    return patch(
+      "$url/update-return-status/$requestId",
+      body,
+      headers: getHeaders(),
+    );
+  }
 }

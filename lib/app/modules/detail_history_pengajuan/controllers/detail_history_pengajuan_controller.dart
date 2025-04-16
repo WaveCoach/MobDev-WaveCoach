@@ -11,6 +11,7 @@ class DetailHistoryPengajuanController extends GetxController {
   final historyRequestResponse = Rxn<HistoryInventoryRequestResponse>();
   final historyReturnResponse = Rxn<HistoryInventoryReturnResponse>();
   final feedbackController = TextEditingController();
+  final selectedStatus = "".obs;
 
   @override
   void onInit() {
@@ -55,6 +56,64 @@ class DetailHistoryPengajuanController extends GetxController {
       logError("fetch history return", response.statusText);
       Get.snackbar("Error", "Failed to load history return");
     }
+    isLoading.value = false;
+  }
+
+  Future<void> submitStatusRequest(int id, String status) async {
+    isLoading.value = true;
+
+    final body = {
+      "status": status,
+      "rejection_reason": feedbackController.text.trim(),
+    };
+
+    final response = await apiService.updateRequestInventory(id, body);
+
+    if (response.statusCode == 200 && response.body != null) {
+      Get.snackbar(
+        "Success",
+        status == "approved"
+            ? "Request approved successfully"
+            : "Request rejected successfully",
+      );
+      fetchHistoryRequest(id);
+    } else {
+      logError("submit request", response.statusText);
+      Get.snackbar(
+        "Error",
+        "Failed to ${status == "approved" ? "approve" : "reject"} request",
+      );
+    }
+
+    isLoading.value = false;
+  }
+
+  Future<void> submitStatusReturn(int id, String status) async {
+    isLoading.value = true;
+
+    final body = {
+      "status": status,
+      "rejection_reason": feedbackController.text.trim(),
+    };
+
+    final response = await apiService.updateReturnInventory(id, body);
+
+    if (response.statusCode == 200 && response.body != null) {
+      Get.snackbar(
+        "Success",
+        status == "approved"
+            ? "Request approved successfully"
+            : "Request rejected successfully",
+      );
+      fetchHistoryRequest(id);
+    } else {
+      logError("submit request", response.statusText);
+      Get.snackbar(
+        "Error",
+        "Failed to ${status == "approved" ? "approve" : "reject"} request",
+      );
+    }
+
     isLoading.value = false;
   }
 }
