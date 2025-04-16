@@ -234,6 +234,10 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
 
   Widget _buildStuffDropdown(AjukanPeminjamanController controller) {
     return Obx(() {
+      // Hitung jumlah barang yang tersedia dan yang sudah dipilih
+      bool allItemsSelected = controller.stuffList.length ==
+          controller.stuffFormList.length;
+
       return Column(
         children: [
           ...controller.stuffFormList.asMap().entries.map((entry) {
@@ -241,15 +245,13 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
             Map<String, dynamic> stuff = entry.value;
 
             // Filter barang yang sudah dipilih
-            List<InventoryItem> availableItems =
-                controller.stuffList.where((item) {
-                  return !controller.stuffFormList.any(
-                    (form) =>
-                        form['selectedStuff']?.inventoryId ==
-                            item.inventoryId &&
-                        form != stuff,
-                  ); // Exclude the current item
-                }).toList();
+            List<InventoryItem> availableItems = controller.stuffList.where((item) {
+              return !controller.stuffFormList.any(
+                (form) =>
+                    form['selectedStuff']?.inventoryId == item.inventoryId &&
+                    form != stuff,
+              ); // Exclude the current item
+            }).toList();
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
@@ -275,13 +277,12 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                           ),
                           isExpanded: true,
                           value: stuff['selectedStuff'],
-                          items:
-                              availableItems.map((item) {
-                                return DropdownMenuItem<InventoryItem>(
-                                  value: item,
-                                  child: Text(item.inventoryName ?? "-"),
-                                );
-                              }).toList(),
+                          items: availableItems.map((item) {
+                            return DropdownMenuItem<InventoryItem>(
+                              value: item,
+                              child: Text(item.inventoryName ?? "-"),
+                            );
+                          }).toList(),
                           onChanged: (value) {
                             stuff['selectedStuff'] = value;
                             controller.stuffFormList[index] = {
@@ -328,62 +329,70 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                   IconButton(
                     icon: const Icon(Icons.remove_circle),
                     color: Colors.red,
-                    onPressed:
-                        controller.stuffFormList.length > 1
-                            ? () {
-                              controller.stuffFormList.removeAt(index);
-                            }
-                            : null, // Disable button if only one item remains
+                    onPressed: controller.stuffFormList.length > 1
+                        ? () {
+                            controller.stuffFormList.removeAt(index);
+                          }
+                        : null, // Disable button if only one item remains
                   ),
                 ],
               ),
             );
           }).toList(),
-          ElevatedButton(
-            onPressed: () {
-              controller.stuffFormList.add({
-                'selectedStuff': null,
-                'quantity': '',
-              });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.goldenAmber,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ), // Padding untuk menyesuaikan ukuran
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min, // Adjust size to fit content
-              children: [
-                Container(
-                  width: 20,
-                  height: 20,
-                  decoration: const BoxDecoration(
-                    color: Colors.white, // White circle background
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.add, // Icon "+"
-                    color: Colors.black,
-                    size: 14, // Adjust icon size
-                  ),
-                ),
-                const SizedBox(width: 8), // Space between icon and text
-                const Text(
-                  "Tambah Stuff",
+          allItemsSelected
+              ? const Text(
+                  "Semua jenis barang telah dipilih",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: Colors.grey,
+                  ),
+                )
+              : ElevatedButton(
+                  onPressed: () {
+                    controller.stuffFormList.add({
+                      'selectedStuff': null,
+                      'quantity': '',
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.goldenAmber,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ), // Padding untuk menyesuaikan ukuran
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min, // Adjust size to fit content
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: const BoxDecoration(
+                          color: Colors.white, // White circle background
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.add, // Icon "+"
+                          color: Colors.black,
+                          size: 14, // Adjust icon size
+                        ),
+                      ),
+                      const SizedBox(width: 8), // Space between icon and text
+                      const Text(
+                        "Tambah Barang",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
           const SizedBox(height: 16),
         ],
       );

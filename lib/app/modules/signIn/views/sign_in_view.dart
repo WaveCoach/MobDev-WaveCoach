@@ -340,39 +340,44 @@ class _SignInViewState extends State<SignInView> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.deepOceanBlue,
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  header(),
-
-                  emailInput(),
-
-                  passwordInput(),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 15,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [rememberMe(), forgotPassword()],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus(); // Menutup keyboard
+        },
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Center(
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        header(),
+                        emailInput(),
+                        passwordInput(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 15,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [rememberMe(), forgotPassword()],
+                          ),
+                        ),
+                        loginButton(),
+                        textHubungiAdmin(),
+                      ],
                     ),
                   ),
-
-                  loginButton(),
-
-                  textHubungiAdmin(),
-                ],
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

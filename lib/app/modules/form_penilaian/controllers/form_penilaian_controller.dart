@@ -134,7 +134,7 @@ class FormPenilaianController extends GetxController {
           "Assessment submitted successfully",
           snackPosition: SnackPosition.TOP,
         );
-        Get.offAllNamed('/history-penilaian');
+        Get.offAllNamed('/form-penilaian');
       } else {
         logError(
           "Submit assessment",

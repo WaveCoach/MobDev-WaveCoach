@@ -49,10 +49,16 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         if (object != null && object is RenderBox) {
           Rect rect = object.paintBounds;
           Offset offset = object.localToGlobal(Offset.zero);
-          double targetOffset = offset.dy + rect.height - MediaQuery.of(context).size.height * 0.4;
+          double targetOffset =
+              offset.dy +
+              rect.height -
+              MediaQuery.of(context).size.height * 0.4;
 
           // Ensure offset is not negative
-          targetOffset = targetOffset.clamp(0.0, _scrollController.position.maxScrollExtent);
+          targetOffset = targetOffset.clamp(
+            0.0,
+            _scrollController.position.maxScrollExtent,
+          );
 
           _scrollController.animateTo(
             targetOffset,
@@ -67,7 +73,21 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Ubah Kata Sandi")),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: AppColors.deepOceanBlue, // Mengubah warna ikon kembali
+        ),
+        title: Text(
+          "Ubah Kata Sandi",
+          style: GoogleFonts.poppins(
+            color: AppColors.deepOceanBlue,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            height: 1,
+            letterSpacing: -0.5,
+          ),
+        ),
+      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus(); // Menutup keyboard
@@ -91,20 +111,21 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 60),
-                child: Text(
-                  "Example@gmail.com",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    color: AppColors.deepOceanBlue,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    height: 1.27,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-              ),
+              SizedBox(height: 40),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(30, 0, 30, 60),
+              //   child: Text(
+              //     "Example@gmail.com",
+              //     textAlign: TextAlign.center,
+              //     style: GoogleFonts.poppins(
+              //       color: AppColors.deepOceanBlue,
+              //       fontSize: 20,
+              //       fontWeight: FontWeight.w400,
+              //       height: 1.27,
+              //       letterSpacing: -0.5,
+              //     ),
+              //   ),
+              // ),
               _buildPasswordField(
                 "Current Password",
                 currentPasswordController,
@@ -167,20 +188,20 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 ),
               ),
               SizedBox(height: 30),
-                GestureDetector(
+              GestureDetector(
                 onTap: () {
                   Get.toNamed('/forget-pass');
                 },
                 child: Text(
                   "Lupa Kata Sandi?",
                   style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: AppColors.deepOceanBlue,
-                  decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    color: AppColors.deepOceanBlue,
+                    decoration: TextDecoration.underline,
                   ),
                 ),
-                ),
+              ),
             ],
           ),
         ),

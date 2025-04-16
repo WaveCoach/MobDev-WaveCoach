@@ -84,14 +84,15 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                         vertical: 5,
                       ),
                       child: Card(
+                        color: Colors.white,
                         margin: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,
                         ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                         child: ListTile(
-                          tileColor:
-                              Colors
-                                  .white, // Menambahkan warna putih pada ListTile
                           subtitle: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
