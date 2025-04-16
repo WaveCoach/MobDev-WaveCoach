@@ -204,27 +204,39 @@ class _ScheduleViewState extends State<ScheduleView> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Container(width: 1, height: 40, color: Colors.grey),
           ),
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 15, 20, 15),
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: Offset(0, 4), // changes position of shadow
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedMonthIndex = -1; // Use a unique index for "History"
+              });
+              controller.fetchSchedules(history: true); // ini dia yang penting
+            },
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 15, 20, 15),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+              decoration: BoxDecoration(
+                color:
+                    _selectedMonthIndex == -1
+                        ? AppColors.deepOceanBlue
+                        : Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 0,
+                    blurRadius: 4,
+                    offset: Offset(0, 4), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Text(
+                'History',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w500, // Medium
+                  fontSize: 16,
+                  color:
+                      _selectedMonthIndex == -1 ? Colors.white : Colors.black,
                 ),
-              ],
-            ),
-            child: Text(
-              'History',
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w500, // Medium
-                fontSize: 16,
-                color: Colors.black,
               ),
             ),
           ),
@@ -245,22 +257,19 @@ class _ScheduleViewState extends State<ScheduleView> {
         // Filter schedule list based on the selected month index
         List filteredScheduleList =
             controller.scheduleList.where((schedule) {
-              if (_selectedMonthIndex == 0) {
-                // "Terdekat" - Filter schedules within the next 3 days
+              if (_selectedMonthIndex == -1) {
+                // Jangan filter apapun, karena data sudah dari endpoint history
+                return true;
+              } else if (_selectedMonthIndex == 0) {
                 final now = DateTime.now();
-                final scheduleDate = DateTime.parse(
-                  schedule.date,
-                ); // Assuming `schedule.date` is in ISO format
+                final scheduleDate = DateTime.parse(schedule.date);
                 return scheduleDate.isAfter(now) &&
                     scheduleDate.isBefore(now.add(Duration(days: 3)));
               } else if (_selectedMonthIndex == 1) {
-                // "Semua" - Show all schedules
-                return true;
+                return true; // semua
               } else {
-                // Specific month - Filter schedules by month
                 final scheduleMonth = DateTime.parse(schedule.date).month;
-                return scheduleMonth ==
-                    _selectedMonthIndex - 1; // Adjust index for monthNames
+                return scheduleMonth == _selectedMonthIndex - 1;
               }
             }).toList();
 

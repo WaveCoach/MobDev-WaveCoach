@@ -18,9 +18,9 @@ class ScheduleController extends GetxController {
     fetchSchedules();
   }
 
-  Future<void> fetchSchedules() async {
+  Future<void> fetchSchedules({bool? history}) async {
     await wrapLoading(isLoading, () async {
-      final response = await apiService.listSchedule();
+      final response = await apiService.listSchedule(history: history);
 
       if (response.statusCode == 200 && response.body != null) {
         final data = ScheduleResponse.fromJson(response.body).data.schedule;
