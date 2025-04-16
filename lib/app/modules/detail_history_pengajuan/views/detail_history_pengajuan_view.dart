@@ -32,7 +32,65 @@ class DetailHistoryPengajuanView
               Text("alasan pinjam: ${data.data.alasanPinjam}"),
               Text("status: ${data.data.status}"),
               Text("alasan ditolak: ${data.data.rejectionReason}"),
-
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Aksi untuk menolak
+                            // controller.tolakPengajuan(data.data.id, controller.feedbackController.text);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          child: const Text("Tolak"),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Aksi untuk menyetujui
+                            // controller.setujuPengajuan(data.data.id, controller.feedbackController.text);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                          ),
+                          child: const Text("Setuju"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Umpan Balik:",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: controller.feedbackController,
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Masukkan umpan balik Anda di sini...",
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Aksi untuk submit
+                      // controller.submitFeedback(data.data.id, controller.feedbackController.text);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                    child: const Text("Submit"),
+                  ),
+                ],
+              ),
               // Tambahkan field lain sesuai kebutuhan
             ],
           );

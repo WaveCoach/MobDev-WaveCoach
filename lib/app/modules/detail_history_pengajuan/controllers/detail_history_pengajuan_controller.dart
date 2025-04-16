@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 import 'package:mob_dev_wave_coach/app/core/utils/loading_helper.dart';
@@ -9,6 +10,7 @@ class DetailHistoryPengajuanController extends GetxController {
   final isLoading = false.obs;
   final historyRequestResponse = Rxn<HistoryInventoryRequestResponse>();
   final historyReturnResponse = Rxn<HistoryInventoryReturnResponse>();
+  final feedbackController = TextEditingController();
 
   @override
   void onInit() {
