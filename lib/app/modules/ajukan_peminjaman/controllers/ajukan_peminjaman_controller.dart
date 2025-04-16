@@ -7,6 +7,7 @@ import 'package:mob_dev_wave_coach/app/modules/ajukan_peminjaman/model/inventory
 import 'package:mob_dev_wave_coach/app/modules/ajukan_peminjaman/model/inventory_matercoach_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/ajukan_peminjaman/model/mastercoach_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/ajukan_peminjaman/model/mastercoach_response.dart';
+import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
 
 class AjukanPeminjamanController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
@@ -107,7 +108,7 @@ class AjukanPeminjamanController extends GetxController {
           "request borrow submitted successfully",
           snackPosition: SnackPosition.TOP,
         );
-        Get.offAllNamed('/inventaris');
+        Get.offAll(() => HomeView(), arguments: 1); // Navigasi ke HomeView dengan indeks 1 (Inventaris)
       } else {
         logError(
           "Submit request borrow",
