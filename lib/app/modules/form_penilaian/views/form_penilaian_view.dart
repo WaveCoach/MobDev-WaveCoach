@@ -20,6 +20,7 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
   final FormPenilaianController controller =
       Get.find<FormPenilaianController>();
   final ScheduleController scheduleController = Get.find<ScheduleController>();
+  TextEditingController scoreController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -512,8 +513,9 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                                   horizontal: 12,
                                 ),
                                 child: TextField(
+                                  controller: scoreController,
                                   decoration: InputDecoration(
-                                    hintText: "Masukkan Nilai",
+                                    hintText: "0 - 100",
                                     hintStyle: const TextStyle(
                                       color: Colors.black54,
                                     ),
@@ -527,9 +529,16 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                                   ),
                                   onChanged: (value) {
                                     setState(() {
-                                      aspect.score =
-                                          int.tryParse(value)?.toDouble() ??
-                                          0.0;
+                                      double? parsedValue = double.tryParse(value);
+                                      if (parsedValue != null && (parsedValue < 0 || parsedValue > 100)) {
+                                        // Jika nilai di luar rentang, reset ke nilai sebelumnya
+                                        scoreController.text = (aspect.score ?? 0.0).toStringAsFixed(0);
+                                        scoreController.selection = TextSelection.fromPosition(
+                                          TextPosition(offset: scoreController.text.length),
+                                        );
+                                      } else {
+                                        aspect.score = parsedValue ?? 0.0;
+                                      }
                                     });
                                   },
                                 ),
