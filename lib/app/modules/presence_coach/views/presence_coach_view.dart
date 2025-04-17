@@ -356,28 +356,22 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                     ? null
                     : () {
                       final scheduleId = Get.arguments['scheduleId'];
+
                       if (controller.showBuktiKehadiranButton.value) {
                         controller.submitPresence(
                           attendanceStatus: "Hadir",
                           scheduleId: scheduleId,
-                          proof:
-                              controller.capturedImagePath.value.isNotEmpty
-                                  ? XFile(controller.capturedImagePath.value)
-                                  : null,
-                          proofBase64:
-                              controller.capturedImagePath.value.isNotEmpty
-                                  ? base64Encode(
-                                    File(
-                                      controller.capturedImagePath.value,
-                                    ).readAsBytesSync(),
-                                  )
-                                  : null,
                         );
                       } else if (showAlasanTidakHadir) {
                         controller.submitPresence(
                           attendanceStatus: "Tidak Hadir",
                           scheduleId: scheduleId,
                           remarks: alasanController.text,
+                        );
+                      } else {
+                        Get.snackbar(
+                          "Peringatan",
+                          "Lengkapi presensi terlebih dahulu.",
                         );
                       }
                     },
@@ -405,6 +399,7 @@ class _PresenceCoachState extends State<PresenceCoachView> {
           ),
         ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
