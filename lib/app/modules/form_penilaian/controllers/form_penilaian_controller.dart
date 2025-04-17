@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
 import '../../../core/services/api_service.dart';
 import '../../schedule/controllers/schedule_controller.dart';
 import '../../schedule/model/schedule_response.dart';
@@ -137,7 +136,7 @@ class FormPenilaianController extends GetxController {
           "Assessment submitted successfully",
           snackPosition: SnackPosition.TOP,
         );
-        Get.offAll(() => HomeView(), arguments: 2);
+        Get.offAllNamed('/history-penilaian');
       } else {
         logError(
           "Submit assessment",

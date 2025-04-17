@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
+import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/controllers/schedule_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 import '../controllers/form_penilaian_controller.dart';
@@ -27,6 +28,12 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0, // Adjust spacing between back icon and title
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.offAll(() => HomeView(), arguments: 2);
+          },
+        ),
         title: Text(
           "Kembali",
           style: GoogleFonts.poppins(
