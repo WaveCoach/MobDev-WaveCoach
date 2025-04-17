@@ -4,6 +4,7 @@ import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
 import 'package:mob_dev_wave_coach/app/core/utils/loading_helper.dart';
 import 'package:mob_dev_wave_coach/app/modules/detail_history_pengajuan/model/history_request_response.dart';
 import 'package:mob_dev_wave_coach/app/modules/detail_history_pengajuan/model/history_return_response.dart';
+import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
 
 class DetailHistoryPengajuanController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
@@ -77,6 +78,7 @@ class DetailHistoryPengajuanController extends GetxController {
             : "Request rejected successfully",
       );
       fetchHistoryRequest(id);
+      Get.offAll(() => HomeView(), arguments: 1);
     } else {
       logError("submit request", response.statusText);
       Get.snackbar(
@@ -106,6 +108,7 @@ class DetailHistoryPengajuanController extends GetxController {
             : "Request rejected successfully",
       );
       fetchHistoryRequest(id);
+      Get.offAll(() => HomeView(), arguments: 1);
     } else {
       logError("submit request", response.statusText);
       Get.snackbar(

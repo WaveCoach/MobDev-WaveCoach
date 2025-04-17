@@ -815,53 +815,48 @@ class _InventarisViewState extends State<InventarisView> {
                             right: 10,
                             bottom: 10,
                           ),
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.all(8),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    item.name,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
+                                      color: AppColors.midnightNavy,
+                                      letterSpacing: -0.3,
+                                      height: 1,
+                                    ),
                                   ),
-                                  padding: EdgeInsets.all(8),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        item.name,
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20,
-                                          color: AppColors.midnightNavy,
-                                          letterSpacing: -0.3,
-                                          height: 1,
-                                        ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    "Jumlah: ${item.totalQtyBorrowed}",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                      color: const Color.fromARGB(
+                                        255,
+                                        32,
+                                        66,
+                                        94,
                                       ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        "Jumlah: ${item.totalQtyBorrowed}",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13,
-                                          color: const Color.fromARGB(
-                                            255,
-                                            32,
-                                            66,
-                                            94,
-                                          ),
-                                          letterSpacing: -0.3,
-                                          height: 1,
-                                        ),
-                                      ),
-                                    ],
+                                      letterSpacing: -0.3,
+                                      height: 1,
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),

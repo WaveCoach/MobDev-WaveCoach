@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'dart:io'; // Pastikan import 'dart:io' untuk File
 
 import '../controllers/ajukan_pengembalian_controller.dart';
@@ -11,7 +14,25 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Detail Peminjaman'), centerTitle: true),
+      appBar: AppBar(
+        titleSpacing: 0, // Adjust spacing between back icon and title
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
+      backgroundColor: AppColors.skyBlue,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());

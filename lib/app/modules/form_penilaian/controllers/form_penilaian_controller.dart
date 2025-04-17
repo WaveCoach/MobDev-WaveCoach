@@ -28,6 +28,8 @@ class FormPenilaianController extends GetxController {
   final swimStyleList = <SwimStyle>[].obs;
   final aspectList = <AssessmentAspect>[].obs;
 
+  final Map<int, TextEditingController> scoreControllers = {};
+
   var isDateSelected = false.obs;
 
   @override
@@ -134,7 +136,7 @@ class FormPenilaianController extends GetxController {
           "Assessment submitted successfully",
           snackPosition: SnackPosition.TOP,
         );
-        Get.offAllNamed('/form-penilaian');
+        Get.offAllNamed('/history-penilaian');
       } else {
         logError(
           "Submit assessment",
