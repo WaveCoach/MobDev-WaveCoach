@@ -92,4 +92,10 @@ class ProfileController extends GetxController {
     imageController.dispose();
     super.onClose();
   }
+
+  @override
+  void dispose() {
+    imageController.dispose();
+    super.dispose();
+  }
 }

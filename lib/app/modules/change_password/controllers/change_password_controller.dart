@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
+import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
 
 class ChangePasswordController extends GetxController {
   final ApiService apiService = ApiService();
@@ -18,7 +19,7 @@ class ChangePasswordController extends GetxController {
 
       if (response.status.isOk) {
         Get.snackbar("Success", "Password changed successfully");
-        Get.offNamed('/profile');
+        Get.offAll(() => HomeView(), arguments: 3);
       } else {
         Get.snackbar(
           "Error",

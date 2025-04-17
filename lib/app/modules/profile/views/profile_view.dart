@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart'; // Ensure this is imported
@@ -86,6 +88,8 @@ class _ProfileViewState extends State<ProfileView> {
                             );
 
                             if (image != null) {
+                              if (!mounted) return; // Ensure the widget is still mounted before proceeding
+
                               final bytes = await image.readAsBytes();
                               final base64Image = base64Encode(bytes);
                               final fileExtension =
@@ -99,13 +103,15 @@ class _ProfileViewState extends State<ProfileView> {
                                       ? 'image/jpeg'
                                       : 'application/octet-stream';
 
-                              controller.imageController.text =
-                                  'data:$mimeType;base64,$base64Image';
+                              if (mounted) { // Check again before updating the controller
+                                controller.imageController.text =
+                                    'data:$mimeType;base64,$base64Image';
 
-                              // Update the imageUrl to trigger UI refresh
-                              controller.imageUrl.value = image.path;
+                                // Update the imageUrl to trigger UI refresh
+                                controller.imageUrl.value = image.path;
 
-                              await controller.updateProfile();
+                                await controller.updateProfile();
+                              }
                             }
                           },
                           child: Obx(
@@ -118,10 +124,12 @@ class _ProfileViewState extends State<ProfileView> {
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
                                       image: controller.imageUrl.value.startsWith('data:image')
-                                          ? MemoryImage(base64Decode(controller.imageUrl.value.split(',').last))
-                                          : controller.imageUrl.value.isNotEmpty
+                                          ? (controller.imageUrl.value.contains(',')
+                                              ? MemoryImage(base64Decode(controller.imageUrl.value.split(',').last))
+                                              : AssetImage('assets/images/default_profile.png')) // Fallback jika format tidak valid
+                                          : controller.imageUrl.value.startsWith('http')
                                               ? NetworkImage(controller.imageUrl.value)
-                                              : const AssetImage('assets/images/coachSarah.jpg') as ImageProvider,
+                                              : FileImage(File(controller.imageUrl.value)) as ImageProvider,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -169,6 +177,8 @@ class _ProfileViewState extends State<ProfileView> {
                                       );
 
                                       if (image != null) {
+                                        if (!mounted) return; // Ensure the widget is still mounted before proceeding
+
                                         final bytes = await image.readAsBytes();
                                         final base64Image = base64Encode(bytes);
                                         final fileExtension =
@@ -181,13 +191,15 @@ class _ProfileViewState extends State<ProfileView> {
                                                 ? 'image/jpeg'
                                                 : 'application/octet-stream';
 
-                                        controller.imageController.text =
-                                            'data:$mimeType;base64,$base64Image';
+                                        if (mounted) { // Check again before updating the controller
+                                          controller.imageController.text =
+                                              'data:$mimeType;base64,$base64Image';
 
-                                        // Update the imageUrl to trigger UI refresh
-                                        controller.imageUrl.value = image.path;
+                                          // Update the imageUrl to trigger UI refresh
+                                          controller.imageUrl.value = image.path;
 
-                                        await controller.updateProfile();
+                                          await controller.updateProfile();
+                                        }
                                       }
                                     },
                                     child: Container(

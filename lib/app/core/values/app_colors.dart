@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class AppColors {
   static const Color skyBlue = Color(0xFFF1FAFF);
   static const Color deepOceanBlue = Color(0xFF3E6585);
+  static const Color contrastBlue = Color(0xFF6399C6);
   static const Color pastelBlue = Color(0xFF89B5D9);
   static const Color mistyBlue = Color(0xFF9EB2C2);
   static const Color lightBlue = Color(0xFFC4D5E0);

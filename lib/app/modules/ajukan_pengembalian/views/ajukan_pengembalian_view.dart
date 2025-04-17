@@ -33,233 +33,694 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
         ),
       ),
       backgroundColor: AppColors.skyBlue,
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final detail = controller.detailPinjaman.value;
-
-        if (detail == null) {
-          return const Center(child: Text("Data tidak ditemukan."));
-        }
-
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Nama Coach: ${detail.coachName}",
-                  style: const TextStyle(fontSize: 18),
+      body: Column(
+        children: [
+          Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.deepOceanBlue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                "Ajukan\nPengembalian",
+                textAlign: TextAlign.center, // Set text alignment to center
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  height: 1,
+                  letterSpacing: -0.5,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  "Nama Mastercoach: ${detail.mastercoachName}",
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Tanggal Pinjam: ${detail.tanggalPinjam}",
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Nama Inventaris: ${detail.inventoryName}",
-                  style: const TextStyle(fontSize: 18),
-                ),
-                Text(
-                  "Jumlah Inventaris: ${detail.qtyBorrow}",
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    final ImagePicker picker = ImagePicker();
-                    final XFile? image = await showDialog<XFile?>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Pilih Sumber Gambar'),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ListTile(
-                                leading: const Icon(Icons.camera_alt),
-                                title: const Text('Kamera'),
-                                onTap: () async {
-                                  final XFile? pickedImage = await picker
-                                      .pickImage(source: ImageSource.camera);
-                                  Navigator.pop(context, pickedImage);
-                                },
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.photo_library),
-                                title: const Text('Galeri'),
-                                onTap: () async {
-                                  final XFile? pickedImage = await picker
-                                      .pickImage(source: ImageSource.gallery);
-                                  Navigator.pop(context, pickedImage);
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-
-                    if (image != null) {
-                      controller.selectedImage.value = File(image.path);
-                    }
-                  },
-                  icon: const Icon(Icons.camera_alt),
-                  label: const Text("Upload Gambar"),
-                ),
-                const SizedBox(height: 16),
-                Obx(() {
-                  final File? imagePath = controller.selectedImage.value;
-                  if (imagePath == null) {
-                    return const SizedBox.shrink();
-                  }
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Preview Gambar:',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      if (imagePath != null)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.file(
-                            imagePath,
-                            width: double.infinity,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                    ],
-                  );
-                }),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Text(
-                      "Terdapat barang rusak?",
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(width: 8),
-                    Obx(() {
-                      return Checkbox(
-                        value: controller.isDamaged.value,
-                        onChanged: (bool? value) {
-                          if (value != null) {
-                            controller.isDamaged.value = value;
-                          }
-                        },
-                      );
-                    }),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Obx(() {
-                  if (!controller.isDamaged.value) return const SizedBox();
-                  return TextField(
-                    controller: controller.damagedController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "Jumlah barang rusak",
-                      border: OutlineInputBorder(),
-                    ),
-                  );
-                }),
-                Row(
-                  children: [
-                    Text(
-                      "Terdapat barang hilang?",
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(width: 8),
-                    Obx(() {
-                      return Checkbox(
-                        value: controller.isMissing.value,
-                        onChanged: (bool? value) {
-                          if (value != null) {
-                            controller.isMissing.value = value;
-                          }
-                        },
-                      );
-                    }),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Obx(() {
-                  if (!controller.isMissing.value) return const SizedBox();
-                  return TextField(
-                    controller:
-                        controller
-                            .missingController, // Use missingController here
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "Jumlah barang hilang", // Correct label
-                      border: OutlineInputBorder(),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: controller.qtyReturnedController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: "Jumlah Pengembalian",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: controller.returnedAtController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: "Tanggal Kembali",
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.calendar_today),
-                      onPressed: () async {
-                        final DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        if (pickedDate != null) {
-                          controller.returnedAtController.text =
-                              "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    final args = Get.arguments;
-                    final landingId = args['landingId'];
-
-                    controller.submitReturnRequest(landingId);
-                  },
-                  child: const Text("Ajukan Pengembalian"),
-                ),
-              ],
+              ),
             ),
           ),
-        );
-      }),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final detail = controller.detailPinjaman.value;
+
+                if (detail == null) {
+                  return const Center(child: Text("Data tidak ditemukan."));
+                }
+
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Nama Coach",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text: detail.coachName,
+                              ),
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                              readOnly: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Nama Master Coach",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text: detail.mastercoachName,
+                              ),
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                              readOnly: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Tanggal Pinjam",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: AppColors.contrastBlue,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text: detail.tanggalPinjam,
+                              ),
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: "Tanggal Pinjam",
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                              ),
+
+                              readOnly: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Tanggal Pengembalian",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: AppColors.contrastBlue,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: controller.returnedAtController,
+                              decoration: InputDecoration(
+                                hintText: "Pilih Tanggal",
+                                hintStyle: TextStyle(color: Colors.white),
+                                border: InputBorder.none,
+                                suffixIcon: Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.white,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                alignLabelWithHint: true,
+                              ),
+                              textAlign: TextAlign.left,
+                              textAlignVertical: TextAlignVertical.center,
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                              readOnly: true,
+                              onTap: () async {
+                                final pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101),
+                                );
+                                if (pickedDate != null) {
+                                  controller.returnedAtController.text =
+                                      "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+
+                        // TextField(
+                        //   controller: controller.returnedAtController,
+                        //   readOnly: true,
+                        //   decoration: InputDecoration(
+                        //     labelText: "Tanggal Kembali",
+                        //     border: const OutlineInputBorder(),
+                        //     suffixIcon: IconButton(
+                        //       icon: const Icon(Icons.calendar_today),
+                        //       onPressed: () async {
+                        //         final DateTime? pickedDate =
+                        //             await showDatePicker(
+                        //               context: context,
+                        //               initialDate: DateTime.now(),
+                        //               firstDate: DateTime(2000),
+                        //               lastDate: DateTime(2100),
+                        //             );
+                        //         if (pickedDate != null) {
+                        //           controller.returnedAtController.text =
+                        //               "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+                        //         }
+                        //       },
+                        //     ),
+                        //   ),
+                        // ),
+                        const SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Barang yang dipinjam",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: AppColors.contrastBlue,
+                                  border: Border.all(color: Colors.grey),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: TextFormField(
+                                    controller: TextEditingController(
+                                      text: detail.inventoryName,
+                                    ),
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                    decoration: const InputDecoration(
+                                      hintText: "Nama Barang",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                    ),
+
+                                    readOnly: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: AppColors.contrastBlue,
+                                  border: Border.all(color: Colors.white),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: TextFormField(
+                                    controller:
+                                        controller.qtyReturnedController,
+                                    keyboardType: TextInputType.number,
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: "${detail.qtyBorrow}",
+                                      hintStyle: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Terdapat barang rusak?",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Obx(() {
+                              return Switch(
+                                value: controller.isDamaged.value,
+                                onChanged: (bool value) {
+                                  controller.isDamaged.value = value;
+                                },
+                                activeColor: AppColors.deepOceanBlue, // Warna saat aktif
+                                inactiveThumbColor: Colors.grey, // Warna saat tidak aktif
+                                inactiveTrackColor: Colors.grey.withOpacity(0.5), // Warna track saat tidak aktif
+                              );
+                            }),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Obx(() {
+                          if (!controller.isDamaged.value)
+                            return const SizedBox();
+                          return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  border: Border.all(color: Colors.grey),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: TextFormField(
+                                    controller:
+                                        controller.damagedController,
+                                    keyboardType: TextInputType.number,
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: "Jumlah barang rusak",
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              );
+                        }),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Terdapat barang hilang?",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Obx(() {
+                              return Switch(
+                                value: controller.isMissing.value,
+                                onChanged: (bool value) {
+                                  controller.isMissing.value = value;
+                                },
+                                activeColor: AppColors.deepOceanBlue, // Warna saat aktif
+                                inactiveThumbColor: Colors.grey, // Warna saat tidak aktif
+                                inactiveTrackColor: Colors.grey.withOpacity(0.5), // Warna track saat tidak aktif
+                              );
+                            }),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Obx(() {
+                          if (!controller.isMissing.value)
+                            return const SizedBox();
+                          return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  border: Border.all(color: Colors.grey),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: TextFormField(
+                                    controller:
+                                        controller.missingController,
+                                    keyboardType: TextInputType.number,
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: "Jumlah barang hilang",
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              );
+                        }),
+                        const SizedBox(height: 16),
+
+                        Center(
+                          child: SizedBox(
+                            width: 225, // Ganti dengan lebar yang diinginkan
+                            height: 60, // Ganti dengan tinggi yang diinginkan
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                final ImagePicker picker = ImagePicker();
+                                final XFile? image = await showDialog<XFile?>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Pilih Sumber Gambar'),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ListTile(
+                                            leading: const Icon(
+                                              Icons.camera_alt,
+                                            ),
+                                            title: const Text('Kamera'),
+                                            onTap: () async {
+                                              final XFile? pickedImage =
+                                                  await picker.pickImage(
+                                                    source: ImageSource.camera,
+                                                  );
+                                              Navigator.pop(
+                                                context,
+                                                pickedImage,
+                                              );
+                                            },
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(
+                                              Icons.photo_library,
+                                            ),
+                                            title: const Text('Galeri'),
+                                            onTap: () async {
+                                              final XFile? pickedImage =
+                                                  await picker.pickImage(
+                                                    source: ImageSource.gallery,
+                                                  );
+                                              Navigator.pop(
+                                                context,
+                                                pickedImage,
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+
+                                if (image != null) {
+                                  controller.selectedImage.value = File(
+                                    image.path,
+                                  );
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.camera_alt,
+                                color:
+                                    Colors
+                                        .white, // Ubah warna ikon menjadi putih
+                              ),
+                              label: Text(
+                                "Upload Bukti Gambar",
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ), // Ubah warna tulisan menjadi putih
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    AppColors.deepOceanBlue, // Warna tombol
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    12,
+                                  ), // Radius sudut tombol
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Obx(() {
+                          final File? imagePath =
+                              controller.selectedImage.value;
+                          if (imagePath == null) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 16),
+                              Text(
+                                'Preview Gambar:',
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              if (imagePath != null)
+                                Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image.file(
+                                        imagePath,
+                                        width: double.infinity,
+                                        height: 200,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 8,
+                                      left: 8,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  child: Image.file(
+                                                    imagePath,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.6),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(
+                                                Icons.visibility,
+                                                color: Colors.white,
+                                                size: 16,
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                "Lihat Gambar",
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 12,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          );
+                        }),
+                        const SizedBox(height: 30),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Deskripsi",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: TextFormField(
+                              // controller:,
+                              decoration: const InputDecoration(
+                                hintText: "Ketik Disini",
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                                alignLabelWithHint:
+                                    true, // Align label with the top-left corner
+                              ),
+                              maxLines: 3,
+                              textAlign:
+                                  TextAlign
+                                      .start, // Align text to the top-left corner
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              final args = Get.arguments;
+                              final landingId = args['landingId'];
+
+                              controller.submitReturnRequest(landingId);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.goldenAmber,
+                              minimumSize: Size(double.infinity, 64),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: Text(
+                              "Submit Pengajuan",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
