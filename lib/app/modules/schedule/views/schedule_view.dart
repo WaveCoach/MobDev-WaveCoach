@@ -399,25 +399,26 @@ class _ScheduleViewState extends State<ScheduleView> {
                                         ),
                                       ),
                                       Expanded(child: Container()),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.roseBlush,
-                                          borderRadius: BorderRadius.circular(
-                                            1000,
+                                      if (schedule.status == "rescheduled")
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: AppColors.roseBlush,
+                                            borderRadius: BorderRadius.circular(
+                                              1000,
+                                            ),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                          ),
+                                          child: Text(
+                                            "Reschedule",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                        ),
-                                        // child: Text(
-                                        //   "Reschedule",
-                                        //   style: GoogleFonts.poppins(
-                                        //     fontWeight: FontWeight.w500,
-                                        //     fontSize: 14,
-                                        //     color: Colors.black,
-                                        //   ),
-                                        // ),
-                                      ),
                                     ],
                                   ),
                                 ),
