@@ -71,21 +71,28 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
             children: [
               Align(
                 alignment: Alignment.centerRight,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Text(
-                    "Reschedule",
-                    style: GoogleFonts.poppins(
-                      color: AppColors.deepOceanBlue,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                child: Obx(() {
+                  if (controller.scheduleResponse.value?.schedule?.status ==
+                      "rescheduled") {
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Text(
+                        "Reschedule",
+                        style: GoogleFonts.poppins(
+                          color: AppColors.deepOceanBlue,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return SizedBox.shrink(); // Tidak menampilkan apapun
+                  }
+                }),
               ),
               SizedBox(height: 20),
               Text(
@@ -149,33 +156,47 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                 ),
               ),
               SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Get.toNamed(
-                    '/reschedule',
-                    arguments: {
-                      'scheduleId':
-                          controller.scheduleResponse.value?.schedule?.id,
+              Obx(() {
+                if (controller
+                        .scheduleResponse
+                        .value
+                        ?.schedule
+                        ?.hasRescheduleRequest ==
+                    false) {
+                  return ElevatedButton.icon(
+                    onPressed: () {
+                      Get.toNamed(
+                        '/reschedule',
+                        arguments: {
+                          'scheduleId':
+                              controller.scheduleResponse.value?.schedule?.id,
+                        },
+                      );
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 25,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    icon: Icon(Icons.edit, color: Colors.white, size: 22),
+                    label: Text(
+                      'Pengajuan Reschedule',
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
                   );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 25),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                ),
-                icon: Icon(Icons.edit, color: Colors.white, size: 22),
-                label: Text(
-                  'Pengajuan Reschedule',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
+                } else {
+                  return SizedBox.shrink(); // Tidak menampilkan apapun
+                }
+              }),
             ],
           ),
         );
@@ -541,33 +562,43 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     SizedBox(height: 8.0),
                     Padding(
                       padding: const EdgeInsets.only(left: 16),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Add your onPressed code here!
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.deepOceanBlue,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 16.0,
+                      child: Obx(() {
+                        if (controller
+                                .scheduleResponse
+                                .value
+                                ?.schedule
+                                ?.isAssessed ==
+                            1) {
+                          return SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Add your onPressed code here!
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.deepOceanBlue,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 16.0,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                'Beri Penilaian',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            'Beri Penilaian',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
+                          );
+                        } else {
+                          return SizedBox.shrink(); // Hidden if isAssessed == 0
+                        }
+                      }),
                     ),
-                    SizedBox(height: 16.0),
                   ],
                 );
               }).toList(),

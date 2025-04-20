@@ -7,6 +7,8 @@ class Schedule {
   final String formattedDate;
   final int? packageId;
   final String? packageName;
+  final bool hasRescheduleRequest;
+  final int? isAssessed;
 
   Schedule({
     required this.id,
@@ -17,6 +19,8 @@ class Schedule {
     required this.formattedDate,
     this.packageId,
     this.packageName,
+    required this.hasRescheduleRequest,
+    this.isAssessed,
   });
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,13 @@ class Schedule {
       formattedDate: json['formatted_date'],
       packageId: json['package_id'],
       packageName: json['package_name'],
+      hasRescheduleRequest: json['has_reschedule_request'],
+      isAssessed:
+          json['is_assessed'] == null
+              ? null
+              : json['is_assessed'] == 1
+              ? 1
+              : 0,
     );
   }
 }
