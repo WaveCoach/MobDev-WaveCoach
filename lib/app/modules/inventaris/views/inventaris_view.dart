@@ -640,8 +640,19 @@ class _InventarisViewState extends State<InventarisView> {
                                                 ),
                                               ),
                                               Icon(
-                                                Icons.home,
-                                                color: Colors.black,
+                                                history.status == 'approved'
+                                                    ? Icons.check_circle
+                                                    : history.status ==
+                                                        'pending'
+                                                    ? Icons.access_time_filled
+                                                    : Icons.cancel,
+                                                color:
+                                                    history.status == 'approved'
+                                                        ? Colors.green
+                                                        : history.status ==
+                                                            'pending'
+                                                        ? Colors.yellow
+                                                        : Colors.red,
                                               ),
                                             ],
                                           ),
