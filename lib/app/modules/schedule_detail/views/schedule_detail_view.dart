@@ -562,33 +562,43 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     SizedBox(height: 8.0),
                     Padding(
                       padding: const EdgeInsets.only(left: 16),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Add your onPressed code here!
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.deepOceanBlue,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 16.0,
+                      child: Obx(() {
+                        if (controller
+                                .scheduleResponse
+                                .value
+                                ?.schedule
+                                ?.isAssessed ==
+                            1) {
+                          return SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Add your onPressed code here!
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.deepOceanBlue,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 16.0,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                'Beri Penilaian',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            'Beri Penilaian',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
+                          );
+                        } else {
+                          return SizedBox.shrink(); // Hidden if isAssessed == 0
+                        }
+                      }),
                     ),
-                    SizedBox(height: 16.0),
                   ],
                 );
               }).toList(),

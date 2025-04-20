@@ -310,7 +310,10 @@ class _ScheduleViewState extends State<ScheduleView> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: AppColors.softSteelBlue,
+                      color:
+                          schedule.isAssessed == 1
+                              ? AppColors.pastelBlue
+                              : AppColors.softSteelBlue,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),

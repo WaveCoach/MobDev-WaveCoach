@@ -23,7 +23,7 @@ class Schedule {
   final int id;
   final String date, startTime, endTime, status, formattedDate;
   final String coachName, locationName, locationAddress, locationMaps;
-  final int? packageId;
+  final int? packageId, isAssessed;
   final String? packageName;
 
   Schedule(
@@ -39,6 +39,7 @@ class Schedule {
     this.locationMaps,
     this.packageId,
     this.packageName,
+    this.isAssessed,
   );
 
   Schedule.fromJson(Map<String, dynamic> json)
@@ -53,5 +54,11 @@ class Schedule {
       locationAddress = json["location_address"],
       locationMaps = json["location_maps"],
       packageId = json["package_id"],
-      packageName = json["package_name"];
+      packageName = json["package_name"],
+      isAssessed =
+          json["is_assessed"] == null
+              ? null
+              : json["is_assessed"] == 1
+              ? 1
+              : 0;
 }
