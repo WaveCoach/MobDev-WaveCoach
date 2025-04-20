@@ -170,6 +170,100 @@ class DetailHistoryPengajuanView
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Text(
+                          "Inventaris & Jumlah",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+
+                      Column(
+                        children: List.generate(data.data.items.length, (
+                          index,
+                        ) {
+                          final item = data.data.items[index];
+                          return Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: TextFormField(
+                                      controller: TextEditingController(
+                                        text: item.inventoryName,
+                                      ),
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        hintText: "Nama Inventaris",
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                        border: InputBorder.none,
+                                      ),
+                                      readOnly: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: TextFormField(
+                                      controller: TextEditingController(
+                                        text: item.qtyRequested.toString(),
+                                      ),
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        hintText: "Qty",
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                        ),
+                                        border: InputBorder.none,
+                                      ),
+                                      readOnly: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ),
+
+                      SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
                           "Tanggal Pinjam",
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w500,
