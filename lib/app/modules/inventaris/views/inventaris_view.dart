@@ -272,11 +272,21 @@ class _InventarisViewState extends State<InventarisView> {
                           child: ExpansionTile(
                             title: Row(
                               children: [
-                                Icon(
-                                  Icons.person,
-                                  color: Colors.black54,
-                                  size: 40,
-                                ),
+                                stock.mastercoachImageUrl != null &&
+                                        stock.mastercoachImageUrl!.isNotEmpty
+                                    ? ClipOval(
+                                      child: Image.network(
+                                        stock.mastercoachImageUrl ?? '',
+                                        width: 40,
+                                        height: 40,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                    : Icon(
+                                      Icons.person,
+                                      color: Colors.black54,
+                                      size: 40,
+                                    ),
                                 SizedBox(width: 20),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

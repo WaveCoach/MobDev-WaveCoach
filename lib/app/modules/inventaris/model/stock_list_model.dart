@@ -1,11 +1,13 @@
 class StockListModel {
   final int mastercoachId;
   final String mastercoachName;
+  final String? mastercoachImageUrl;
   final List<StockItem> items;
 
   StockListModel({
     required this.mastercoachId,
     required this.mastercoachName,
+    this.mastercoachImageUrl,
     required this.items,
   });
 
@@ -13,6 +15,7 @@ class StockListModel {
     return StockListModel(
       mastercoachId: json['mastercoach_id'] ?? 0,
       mastercoachName: json['mastercoach_name'] ?? '',
+      mastercoachImageUrl: json['mastercoach_profile'] ?? null,
       items:
           (json['items'] as List?)
               ?.map((x) => StockItem.fromJson(x))
