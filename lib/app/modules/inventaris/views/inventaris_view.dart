@@ -781,12 +781,20 @@ class _InventarisViewState extends State<InventarisView> {
                           padding: const EdgeInsets.fromLTRB(15, 10, 15, 50),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: Image.asset(
-                              'assets/images/onboarding1.png',
-                              height: double.infinity,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
+                            child:
+                                item.imageUrl?.isNotEmpty ?? false
+                                    ? Image.network(
+                                      item.imageUrl ?? '',
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    )
+                                    : Image.asset(
+                                      'assets/images/onboarding1.png',
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
                           ),
                         ),
                       ),
