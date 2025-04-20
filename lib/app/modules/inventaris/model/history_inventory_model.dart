@@ -7,7 +7,7 @@ class HistoryData {
   String updatedAt;
   String type;
   String coachName;
-  String? imageUrl;
+  String? imageUrlHistory;
 
   HistoryData({
     required this.id,
@@ -18,7 +18,7 @@ class HistoryData {
     required this.updatedAt,
     required this.type,
     required this.coachName,
-    this.imageUrl,
+    this.imageUrlHistory,
   });
 
   factory HistoryData.fromJson(Map<String, dynamic> json) {
@@ -31,7 +31,7 @@ class HistoryData {
       updatedAt: json['updated_at'],
       type: json['type'],
       coachName: json['coach_name'],
-      imageUrl: json['profile_image'] ?? null,
+      imageUrlHistory: json['profile_image'] ?? null,
     );
   }
 
@@ -45,7 +45,7 @@ class HistoryData {
       'updated_at': updatedAt,
       'type': type,
       'coach_name': coachName,
-      'profile_image': imageUrl,
+      'profile_image': imageUrlHistory,
     };
   }
 }

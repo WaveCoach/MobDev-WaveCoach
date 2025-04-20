@@ -672,13 +672,13 @@ class _InventarisViewState extends State<InventarisView> {
                                           SizedBox(height: 4),
                                           Row(
                                             children: [
-                                              history.imageUrl != null &&
+                                              history.imageUrlHistory != null &&
                                                       history
-                                                          .imageUrl!
+                                                          .imageUrlHistory!
                                                           .isNotEmpty
                                                   ? ClipOval(
                                                     child: Image.network(
-                                                      history.imageUrl!,
+                                                      history.imageUrlHistory!,
                                                       width: 24,
                                                       height: 24,
                                                       fit: BoxFit.cover,

@@ -169,16 +169,18 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: TextFormField(
           controller: controller.dateController,
-            decoration: const InputDecoration(
+          decoration: const InputDecoration(
             hintText: "Tanggal",
             hintStyle: TextStyle(color: Colors.grey),
             border: InputBorder.none,
             suffixIcon: Icon(Icons.calendar_today),
-            contentPadding: EdgeInsets.symmetric(vertical: 16), // Adjust vertical padding
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 16,
+            ), // Adjust vertical padding
             alignLabelWithHint: true, // Align hint text vertically
-            ),
-            textAlign: TextAlign.left, // Align text to the left
-            textAlignVertical: TextAlignVertical.center, // Center text vertically
+          ),
+          textAlign: TextAlign.left, // Align text to the left
+          textAlignVertical: TextAlignVertical.center, // Center text vertically
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w400,
             fontSize: 15,
@@ -292,18 +294,18 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Column(
                     children: [
-                      SizedBox(height: 8,),
-                        Align(
+                      SizedBox(height: 8),
+                      Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Kategori Kelas",
                           style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.white,
                           ),
                         ),
-                        ),
+                      ),
                       TextFormField(
                         controller: controller.packageController,
                         readOnly: true,
@@ -454,172 +456,178 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
       }
 
       return Column(
-        children: controller.aspectList.asMap().entries.map((entry) {
-          final index = entry.key;
-          final aspect = entry.value;
+        children:
+            controller.aspectList.asMap().entries.map((entry) {
+              final index = entry.key;
+              final aspect = entry.value;
 
-          // Buat controller baru jika belum ada
-          controller.scoreControllers.putIfAbsent(
-            index,
-            () => TextEditingController(
-              text: aspect.score?.toString() ?? '',
-            ),
-          );
+              // Buat controller baru jika belum ada
+              controller.scoreControllers.putIfAbsent(
+                index,
+                () =>
+                    TextEditingController(text: aspect.score?.toString() ?? ''),
+              );
 
-          final scoreController = controller.scoreControllers[index]!;
+              final scoreController = controller.scoreControllers[index]!;
 
-          return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-              color: AppColors.deepOceanBlue,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ExpansionTile(
-              title: Text(
-                aspect.name,
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                  color: Colors.white,
+              return Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.deepOceanBlue,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-              subtitle: Text(
-                aspect.desc ?? 'Deskripsi tidak tersedia',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  color: Colors.white,
-                ),
-              ),
-              iconColor: Colors.white,
-              collapsedIconColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.grey, width: 0),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+                child: ExpansionTile(
+                  title: Text(
+                    aspect.name,
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Nilai",
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
+                  subtitle: Text(
+                    aspect.desc ?? 'Deskripsi tidak tersedia',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                  iconColor: Colors.white,
+                  collapsedIconColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey, width: 0),
+                  ),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 150),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.black.withOpacity(0.2),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                            ),
-                            child: TextField(
-                              controller: scoreController,
-                              decoration: InputDecoration(
-                                hintText: "0 - 100",
-                                hintStyle: const TextStyle(
-                                  color: Colors.black54,
-                                ),
-                                border: InputBorder.none,
-                              ),
-                              keyboardType: TextInputType.number,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Nilai",
                               style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15,
-                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Colors.white,
                               ),
-                              onChanged: (value) {
-                                setState(() {
-                                  double? parsedValue = double.tryParse(value);
-                                  if (parsedValue != null &&
-                                      (parsedValue < 0 || parsedValue > 100)) {
-                                    // Jika nilai di luar rentang, reset ke nilai sebelumnya
-                                    scoreController.text =
-                                        (aspect.score ?? 0.0).toStringAsFixed(0);
-                                    scoreController.selection =
-                                        TextSelection.fromPosition(
-                                      TextPosition(
-                                          offset: scoreController.text.length),
-                                    );
-                                  } else {
-                                    aspect.score = parsedValue ?? 0.0;
-                                  }
-                                });
-                              },
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Komentar",
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.black.withOpacity(0.2),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                          ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText:
-                                  "Catatan ${aspect.name}", // Ubah menjadi hint text
-                              hintStyle: const TextStyle(
-                                color: Colors.black54,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 150),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.black.withOpacity(0.2),
+                                ),
                               ),
-                              border: InputBorder.none,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
+                                child: TextField(
+                                  controller: scoreController,
+                                  decoration: InputDecoration(
+                                    hintText: "0 - 100",
+                                    hintStyle: const TextStyle(
+                                      color: Colors.black54,
+                                    ),
+                                    border: InputBorder.none,
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      double? parsedValue = double.tryParse(
+                                        value,
+                                      );
+                                      if (parsedValue != null &&
+                                          (parsedValue < 0 ||
+                                              parsedValue > 100)) {
+                                        // Jika nilai di luar rentang, reset ke nilai sebelumnya
+                                        scoreController.text = (aspect.score ??
+                                                0.0)
+                                            .toStringAsFixed(0);
+                                        scoreController.selection =
+                                            TextSelection.fromPosition(
+                                              TextPosition(
+                                                offset:
+                                                    scoreController.text.length,
+                                              ),
+                                            );
+                                      } else {
+                                        aspect.score = parsedValue ?? 0.0;
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
                             ),
-                            maxLines: 3,
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15,
-                              color: Colors.black,
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                aspect.remarks = value;
-                              });
-                            },
                           ),
-                        ),
+                          const SizedBox(height: 8),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Komentar",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.black.withOpacity(0.2),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText:
+                                      "Catatan ${aspect.name}", // Ubah menjadi hint text
+                                  hintStyle: const TextStyle(
+                                    color: Colors.black54,
+                                  ),
+                                  border: InputBorder.none,
+                                ),
+                                maxLines: 3,
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    aspect.remarks = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
       );
     });
   }
@@ -628,7 +636,19 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: ElevatedButton(
-        onPressed: controller.submitAssessment,
+        onPressed: () {
+          Get.defaultDialog(
+            title: "Konfirmasi",
+            middleText: "Apakah Anda yakin ingin mengirim hasil penilaian?",
+            textConfirm: "Ya",
+            textCancel: "Batal",
+            confirmTextColor: Colors.white,
+            onConfirm: () {
+              Get.back(); // Tutup dialog
+              controller.submitAssessment();
+            },
+          );
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.goldenAmber,
           minimumSize: Size(double.infinity, 64),

@@ -9,6 +9,7 @@ class AssessmentHistory {
   final String packageName;
   final int categoryId;
   final String categoryName;
+  final DateTime createdAt;
 
   AssessmentHistory({
     required this.id,
@@ -21,6 +22,7 @@ class AssessmentHistory {
     required this.packageName,
     required this.categoryId,
     required this.categoryName,
+    required this.createdAt,
   });
 
   factory AssessmentHistory.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class AssessmentHistory {
       packageName: json['package']['name'],
       categoryId: json['category']['id'],
       categoryName: json['category']['name'],
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 }
