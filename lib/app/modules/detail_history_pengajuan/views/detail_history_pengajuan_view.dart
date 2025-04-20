@@ -575,6 +575,85 @@ class DetailHistoryPengajuanView
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Text(
+                          "Nama Inventaris",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                                border: Border.all(color: Colors.grey),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: TextFormField(
+                                  controller: TextEditingController(
+                                    text: data.data.inventoryName,
+                                  ),
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                  decoration: const InputDecoration(
+                                    hintText: "Nama Inventaris",
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                    border: InputBorder.none,
+                                  ),
+                                  readOnly: true,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                                border: Border.all(color: Colors.grey),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: TextFormField(
+                                  controller: TextEditingController(
+                                    text: data.data.qtyReturned.toString(),
+                                  ),
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                  decoration: const InputDecoration(
+                                    hintText: "Qty",
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                    border: InputBorder.none,
+                                  ),
+                                  readOnly: true,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
                           "Nama Master Coach",
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w500,
