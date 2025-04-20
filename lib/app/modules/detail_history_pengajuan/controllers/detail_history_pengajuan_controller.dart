@@ -5,6 +5,7 @@ import 'package:mob_dev_wave_coach/app/core/utils/loading_helper.dart';
 import 'package:mob_dev_wave_coach/app/modules/detail_history_pengajuan/model/history_request_response.dart';
 import 'package:mob_dev_wave_coach/app/modules/detail_history_pengajuan/model/history_return_response.dart';
 import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
+import 'package:get_storage/get_storage.dart';
 
 class DetailHistoryPengajuanController extends GetxController {
   final ApiService apiService = Get.find<ApiService>();
@@ -13,6 +14,8 @@ class DetailHistoryPengajuanController extends GetxController {
   final historyReturnResponse = Rxn<HistoryInventoryReturnResponse>();
   final feedbackController = TextEditingController();
   final selectedStatus = "".obs;
+  final Type = "".obs;
+  final roleId = 0.obs;
 
   @override
   void onInit() {
@@ -21,7 +24,9 @@ class DetailHistoryPengajuanController extends GetxController {
     final args = Get.arguments;
     final id = args['id'];
     final type = args['type'];
-    print("ID: $id, Type: $type");
+    Type.value = type;
+    final box = GetStorage();
+    roleId.value = box.read("role_id") ?? 0;
     if (type == "request") {
       fetchHistoryRequest(id);
     } else if (type == "return") {

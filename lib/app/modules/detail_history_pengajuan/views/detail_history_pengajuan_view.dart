@@ -47,38 +47,41 @@ class DetailHistoryPengajuanView
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                    "Dari: ${data.data.coachName}",
-                    style: GoogleFonts.poppins(
-                      color: Color(0xFF4C4C4C),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      height: 1,
-                    ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                    "Pengajuan Peminjaman Inventaris",
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                    data.data.tanggalPinjam,
-                    style: GoogleFonts.poppins(
-                      color: AppColors.deepOceanBlue,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    ),
-                    const SizedBox(height: 16),
-                    Divider(color: Colors.black.withOpacity(0.2), thickness: 1),
-                  ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Dari: ${data.data.coachName}",
+                        style: GoogleFonts.poppins(
+                          color: Color(0xFF4C4C4C),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          height: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Pengajuan Peminjaman Inventaris",
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        data.data.tanggalPinjam,
+                        style: GoogleFonts.poppins(
+                          color: AppColors.deepOceanBlue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Divider(
+                        color: Colors.black.withOpacity(0.2),
+                        thickness: 1,
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
@@ -288,168 +291,186 @@ class DetailHistoryPengajuanView
                       // Text("alasan ditolak: ${data.data.rejectionReason}"),
                       Divider(color: Colors.grey, thickness: 1),
                       SizedBox(height: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                      Obx(() {
+                        if (controller.Type.value == "request" &&
+                            controller.roleId.value == 3) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50, // Ubah tinggi tombol di sini
-                                  child: Obx(
-                                    () => ElevatedButton(
-                                      onPressed: () {
-                                        controller.selectedStatus.value =
-                                            "rejected";
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            controller.selectedStatus.value ==
-                                                    "rejected"
-                                                ? AppColors.redPastel
-                                                : Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 50, // Ubah tinggi tombol di sini
+                                      child: Obx(
+                                        () => ElevatedButton(
+                                          onPressed: () {
+                                            controller.selectedStatus.value =
+                                                "rejected";
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                controller
+                                                            .selectedStatus
+                                                            .value ==
+                                                        "rejected"
+                                                    ? AppColors.redPastel
+                                                    : Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              side: BorderSide(
+                                                color: AppColors.redPastel,
+                                              ),
+                                            ),
                                           ),
-                                          side: BorderSide(
-                                            color: AppColors.redPastel,
+                                          child: Text(
+                                            "Tolak",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                              color:
+                                                  controller
+                                                              .selectedStatus
+                                                              .value ==
+                                                          "rejected"
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        "Tolak",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          color:
-                                              controller.selectedStatus.value ==
-                                                      "rejected"
-                                                  ? Colors.white
-                                                  : Colors.black,
                                         ),
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 50, // Ubah tinggi tombol di sini
+                                      child: Obx(
+                                        () => ElevatedButton(
+                                          onPressed: () {
+                                            controller.selectedStatus.value =
+                                                "approved";
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                controller
+                                                            .selectedStatus
+                                                            .value ==
+                                                        "approved"
+                                                    ? Colors.green
+                                                    : Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              side: BorderSide(
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Setuju",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                              color:
+                                                  controller
+                                                              .selectedStatus
+                                                              .value ==
+                                                          "approved"
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 25),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Text(
+                                  "Umpan Balik",
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50, // Ubah tinggi tombol di sini
-                                  child: Obx(
-                                    () => ElevatedButton(
-                                      onPressed: () {
-                                        controller.selectedStatus.value =
-                                            "approved";
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            controller.selectedStatus.value ==
-                                                    "approved"
-                                                ? Colors.green
-                                                : Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                          side: BorderSide(color: Colors.green),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        "Setuju",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          color:
-                                              controller.selectedStatus.value ==
-                                                      "approved"
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                        ),
-                                      ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.black.withOpacity(0.2),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                  child: TextFormField(
+                                    controller: controller.feedbackController,
+                                    decoration: const InputDecoration(
+                                      hintText: "Ketik Disini",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                      alignLabelWithHint:
+                                          true, // Align label with the top-left corner
+                                    ),
+                                    maxLines: 4,
+                                    textAlign:
+                                        TextAlign
+                                            .start, // Align text to the top-left corner
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 50),
+                              Center(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (controller
+                                        .selectedStatus
+                                        .value
+                                        .isEmpty) {
+                                      Get.snackbar(
+                                        "Error",
+                                        "Silakan pilih status terlebih dahulu (Tolak atau Setuju).",
+                                      );
+                                      return;
+                                    }
+
+                                    controller.submitStatusRequest(
+                                      data.data.id,
+                                      controller.selectedStatus.value,
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.deepOceanBlue,
+                                    minimumSize: Size(double.infinity, 54),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Submit",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
                               ),
                             ],
-                          ),
-                          const SizedBox(height: 25),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Text(
-                              "Umpan Balik",
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.black.withOpacity(0.2),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                              ),
-                              child: TextFormField(
-                                controller: controller.feedbackController,
-                                decoration: const InputDecoration(
-                                  hintText: "Ketik Disini",
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  border: InputBorder.none,
-                                  alignLabelWithHint:
-                                      true, // Align label with the top-left corner
-                                ),
-                                maxLines: 4,
-                                textAlign:
-                                    TextAlign
-                                        .start, // Align text to the top-left corner
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 50),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (controller.selectedStatus.value.isEmpty) {
-                                  Get.snackbar(
-                                    "Error",
-                                    "Silakan pilih status terlebih dahulu (Tolak atau Setuju).",
-                                  );
-                                  return;
-                                }
-
-                                controller.submitStatusRequest(
-                                  data.data.id,
-                                  controller.selectedStatus.value,
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.deepOceanBlue,
-                                minimumSize: Size(double.infinity, 54),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                              child: Text(
-                                "Submit",
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          );
+                        } else {
+                          return SizedBox.shrink(); // Hide the element
+                        }
+                      }),
                       // Tambahkan field lain sesuai kebutuhan
                     ],
                   ),
@@ -470,38 +491,41 @@ class DetailHistoryPengajuanView
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                    "Dari: ${data.data.coachName}",
-                    style: GoogleFonts.poppins(
-                      color: Color(0xFF4C4C4C),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      height: 1,
-                    ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                    "Pengajuan Pengembalian Inventaris",
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                    data.data.landingTanggalPinjam,
-                    style: GoogleFonts.poppins(
-                      color: AppColors.deepOceanBlue,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    ),
-                    const SizedBox(height: 16),
-                    Divider(color: Colors.black.withOpacity(0.2), thickness: 1),
-                  ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Dari: ${data.data.coachName}",
+                        style: GoogleFonts.poppins(
+                          color: Color(0xFF4C4C4C),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          height: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Pengajuan Pengembalian Inventaris",
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        data.data.landingTanggalPinjam,
+                        style: GoogleFonts.poppins(
+                          color: AppColors.deepOceanBlue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Divider(
+                        color: Colors.black.withOpacity(0.2),
+                        thickness: 1,
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
@@ -711,168 +735,186 @@ class DetailHistoryPengajuanView
                       // Text("alasan ditolak: ${data.data.rejectionReason}"),
                       Divider(color: Colors.grey, thickness: 1),
                       SizedBox(height: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                      Obx(() {
+                        if (controller.Type.value == "return" &&
+                            controller.roleId.value == 3) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50, // Ubah tinggi tombol di sini
-                                  child: Obx(
-                                    () => ElevatedButton(
-                                      onPressed: () {
-                                        controller.selectedStatus.value =
-                                            "rejected";
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            controller.selectedStatus.value ==
-                                                    "rejected"
-                                                ? AppColors.redPastel
-                                                : Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 50, // Ubah tinggi tombol di sini
+                                      child: Obx(
+                                        () => ElevatedButton(
+                                          onPressed: () {
+                                            controller.selectedStatus.value =
+                                                "rejected";
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                controller
+                                                            .selectedStatus
+                                                            .value ==
+                                                        "rejected"
+                                                    ? AppColors.redPastel
+                                                    : Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              side: BorderSide(
+                                                color: AppColors.redPastel,
+                                              ),
+                                            ),
                                           ),
-                                          side: BorderSide(
-                                            color: AppColors.redPastel,
+                                          child: Text(
+                                            "Tolak",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                              color:
+                                                  controller
+                                                              .selectedStatus
+                                                              .value ==
+                                                          "rejected"
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        "Tolak",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          color:
-                                              controller.selectedStatus.value ==
-                                                      "rejected"
-                                                  ? Colors.white
-                                                  : Colors.black,
                                         ),
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 50, // Ubah tinggi tombol di sini
+                                      child: Obx(
+                                        () => ElevatedButton(
+                                          onPressed: () {
+                                            controller.selectedStatus.value =
+                                                "approved";
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                controller
+                                                            .selectedStatus
+                                                            .value ==
+                                                        "approved"
+                                                    ? Colors.green
+                                                    : Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              side: BorderSide(
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Setuju",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16,
+                                              color:
+                                                  controller
+                                                              .selectedStatus
+                                                              .value ==
+                                                          "approved"
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 25),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Text(
+                                  "Umpan Balik",
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50, // Ubah tinggi tombol di sini
-                                  child: Obx(
-                                    () => ElevatedButton(
-                                      onPressed: () {
-                                        controller.selectedStatus.value =
-                                            "approved";
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            controller.selectedStatus.value ==
-                                                    "approved"
-                                                ? Colors.green
-                                                : Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                          side: BorderSide(color: Colors.green),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        "Setuju",
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                          color:
-                                              controller.selectedStatus.value ==
-                                                      "approved"
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                        ),
-                                      ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.black.withOpacity(0.2),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                  child: TextFormField(
+                                    controller: controller.feedbackController,
+                                    decoration: const InputDecoration(
+                                      hintText: "Ketik Disini",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                      alignLabelWithHint:
+                                          true, // Align label with the top-left corner
+                                    ),
+                                    maxLines: 4,
+                                    textAlign:
+                                        TextAlign
+                                            .start, // Align text to the top-left corner
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 50),
+                              Center(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (controller
+                                        .selectedStatus
+                                        .value
+                                        .isEmpty) {
+                                      Get.snackbar(
+                                        "Error",
+                                        "Silakan pilih status terlebih dahulu (Tolak atau Setuju).",
+                                      );
+                                      return;
+                                    }
+
+                                    controller.submitStatusReturn(
+                                      data.data.id,
+                                      controller.selectedStatus.value,
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.deepOceanBlue,
+                                    minimumSize: Size(double.infinity, 54),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Submit",
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
                               ),
                             ],
-                          ),
-                          const SizedBox(height: 25),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Text(
-                              "Umpan Balik",
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.black.withOpacity(0.2),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                              ),
-                              child: TextFormField(
-                                controller: controller.feedbackController,
-                                decoration: const InputDecoration(
-                                  hintText: "Ketik Disini",
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  border: InputBorder.none,
-                                  alignLabelWithHint:
-                                      true, // Align label with the top-left corner
-                                ),
-                                maxLines: 4,
-                                textAlign:
-                                    TextAlign
-                                        .start, // Align text to the top-left corner
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 50),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (controller.selectedStatus.value.isEmpty) {
-                                  Get.snackbar(
-                                    "Error",
-                                    "Silakan pilih status terlebih dahulu (Tolak atau Setuju).",
-                                  );
-                                  return;
-                                }
-
-                                controller.submitStatusReturn(
-                                  data.data.id,
-                                  controller.selectedStatus.value,
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.deepOceanBlue,
-                                minimumSize: Size(double.infinity, 54),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                              child: Text(
-                                "Submit",
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          );
+                        } else {
+                          return SizedBox.shrink(); // Hide the element
+                        }
+                      }),
                       // Tambahkan field lain sesuai kebutuhan
                     ],
                   ),
