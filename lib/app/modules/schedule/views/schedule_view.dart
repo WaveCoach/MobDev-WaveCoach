@@ -386,7 +386,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                                       if (schedule.status == "rescheduled")
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: AppColors.roseBlush,
+                                            color: Colors.white,
                                             borderRadius: BorderRadius.circular(
                                               1000,
                                             ),
@@ -395,11 +395,11 @@ class _ScheduleViewState extends State<ScheduleView> {
                                             horizontal: 8,
                                           ),
                                           child: Text(
-                                            "Reschedule",
+                                            "R",
                                             style: GoogleFonts.poppins(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 14,
-                                              color: Colors.black,
+                                              color: AppColors.deepOceanBlue,
                                             ),
                                           ),
                                         ),

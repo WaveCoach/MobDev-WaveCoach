@@ -34,9 +34,16 @@ class _PenilaianViewState extends State<PenilaianView> {
               ),
             ),
             SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: SvgPicture.asset('assets/images/GroupPeople.svg'),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Menentukan ukuran gambar secara dinamis berdasarkan lebar layar
+                double imageSize = constraints.maxWidth * 0.7; // 60% dari lebar layar
+                return SvgPicture.asset(
+                  'assets/images/GroupPeople.svg',
+                  width: imageSize,
+                  height: imageSize,
+                );
+              },
             ),
             Spacer(), // Menambahkan spacer untuk mendorong tombol ke bawah
             ElevatedButton(

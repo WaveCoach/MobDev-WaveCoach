@@ -72,7 +72,7 @@ class AjukanPengembalianController extends GetxController {
     }
   }
 
-  Future<void> submitReturnRequest(int landingId) async {
+  Future<bool> submitReturnRequest(int landingId) async {
     try {
       final qtyReturned = int.tryParse(qtyReturnedController.text) ?? 0;
       final damagedCount = int.tryParse(damagedController.text) ?? 0;
@@ -98,13 +98,14 @@ class AjukanPengembalianController extends GetxController {
 
       if (response.status.isOk) {
         Get.snackbar("Sukses", "Pengajuan pengembalian berhasil");
-        Get.offAllNamed('/profile');
+        return true; // Berhasil
       } else {
         Get.snackbar("Gagal", response.body?['message'] ?? "Pengajuan gagal");
-        print("Error: ${response.body}");
+        return false; // Gagal
       }
     } catch (e) {
       Get.snackbar("Error", "Terjadi kesalahan: $e");
+      return false; // Gagal karena error
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
+import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
 import 'dart:io'; // Pastikan import 'dart:io' untuk File
 
 import '../controllers/ajukan_pengembalian_controller.dart';
@@ -231,7 +232,7 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w400,
                               fontSize: 15,
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                             readOnly: true,
                             onTap: () async {
@@ -747,7 +748,7 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
-                            color: Colors.red,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -781,11 +782,20 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             final args = Get.arguments;
                             final landingId = args['landingId'];
 
-                            controller.submitReturnRequest(landingId);
+                            final isSuccess = await controller.submitReturnRequest(landingId);
+                            if (isSuccess) {
+                              Get.offAll(() => HomeView(), arguments: 1);
+                            } else {
+                              Get.snackbar(
+                                "Error",
+                                "Pengajuan gagal, silakan coba lagi.",
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.goldenAmber,

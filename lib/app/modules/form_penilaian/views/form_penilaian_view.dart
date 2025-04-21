@@ -636,22 +636,84 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: ElevatedButton(
-        onPressed: () {
-          Get.defaultDialog(
-            title: "Konfirmasi",
-            middleText: "Apakah Anda yakin ingin mengirim hasil penilaian?",
-            textConfirm: "Ya",
-            textCancel: "Batal",
-            confirmTextColor: Colors.white,
-            onConfirm: () {
-              Get.back(); // Tutup dialog
-              controller.submitAssessment();
+        onPressed: () async {
+          final shouldSubmit = await showDialog<bool>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(
+                  'Konfirmasi',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                  ),
+                ),
+                content: Text(
+                  'Apakah Anda yakin ingin mengirim hasil penilaian?',
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                          child: Text(
+                            'Batal',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: AppColors.deepOceanBlue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.deepOceanBlue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                          child: Text(
+                            'Kirim',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
             },
           );
+
+          if (shouldSubmit == true) {
+            controller.submitAssessment();
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.goldenAmber,
-          minimumSize: Size(double.infinity, 64),
+          minimumSize: const Size(double.infinity, 64),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
