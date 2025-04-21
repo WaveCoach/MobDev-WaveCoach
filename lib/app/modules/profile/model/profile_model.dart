@@ -1,26 +1,26 @@
 class User {
-  final int id;
-  final String name;
-  final String email;
+  final int? id;
+  final String? name;
+  final String? email;
   final String? emailVerifiedAt;
-  final String profileImage;
+  final String? profileImage;
   final String? noTelf;
-  final String createdAt;
-  final String updatedAt;
-  final int roleId;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? roleId;
   final String? deletedAt;
 
   User({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.emailVerifiedAt,
-    required this.profileImage,
-    required this.noTelf,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.roleId,
-    required this.deletedAt,
+    this.id,
+    this.name,
+    this.email,
+    this.emailVerifiedAt,
+    this.profileImage,
+    this.noTelf,
+    this.createdAt,
+    this.updatedAt,
+    this.roleId,
+    this.deletedAt,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {

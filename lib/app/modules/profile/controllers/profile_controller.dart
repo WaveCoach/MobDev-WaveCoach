@@ -32,9 +32,9 @@ class ProfileController extends GetxController {
         final user = responseData.data.user;
 
         // Fallback jika null
-        name.value = user.name;
-        email.value = user.email;
-        imageUrl.value = user.profileImage;
+        name.value = user.name ?? '';
+        email.value = user.email ?? '';
+        imageUrl.value = user.profileImage ?? '';
 
         imageController.text = imageUrl.value;
       } else {

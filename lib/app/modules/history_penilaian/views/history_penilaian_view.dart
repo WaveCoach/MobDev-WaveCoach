@@ -159,7 +159,7 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                                       horizontal: 8,
                                     ),
                                     child: Text(
-                                      item.date,
+                                      item.date ?? 'Unknown Date',
                                       style: GoogleFonts.poppins(
                                         color: Colors.black,
                                         fontSize: 14,
@@ -170,7 +170,7 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                                 ),
                                 Text(
                                   DateFormat('HH:mm').format(
-                                    item.createdAt,
+                                    item.createdAt ?? DateTime.now(),
                                   ), // Extract time from createdAt
                                   style: GoogleFonts.poppins(
                                     color: AppColors.midnightNavy,
@@ -184,7 +184,7 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                               children: [
                                 //Paket Renang
                                 Text(
-                                  item.packageName,
+                                  item.packageName ?? '-',
                                   style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -201,7 +201,7 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                                 ),
                                 //Kategori Gaya
                                 Text(
-                                  item.categoryName,
+                                  item.categoryName ?? '-',
                                   style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -212,7 +212,7 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                             ),
                             //Nama Siswa
                             Text(
-                              item.studentName,
+                              item.studentName ?? '-',
                               style: GoogleFonts.poppins(
                                 color: Colors.black,
                                 fontSize: 14,
