@@ -691,7 +691,7 @@ class _InventarisViewState extends State<InventarisView> {
                                                         ? Colors.green
                                                         : history.status ==
                                                             'pending'
-                                                        ? Colors.yellow
+                                                        ? AppColors.honeyGold
                                                         : Colors.red,
                                               ),
                                             ],
