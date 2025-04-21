@@ -6,17 +6,17 @@ class OnBoardingController extends GetxController {
   final List<Map<String, String>> onboardingData = [
     {
       "title": "Selamat Datang!",
-      "description": "Lorem ipsum dolor sit amet consecte...",
+      "description": "Selamat datang di WaveCoach, solusi praktis untuk latihan kamu.",
       "image": "assets/images/onboarding1.png",
     },
     {
       "title": "Bangun Atlet Hebat",
-      "description": "Lorem ipsum dolor sit amet consecte...",
+      "description": "Temukan rekan satu visi dan capai tujuan bersama dalam lingkungan yang mendukung dan inspiratif.",
       "image": "assets/images/onboarding2.png",
     },
     {
-      "title": "Mentor Inspiratif",
-      "description": "Lorem ipsum dolor sit amet consecte...",
+      "title": "Coaches Inspiratif",
+      "description": "Bersama Coach FSA yang inspiratif, kamu akan berkembang dan jadi lebih unggul.",
       "image": "assets/images/onboarding3.png",
     },
   ];

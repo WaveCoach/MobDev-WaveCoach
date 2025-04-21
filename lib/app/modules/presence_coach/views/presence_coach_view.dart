@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
@@ -49,13 +50,13 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 100),
-                        child: const Text(
+                        child: Text(
                           "Absensi Coach",
-                          style: TextStyle(
-                            fontFamily: "poppins_semibold",
-                            fontSize: 32,
-                            color: Colors.white,
-                          ),
+                          style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 32,
+                          color: Colors.white,
+                        ),
                         ),
                       ),
                     ),
@@ -73,12 +74,12 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                               Navigator.of(context).pop();
                             },
                           ),
-                          const Text(
+                          Text(
                             "Kembali",
-                            style: TextStyle(
-                              fontFamily: "poppins_semibold",
-                              color: Colors.white,
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600,
                               fontSize: 20,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -106,10 +107,10 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                         borderRadius: BorderRadius.circular(100),
                         color: AppColors.deepOceanBlue,
                       ),
-                      child: const Text(
+                      child: Text(
                         "Presensi Kehadiran",
-                        style: TextStyle(
-                          fontFamily: "poppins_semibold",
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
                           fontSize: 16,
                           color: Colors.white,
                         ),
@@ -190,13 +191,13 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                           borderRadius: BorderRadius.circular(100),
                           color: AppColors.deepOceanBlue,
                         ),
-                        child: const Text(
+                        child: Text(
                           "Ambil Gambar",
-                          style: TextStyle(
-                            fontFamily: "poppins_semibold",
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                          style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -389,7 +390,7 @@ class _PresenceCoachState extends State<PresenceCoachView> {
                 controller.isSubmitting.value
                     ? const CircularProgressIndicator(color: Colors.white)
                     : const Text(
-                      "Upload",
+                      "Submit",
                       style: TextStyle(
                         fontFamily: "poppins_semibold",
                         fontSize: 18,
