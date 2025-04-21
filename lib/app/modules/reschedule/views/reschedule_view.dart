@@ -59,7 +59,7 @@ class RescheduleView extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.arrow_back, color: Colors.white),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Get.back(result: true); // Kirim sinyal untuk refresh
                             },
                           ),
                           Text(
@@ -143,6 +143,7 @@ class RescheduleView extends StatelessWidget {
             String reason = reasonController.text.trim();
             if (reason.isNotEmpty) {
               controller.sendRescheduleRequest(reason);
+              Get.back(result: true); // Kirim sinyal untuk refresh setelah upload
             } else {
               Get.snackbar("Error", "Reason cannot be empty");
             }

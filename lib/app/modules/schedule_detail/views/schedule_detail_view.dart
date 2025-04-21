@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
@@ -64,37 +65,11 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               bottomRight: Radius.circular(30),
             ),
           ),
-          padding: EdgeInsets.fromLTRB(20, 70, 20, 30),
+          padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Obx(() {
-                  if (controller.scheduleResponse.value?.schedule?.status ==
-                      "rescheduled") {
-                    return Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Text(
-                        "Reschedule",
-                        style: GoogleFonts.poppins(
-                          color: AppColors.deepOceanBlue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return SizedBox.shrink(); // Tidak menampilkan apapun
-                  }
-                }),
-              ),
-              SizedBox(height: 20),
               Text(
                 controller.scheduleResponse.value?.schedule?.packageName ?? "",
                 style: GoogleFonts.poppins(
@@ -609,42 +584,58 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
     }
 
     return Scaffold(
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [header(), location(), buttonAttendance(), listSiswa()],
-            ),
-          ),
-          Positioned(
-            top: 70,
-            left: 20,
-            child: GestureDetector(
-              onTap: () => Get.back(),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.deepOceanBlue,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.arrow_back, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text(
-                      "Kembali",
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Row(
+          children: [
+            Text(
+              "Kembali",
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          ),
-        ],
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: Obx(() {
+                    if (controller.scheduleResponse.value?.schedule?.status ==
+                        "rescheduled") {
+                      return Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Text(
+                          "Reschedule",
+                          style: GoogleFonts.poppins(
+                            color: AppColors.deepOceanBlue,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return SizedBox.shrink(); // Tidak menampilkan apapun
+                    }
+                  }),
+            ),
+          ],
+        ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [header(), location(), buttonAttendance(), listSiswa()],
+        ),
       ),
     );
   }
