@@ -123,7 +123,9 @@ class _ScheduleViewState extends State<ScheduleView> {
         // Filter months that have schedules
         List<int> availableMonths = [];
         for (var schedule in controller.scheduleList) {
-          final scheduleDate = DateTime.parse(schedule.date); // Assuming `schedule.date` is in ISO format
+          final scheduleDate = DateTime.parse(
+            schedule.date,
+          ); // Assuming `schedule.date` is in ISO format
           final scheduleMonth = scheduleDate.month;
           if (!availableMonths.contains(scheduleMonth)) {
             availableMonths.add(scheduleMonth);
@@ -141,7 +143,9 @@ class _ScheduleViewState extends State<ScheduleView> {
                     Row(
                       children: List.generate(monthNames.length, (index) {
                         // Show button only if the month is available or it's "Terdekat" or "Semua"
-                        if (index == 0 || index == 1 || availableMonths.contains(index - 1)) {
+                        if (index == 0 ||
+                            index == 1 ||
+                            availableMonths.contains(index - 1)) {
                           return GestureDetector(
                             onTap: () {
                               setState(() {
@@ -158,16 +162,20 @@ class _ScheduleViewState extends State<ScheduleView> {
                                 vertical: 7,
                               ),
                               decoration: BoxDecoration(
-                                color: _selectedMonthIndex == index
-                                    ? AppColors.deepOceanBlue
-                                    : Colors.white,
+                                color:
+                                    _selectedMonthIndex == index
+                                        ? AppColors.deepOceanBlue
+                                        : Colors.white,
                                 borderRadius: BorderRadius.circular(1000),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey.withOpacity(0.5),
                                     spreadRadius: 0,
                                     blurRadius: 4,
-                                    offset: Offset(0, 4), // changes position of shadow
+                                    offset: Offset(
+                                      0,
+                                      4,
+                                    ), // changes position of shadow
                                   ),
                                 ],
                               ),
@@ -176,9 +184,10 @@ class _ScheduleViewState extends State<ScheduleView> {
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w500, // Medium
                                   fontSize: 16,
-                                  color: _selectedMonthIndex == index
-                                      ? Colors.white
-                                      : Colors.black,
+                                  color:
+                                      _selectedMonthIndex == index
+                                          ? Colors.white
+                                          : Colors.black,
                                 ),
                               ),
                             ),
@@ -196,27 +205,41 @@ class _ScheduleViewState extends State<ScheduleView> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Container(width: 1, height: 40, color: Colors.grey),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 15, 20, 15),
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 0,
-                    blurRadius: 4,
-                    offset: Offset(0, 4), // changes position of shadow
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedMonthIndex = -1; // Set index to -1 for history
+                });
+                controller.fetchSchedules(
+                  history: true,
+                ); // Fetch history schedules
+              },
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 15, 20, 15),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+                decoration: BoxDecoration(
+                  color:
+                      _selectedMonthIndex == -1
+                          ? AppColors.deepOceanBlue
+                          : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 0,
+                      blurRadius: 4,
+                      offset: Offset(0, 4), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Text(
+                  'History',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500, // Medium
+                    fontSize: 16,
+                    color:
+                        _selectedMonthIndex == -1 ? Colors.white : Colors.black,
                   ),
-                ],
-              ),
-              child: Text(
-                'History',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500, // Medium
-                  fontSize: 16,
-                  color: Colors.black,
                 ),
               ),
             ),
