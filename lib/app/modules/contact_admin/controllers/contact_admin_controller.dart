@@ -34,6 +34,16 @@ class ContactAdminController extends GetxController {
     }
   }
 
+  Future<void> refreshAdmins() async {
+    isLoading.value = true;
+    try {
+      // Panggil API atau logika untuk memuat ulang data admin
+      fetchAdmins();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void launchWhatsApp(String phone) async {
     String formattedPhone = phone.replaceAll(" ", "").replaceAll("+", "");
     final Uri whatsappUrl = Uri.parse("https://wa.me/$formattedPhone");

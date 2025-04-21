@@ -79,68 +79,73 @@ class _ContactAdminViewState extends State<ContactAdminView> {
       }
 
       return Expanded(
-        child: ListView.builder(
-          itemCount: controller.admins.length,
-          itemBuilder: (context, index) {
-            final admin = controller.admins[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-              child: GestureDetector(
-                onTap: () => controller.launchWhatsApp(admin.noTelf ?? ""),
-
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        blurRadius: 5,
-                        spreadRadius: 1,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            'assets/images/coachSarah.jpg',
-                            width: 70,
-                            height: 70,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            // Panggil fungsi untuk memuat ulang data
+            await controller.refreshAdmins();
+          },
+          child: ListView.builder(
+            itemCount: controller.admins.length,
+            itemBuilder: (context, index) {
+              final admin = controller.admins[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                child: GestureDetector(
+                  onTap: () => controller.launchWhatsApp(admin.noTelf ?? ""),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          blurRadius: 5,
+                          spreadRadius: 1,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              'assets/images/coachSarah.jpg',
+                              width: 70,
+                              height: 70,
+                            ),
                           ),
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            admin.name,
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              admin.name,
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "${admin.email}\n${admin.noTelf}",
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              color: Colors.grey[700],
+                            SizedBox(height: 5),
+                            Text(
+                              "${admin.email}\n${admin.noTelf}",
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                color: Colors.grey[700],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       );
     });
