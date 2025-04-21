@@ -75,7 +75,8 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                   }
 
                   // Set default value for qtyReturnedController
-                  controller.qtyReturnedController.text = "${detail.qtyBorrow ?? 0}";
+                  controller.qtyReturnedController.text =
+                      "${detail.qtyBorrow ?? 0}";
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,15 +334,23 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                   horizontal: 16,
                                 ),
                                 child: TextFormField(
-                                  controller:
-                                      controller.qtyReturnedController,
+                                  controller: controller.qtyReturnedController,
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly, // Hanya angka
-                                    TextInputFormatter.withFunction((oldValue, newValue) {
-                                      if (newValue.text.isEmpty) return newValue;
-                                      final int? value = int.tryParse(newValue.text);
-                                      if (value == null || value < 1 || value > (detail.qtyBorrow ?? 0)) {
+                                    FilteringTextInputFormatter
+                                        .digitsOnly, // Hanya angka
+                                    TextInputFormatter.withFunction((
+                                      oldValue,
+                                      newValue,
+                                    ) {
+                                      if (newValue.text.isEmpty)
+                                        return newValue;
+                                      final int? value = int.tryParse(
+                                        newValue.text,
+                                      );
+                                      if (value == null ||
+                                          value < 1 ||
+                                          value > (detail.qtyBorrow ?? 0)) {
                                         return oldValue; // Batalkan perubahan jika di luar batas
                                       }
                                       return newValue;
@@ -361,8 +370,10 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                   ),
                                   onChanged: (value) {
                                     final int? qty = int.tryParse(value);
-                                    if (qty != null && qty > (detail.qtyBorrow ?? 0)) {
-                                      controller.qtyReturnedController.text = "${detail.qtyBorrow}";
+                                    if (qty != null &&
+                                        qty > (detail.qtyBorrow ?? 0)) {
+                                      controller.qtyReturnedController.text =
+                                          "${detail.qtyBorrow}";
                                     }
                                   },
                                 ),
@@ -387,8 +398,13 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                             Switch(
                               value: controller.isDamaged.value,
                               onChanged: (bool value) {
-                                final int missingValue = int.tryParse(controller.missingController.text) ?? 0;
-                                if (value && missingValue == (detail.qtyBorrow ?? 0)) {
+                                final int missingValue =
+                                    int.tryParse(
+                                      controller.missingController.text,
+                                    ) ??
+                                    0;
+                                if (value &&
+                                    missingValue == (detail.qtyBorrow ?? 0)) {
                                   // Jika barang hilang mencapai maksimum, switch rusak tidak dapat diaktifkan
                                   return;
                                 }
@@ -403,7 +419,8 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                       }),
                       const SizedBox(height: 8),
                       Obx(() {
-                        if (!controller.isDamaged.value) return const SizedBox();
+                        if (!controller.isDamaged.value)
+                          return const SizedBox();
                         return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
@@ -417,13 +434,25 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                               keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
-                                TextInputFormatter.withFunction((oldValue, newValue) {
+                                TextInputFormatter.withFunction((
+                                  oldValue,
+                                  newValue,
+                                ) {
                                   if (newValue.text.isEmpty) return newValue;
-                                  final int? damagedValue = int.tryParse(newValue.text);
-                                  final int missingValue = int.tryParse(controller.missingController.text) ?? 0;
-                                  final int maxDamaged = (detail.qtyBorrow ?? 0) - missingValue;
+                                  final int? damagedValue = int.tryParse(
+                                    newValue.text,
+                                  );
+                                  final int missingValue =
+                                      int.tryParse(
+                                        controller.missingController.text,
+                                      ) ??
+                                      0;
+                                  final int maxDamaged =
+                                      (detail.qtyBorrow ?? 0) - missingValue;
 
-                                  if (damagedValue == null || damagedValue < 0 || damagedValue > maxDamaged) {
+                                  if (damagedValue == null ||
+                                      damagedValue < 0 ||
+                                      damagedValue > maxDamaged) {
                                     return oldValue; // Batalkan perubahan jika di luar batas
                                   }
 
@@ -441,7 +470,8 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                 border: InputBorder.none,
                               ),
                               onChanged: (value) {
-                                controller.update(); // Perbarui UI jika ada perubahan
+                                controller
+                                    .update(); // Perbarui UI jika ada perubahan
                               },
                             ),
                           ),
@@ -462,7 +492,11 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                             Switch(
                               value: controller.isMissing.value,
                               onChanged: (bool value) {
-                                final int damagedValue = int.tryParse(controller.damagedController.text) ?? 0;
+                                final int damagedValue =
+                                    int.tryParse(
+                                      controller.damagedController.text,
+                                    ) ??
+                                    0;
                                 final int maxItems = detail.qtyBorrow ?? 0;
 
                                 if (value && damagedValue == maxItems) {
@@ -480,7 +514,8 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                       }),
                       const SizedBox(height: 8),
                       Obx(() {
-                        if (!controller.isMissing.value) return const SizedBox();
+                        if (!controller.isMissing.value)
+                          return const SizedBox();
                         return Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
@@ -494,13 +529,25 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                               keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
-                                TextInputFormatter.withFunction((oldValue, newValue) {
+                                TextInputFormatter.withFunction((
+                                  oldValue,
+                                  newValue,
+                                ) {
                                   if (newValue.text.isEmpty) return newValue;
-                                  final int? missingValue = int.tryParse(newValue.text);
-                                  final int damagedValue = int.tryParse(controller.damagedController.text) ?? 0;
-                                  final int maxMissing = (detail.qtyBorrow ?? 0) - damagedValue;
+                                  final int? missingValue = int.tryParse(
+                                    newValue.text,
+                                  );
+                                  final int damagedValue =
+                                      int.tryParse(
+                                        controller.damagedController.text,
+                                      ) ??
+                                      0;
+                                  final int maxMissing =
+                                      (detail.qtyBorrow ?? 0) - damagedValue;
 
-                                  if (missingValue == null || missingValue < 0 || missingValue > maxMissing) {
+                                  if (missingValue == null ||
+                                      missingValue < 0 ||
+                                      missingValue > maxMissing) {
                                     return oldValue; // Batalkan perubahan jika di luar batas
                                   }
 
@@ -518,7 +565,8 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                 border: InputBorder.none,
                               ),
                               onChanged: (value) {
-                                controller.update(); // Perbarui UI jika ada perubahan
+                                controller
+                                    .update(); // Perbarui UI jika ada perubahan
                               },
                             ),
                           ),
@@ -542,19 +590,14 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         ListTile(
-                                          leading: const Icon(
-                                            Icons.camera_alt,
-                                          ),
+                                          leading: const Icon(Icons.camera_alt),
                                           title: const Text('Kamera'),
                                           onTap: () async {
                                             final XFile? pickedImage =
                                                 await picker.pickImage(
                                                   source: ImageSource.camera,
                                                 );
-                                            Navigator.pop(
-                                              context,
-                                              pickedImage,
-                                            );
+                                            Navigator.pop(context, pickedImage);
                                           },
                                         ),
                                         ListTile(
@@ -567,10 +610,7 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                                 await picker.pickImage(
                                                   source: ImageSource.gallery,
                                                 );
-                                            Navigator.pop(
-                                              context,
-                                              pickedImage,
-                                            );
+                                            Navigator.pop(context, pickedImage);
                                           },
                                         ),
                                       ],
@@ -588,8 +628,7 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                             icon: const Icon(
                               Icons.camera_alt,
                               color:
-                                  Colors
-                                      .white, // Ubah warna ikon menjadi putih
+                                  Colors.white, // Ubah warna ikon menjadi putih
                             ),
                             label: Text(
                               "Upload Bukti Gambar",
@@ -612,8 +651,7 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                         ),
                       ),
                       Obx(() {
-                        final File? imagePath =
-                            controller.selectedImage.value;
+                        final File? imagePath = controller.selectedImage.value;
                         if (imagePath == null) {
                           return const SizedBox.shrink();
                         }
@@ -670,10 +708,10 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                           vertical: 4,
                                         ),
                                         decoration: BoxDecoration(
-                                          color:
-                                              Colors.black.withOpacity(0.6),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                                          color: Colors.black.withOpacity(0.6),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -724,7 +762,7 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: TextFormField(
-                            // controller:,
+                            controller: controller.descController,
                             decoration: const InputDecoration(
                               hintText: "Ketik Disini",
                               hintStyle: TextStyle(color: Colors.grey),
