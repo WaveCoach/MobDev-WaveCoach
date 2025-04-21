@@ -192,7 +192,7 @@ class DetailHistoryPengajuanView
                                   margin: const EdgeInsets.only(bottom: 8),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
+                                    color: AppColors.contrastBlue,
                                     border: Border.all(color: Colors.grey),
                                   ),
                                   child: Padding(
@@ -206,7 +206,7 @@ class DetailHistoryPengajuanView
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
-                                        color: Colors.black,
+                                        color: Colors.white,
                                       ),
                                       decoration: const InputDecoration(
                                         hintText: "Nama Inventaris",
@@ -227,7 +227,7 @@ class DetailHistoryPengajuanView
                                   margin: const EdgeInsets.only(bottom: 8),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
+                                    color: AppColors.contrastBlue,
                                     border: Border.all(color: Colors.grey),
                                   ),
                                   child: Padding(
@@ -241,7 +241,7 @@ class DetailHistoryPengajuanView
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 16,
-                                        color: Colors.black,
+                                        color: Colors.white,
                                       ),
                                       decoration: const InputDecoration(
                                         hintText: "Qty",

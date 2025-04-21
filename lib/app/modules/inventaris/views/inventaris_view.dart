@@ -441,6 +441,26 @@ class _InventarisViewState extends State<InventarisView> {
     return Obx(() {
       final filterOptions = ["Semua", "Masuk", "Keluar"];
 
+      // Filter daftar history berdasarkan input pencarian
+      final filteredHistoryList = controller.historyList.where((history) {
+        final matchesCoachName = history.coachName
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase());
+        final matchesTitle = history.type == 'request'
+            ? 'Pengajuan Peminjaman Inventaris'
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase())
+            : 'Pengajuan Pengembalian Inventaris'
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase());
+        final matchesDate = DateFormat('dd MMMM yyyy, HH:mm')
+            .format(DateTime.parse(history.createdAt))
+            .toLowerCase()
+            .contains(searchQuery.toLowerCase());
+
+        return matchesCoachName || matchesTitle || matchesDate;
+      }).toList();
+
       return Column(
         children: [
           Obx(() {
@@ -495,6 +515,7 @@ class _InventarisViewState extends State<InventarisView> {
             }
           }),
           SizedBox(height: 20),
+          // Search Bar
           Container(
             height: 50,
             width: double.infinity,
@@ -528,8 +549,9 @@ class _InventarisViewState extends State<InventarisView> {
                       ),
                     ),
                     onChanged: (value) {
-                      // Add your search logic here
-                      // controller.searchHistoryItems(value);
+                      setState(() {
+                        searchQuery = value; // Perbarui input pencarian
+                      });
                     },
                   ),
                 ),
@@ -537,11 +559,14 @@ class _InventarisViewState extends State<InventarisView> {
             ),
           ),
           SizedBox(height: 25),
-
           Expanded(
-            child:
-                controller.historyList.isEmpty
-                    ? Center(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                // Panggil fungsi untuk memuat ulang data historyList
+                await controller.fetchInventaris('History Pengajuan');
+              },
+              child: filteredHistoryList.isEmpty
+                  ? Center(
                       child: Text(
                         "Data kosong",
                         style: GoogleFonts.poppins(
@@ -551,11 +576,11 @@ class _InventarisViewState extends State<InventarisView> {
                         ),
                       ),
                     )
-                    : ListView.builder(
+                  : ListView.builder(
                       padding: EdgeInsets.only(bottom: 110),
-                      itemCount: controller.historyList.length,
+                      itemCount: filteredHistoryList.length,
                       itemBuilder: (context, index) {
-                        final history = controller.historyList[index];
+                        final history = filteredHistoryList[index];
                         return GestureDetector(
                           onTap: () {
                             Get.toNamed(
@@ -581,12 +606,27 @@ class _InventarisViewState extends State<InventarisView> {
                                         bottomLeft: Radius.circular(12),
                                       ),
                                     ),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.description,
-                                        color: Colors.white,
-                                        size: 50,
-                                      ),
+                                    child: Stack(
+                                      children: [
+                                        Center(
+                                          child: Icon(
+                                            Icons.description,
+                                            color: Colors.white,
+                                            size: 50,
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 8,
+                                          right: 8,
+                                          child: Icon(
+                                            history.type == 'request'
+                                                ? Icons.south_west // Panah ke bawah untuk ajuan masuk
+                                                : Icons.north_east,   // Panah ke atas untuk ajuan keluar
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Expanded(
@@ -718,6 +758,7 @@ class _InventarisViewState extends State<InventarisView> {
                         );
                       },
                     ),
+            ),
           ),
         ],
       );
