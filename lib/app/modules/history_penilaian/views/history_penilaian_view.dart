@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/history_penilaian/controllers/history_penilaian_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
@@ -14,7 +15,8 @@ class HistoryPenilaianView extends StatefulWidget {
 }
 
 class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
-  final HistoryPenilaianController controller = Get.find<HistoryPenilaianController>();
+  final HistoryPenilaianController controller =
+      Get.find<HistoryPenilaianController>();
 
   @override
   Widget build(BuildContext context) {
@@ -144,31 +146,45 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.goldenAmber,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                //Tanggal Penilaian
-                                child: Text(
-                                  item.date,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.goldenAmber,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
+                                    child: Text(
+                                      item.date ?? 'Unknown Date',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Text(
+                                  DateFormat('HH:mm').format(
+                                    item.createdAt ?? DateTime.now(),
+                                  ), // Extract time from createdAt
+                                  style: GoogleFonts.poppins(
+                                    color: AppColors.midnightNavy,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
                             Row(
                               children: [
                                 //Paket Renang
                                 Text(
-                                  item.packageName,
+                                  item.packageName ?? '-',
                                   style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -185,7 +201,7 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                                 ),
                                 //Kategori Gaya
                                 Text(
-                                  item.categoryName,
+                                  item.categoryName ?? '-',
                                   style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -196,7 +212,7 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                             ),
                             //Nama Siswa
                             Text(
-                              item.studentName,
+                              item.studentName ?? '-',
                               style: GoogleFonts.poppins(
                                 color: Colors.black,
                                 fontSize: 14,

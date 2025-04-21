@@ -97,8 +97,6 @@ class AjukanPeminjamanController extends GetxController {
       "items": items,
     };
 
-    print("body: ${body}");
-
     await wrapLoading(isLoading, () async {
       final response = await apiService.postRequestBorrow(body);
 
@@ -108,7 +106,10 @@ class AjukanPeminjamanController extends GetxController {
           "request borrow submitted successfully",
           snackPosition: SnackPosition.TOP,
         );
-        Get.offAll(() => HomeView(), arguments: 1); // Navigasi ke HomeView dengan indeks 1 (Inventaris)
+        Get.offAll(
+          () => HomeView(),
+          arguments: 1,
+        ); // Navigasi ke HomeView dengan indeks 1 (Inventaris)
       } else {
         logError(
           "Submit request borrow",
@@ -116,7 +117,7 @@ class AjukanPeminjamanController extends GetxController {
         );
         Get.snackbar(
           "Error",
-          "Failed to submit request borrow: ${response.body}",
+          "Failed to submit request borrow",
           snackPosition: SnackPosition.TOP,
         );
       }

@@ -34,13 +34,18 @@ class SignInController extends GetxController {
 
       if (signInResponse.value?.success == true) {
         final user = signInResponse.value!.user;
-
+        print("User ID: ${user.id}");
+        print("User Name: ${user.name}");
+        print("User Email: ${user.email}");
+        print("User Role ID: ${user.roleId}");
+        print("User Profile Image: ${user.profileImage}");
+        print("Token: ${signInResponse.value!.token}");
         // Pastikan nilai tidak null sebelum disimpan
         storage.write("token", signInResponse.value!.token ?? '');
         storage.write("name", user.name ?? '');
         storage.write("email", user.email ?? '');
         storage.write("profile_image", user.profileImage ?? '');
-        storage.write("roleId", user.roleId?.toString() ?? '');
+        storage.write("roleId", user.roleId.toString());
 
         Get.offAllNamed(Routes.HOME);
       } else {
