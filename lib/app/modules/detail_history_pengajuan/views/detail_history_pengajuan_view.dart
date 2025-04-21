@@ -385,8 +385,9 @@ class DetailHistoryPengajuanView
                       // Text("alasan ditolak: ${data.data.rejectionReason}"),
                       Divider(color: Colors.grey, thickness: 1),
                       SizedBox(height: 16),
+
                       Obx(() {
-                        if (controller.Type.value == "request" &&
+                        if (controller.typeView.value == "request" &&
                             controller.roleId.value == 3) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -909,7 +910,7 @@ class DetailHistoryPengajuanView
                       Divider(color: Colors.grey, thickness: 1),
                       SizedBox(height: 16),
                       Obx(() {
-                        if (controller.Type.value == "return" &&
+                        if (controller.typeView.value != "return" &&
                             controller.roleId.value == 3) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

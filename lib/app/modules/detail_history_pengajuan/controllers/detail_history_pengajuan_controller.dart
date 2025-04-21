@@ -14,7 +14,7 @@ class DetailHistoryPengajuanController extends GetxController {
   final historyReturnResponse = Rxn<HistoryInventoryReturnResponse>();
   final feedbackController = TextEditingController();
   final selectedStatus = "".obs;
-  final Type = "".obs;
+  final typeView = "".obs;
   final roleId = 0.obs;
 
   @override
@@ -24,9 +24,10 @@ class DetailHistoryPengajuanController extends GetxController {
     final args = Get.arguments;
     final id = args['id'];
     final type = args['type'];
-    Type.value = type;
+    typeView.value = type;
     final box = GetStorage();
-    roleId.value = box.read("role_id") ?? 0;
+    roleId.value = int.tryParse(box.read("roleId")?.toString() ?? '0') ?? 0;
+
     if (type == "request") {
       fetchHistoryRequest(id);
     } else if (type == "return") {
