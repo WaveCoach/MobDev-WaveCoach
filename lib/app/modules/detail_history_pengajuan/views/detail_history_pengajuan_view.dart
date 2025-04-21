@@ -387,7 +387,7 @@ class DetailHistoryPengajuanView
                       SizedBox(height: 16),
 
                       Obx(() {
-                        if (controller.typeView.value == "request" &&
+                        if (controller.kondisi.value == "masuk" &&
                             controller.roleId.value == 3) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -907,12 +907,10 @@ class DetailHistoryPengajuanView
 
                       // Text("status: ${data.data.status}"),
                       // Text("alasan ditolak: ${data.data.rejectionReason}"),
-                      Text(controller.typeView.value),
-                      Text(controller.roleId.value.toString()),
                       Divider(color: Colors.grey, thickness: 1),
                       SizedBox(height: 16),
                       Obx(() {
-                        if (controller.typeView.value == "request" &&
+                        if (controller.kondisi.value == "masuk" &&
                             controller.roleId.value == 3) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

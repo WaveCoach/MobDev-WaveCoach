@@ -442,24 +442,26 @@ class _InventarisViewState extends State<InventarisView> {
       final filterOptions = ["Semua", "Masuk", "Keluar"];
 
       // Filter daftar history berdasarkan input pencarian
-      final filteredHistoryList = controller.historyList.where((history) {
-        final matchesCoachName = history.coachName
-            .toLowerCase()
-            .contains(searchQuery.toLowerCase());
-        final matchesTitle = history.type == 'request'
-            ? 'Pengajuan Peminjaman Inventaris'
-                .toLowerCase()
-                .contains(searchQuery.toLowerCase())
-            : 'Pengajuan Pengembalian Inventaris'
+      final filteredHistoryList =
+          controller.historyList.where((history) {
+            final matchesCoachName = history.coachName.toLowerCase().contains(
+              searchQuery.toLowerCase(),
+            );
+            final matchesTitle =
+                history.type == 'request'
+                    ? 'Pengajuan Peminjaman Inventaris'.toLowerCase().contains(
+                      searchQuery.toLowerCase(),
+                    )
+                    : 'Pengajuan Pengembalian Inventaris'
+                        .toLowerCase()
+                        .contains(searchQuery.toLowerCase());
+            final matchesDate = DateFormat('dd MMMM yyyy, HH:mm')
+                .format(DateTime.parse(history.createdAt))
                 .toLowerCase()
                 .contains(searchQuery.toLowerCase());
-        final matchesDate = DateFormat('dd MMMM yyyy, HH:mm')
-            .format(DateTime.parse(history.createdAt))
-            .toLowerCase()
-            .contains(searchQuery.toLowerCase());
 
-        return matchesCoachName || matchesTitle || matchesDate;
-      }).toList();
+            return matchesCoachName || matchesTitle || matchesDate;
+          }).toList();
 
       return Column(
         children: [
@@ -565,199 +567,211 @@ class _InventarisViewState extends State<InventarisView> {
                 // Panggil fungsi untuk memuat ulang data historyList
                 await controller.fetchInventaris('History Pengajuan');
               },
-              child: filteredHistoryList.isEmpty
-                  ? Center(
-                      child: Text(
-                        "Data kosong",
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: Colors.black54,
+              child:
+                  filteredHistoryList.isEmpty
+                      ? Center(
+                        child: Text(
+                          "Data kosong",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.black54,
+                          ),
                         ),
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: EdgeInsets.only(bottom: 110),
-                      itemCount: filteredHistoryList.length,
-                      itemBuilder: (context, index) {
-                        final history = filteredHistoryList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.toNamed(
-                              Routes.DETAIL_HISTORY_PENGAJUAN,
-                              arguments: {
-                                'id': history.id,
-                                'type': history.type,
-                              },
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: IntrinsicHeight(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    width: 80,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.deepOceanBlue,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(12),
-                                        bottomLeft: Radius.circular(12),
-                                      ),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Center(
-                                          child: Icon(
-                                            Icons.description,
-                                            color: Colors.white,
-                                            size: 50,
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: 8,
-                                          right: 8,
-                                          child: Icon(
-                                            history.type == 'request'
-                                                ? Icons.south_west // Panah ke bawah untuk ajuan masuk
-                                                : Icons.north_east,   // Panah ke atas untuk ajuan keluar
-                                            color: Colors.white,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(12),
+                      )
+                      : ListView.builder(
+                        padding: EdgeInsets.only(bottom: 110),
+                        itemCount: filteredHistoryList.length,
+                        itemBuilder: (context, index) {
+                          final history = filteredHistoryList[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Get.toNamed(
+                                Routes.DETAIL_HISTORY_PENGAJUAN,
+                                arguments: {
+                                  'id': history.id,
+                                  'type': history.type,
+                                  'condition': history.condition,
+                                },
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 10),
+                              child: IntrinsicHeight(
+                                child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Container(
+                                      width: 80,
                                       decoration: BoxDecoration(
-                                        color: AppColors.lightBlue,
+                                        color: AppColors.deepOceanBlue,
                                         borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(12),
-                                          bottomRight: Radius.circular(12),
+                                          topLeft: Radius.circular(12),
+                                          bottomLeft: Radius.circular(12),
                                         ),
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      child: Stack(
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 2,
-                                                    ),
-                                                decoration: BoxDecoration(
-                                                  color: AppColors.goldenAmber,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        100,
-                                                      ),
-                                                ),
-                                                child: Text(
-                                                  DateFormat(
-                                                    'dd MMMM yyyy, HH:mm',
-                                                  ).format(
-                                                    DateTime.parse(
-                                                      history.createdAt,
-                                                    ),
-                                                  ),
-                                                  style: GoogleFonts.poppins(
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14,
-                                                    color: Colors.black,
-                                                    letterSpacing: -0.5,
-                                                  ),
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              Icon(
-                                                history.status == 'approved'
-                                                    ? Icons.check_circle
-                                                    : history.status ==
-                                                        'pending'
-                                                    ? Icons.access_time_filled
-                                                    : Icons.cancel,
-                                                color:
-                                                    history.status == 'approved'
-                                                        ? Colors.green
-                                                        : history.status ==
-                                                            'pending'
-                                                        ? Colors.yellow
-                                                        : Colors.red,
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            history.type == 'request'
-                                                ? 'Pengajuan Peminjaman Inventaris'
-                                                : 'Pengajuan Pengembalian Inventaris',
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 14,
-                                              color: Colors.black,
+                                          Center(
+                                            child: Icon(
+                                              Icons.description,
+                                              color: Colors.white,
+                                              size: 50,
                                             ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                          SizedBox(height: 4),
-                                          Row(
-                                            children: [
-                                              history.imageUrlHistory != null &&
-                                                      history
-                                                          .imageUrlHistory!
-                                                          .isNotEmpty
-                                                  ? ClipOval(
-                                                    child: Image.network(
-                                                      history.imageUrlHistory!,
-                                                      width: 24,
-                                                      height: 24,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  )
-                                                  : Icon(
-                                                    Icons.person,
-                                                    color: Colors.black,
+                                          Positioned(
+                                            bottom: 8,
+                                            right: 8,
+                                            child: Icon(
+                                              history.type == 'request'
+                                                  ? Icons
+                                                      .south_west // Panah ke bawah untuk ajuan masuk
+                                                  : Icons
+                                                      .north_east, // Panah ke atas untuk ajuan keluar
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.lightBlue,
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(12),
+                                            bottomRight: Radius.circular(12),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 2,
+                                                      ),
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        AppColors.goldenAmber,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          100,
+                                                        ),
                                                   ),
-                                              SizedBox(width: 6),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    history.coachName,
+                                                  child: Text(
+                                                    DateFormat(
+                                                      'dd MMMM yyyy, HH:mm',
+                                                    ).format(
+                                                      DateTime.parse(
+                                                        history.createdAt,
+                                                      ),
+                                                    ),
                                                     style: GoogleFonts.poppins(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontSize: 14,
                                                       color: Colors.black,
+                                                      letterSpacing: -0.5,
                                                     ),
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
-                                                ],
+                                                ),
+                                                Icon(
+                                                  history.status == 'approved'
+                                                      ? Icons.check_circle
+                                                      : history.status ==
+                                                          'pending'
+                                                      ? Icons.access_time_filled
+                                                      : Icons.cancel,
+                                                  color:
+                                                      history.status ==
+                                                              'approved'
+                                                          ? Colors.green
+                                                          : history.status ==
+                                                              'pending'
+                                                          ? Colors.yellow
+                                                          : Colors.red,
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              history.type == 'request'
+                                                  ? 'Pengajuan Peminjaman Inventaris'
+                                                  : 'Pengajuan Pengembalian Inventaris',
+                                              style: GoogleFonts.poppins(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                                color: Colors.black,
                                               ),
-                                            ],
-                                          ),
-                                        ],
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            SizedBox(height: 4),
+                                            Row(
+                                              children: [
+                                                history.imageUrlHistory !=
+                                                            null &&
+                                                        history
+                                                            .imageUrlHistory!
+                                                            .isNotEmpty
+                                                    ? ClipOval(
+                                                      child: Image.network(
+                                                        history
+                                                            .imageUrlHistory!,
+                                                        width: 24,
+                                                        height: 24,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    )
+                                                    : Icon(
+                                                      Icons.person,
+                                                      color: Colors.black,
+                                                    ),
+                                                SizedBox(width: 6),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      history.coachName,
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 14,
+                                                            color: Colors.black,
+                                                          ),
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                      ),
             ),
           ),
         ],

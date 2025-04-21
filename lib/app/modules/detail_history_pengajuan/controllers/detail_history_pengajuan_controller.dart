@@ -16,6 +16,7 @@ class DetailHistoryPengajuanController extends GetxController {
   final selectedStatus = "".obs;
   final typeView = "".obs;
   final roleId = 0.obs;
+  final kondisi = "".obs;
 
   @override
   void onInit() {
@@ -25,6 +26,9 @@ class DetailHistoryPengajuanController extends GetxController {
     final id = args['id'];
     final type = args['type'];
     typeView.value = type;
+    final condition = args['condition'] ?? "";
+    kondisi.value = condition;
+
     final box = GetStorage();
     roleId.value = int.tryParse(box.read("roleId")?.toString() ?? '0') ?? 0;
 

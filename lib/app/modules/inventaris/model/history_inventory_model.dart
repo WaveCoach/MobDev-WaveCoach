@@ -8,6 +8,7 @@ class HistoryData {
   String type;
   String coachName;
   String? imageUrlHistory;
+  String? condition;
 
   HistoryData({
     required this.id,
@@ -19,6 +20,7 @@ class HistoryData {
     required this.type,
     required this.coachName,
     this.imageUrlHistory,
+    this.condition,
   });
 
   factory HistoryData.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class HistoryData {
       type: json['type'],
       coachName: json['coach_name'],
       imageUrlHistory: json['profile_image'] ?? null,
+      condition: json['condition'] ?? null,
     );
   }
 
@@ -46,6 +49,7 @@ class HistoryData {
       'type': type,
       'coach_name': coachName,
       'profile_image': imageUrlHistory,
+      'condition': condition,
     };
   }
 }
