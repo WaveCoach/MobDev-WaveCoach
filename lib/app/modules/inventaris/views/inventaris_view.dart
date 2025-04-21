@@ -624,7 +624,7 @@ class _InventarisViewState extends State<InventarisView> {
                                             bottom: 8,
                                             right: 8,
                                             child: Icon(
-                                              history.type == 'request'
+                                              history.condition == 'masuk'
                                                   ? Icons
                                                       .south_west // Panah ke bawah untuk ajuan masuk
                                                   : Icons

@@ -6,7 +6,7 @@ class OnBoardingController extends GetxController {
   final List<Map<String, String>> onboardingData = [
     {
       "title": "Selamat Datang!",
-      "description": "Selamat datang di WaveCoach, solusi praktis untuk latihan kamu.",
+      "description": "WaveCoach, solusi praktis untuk latihan kamu.",
       "image": "assets/images/onboarding1.png",
     },
     {
