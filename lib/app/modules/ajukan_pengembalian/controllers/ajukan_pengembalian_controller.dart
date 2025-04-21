@@ -20,6 +20,7 @@ class AjukanPengembalianController extends GetxController {
   final damagedController = TextEditingController();
   final missingController = TextEditingController();
   final returnedAtController = TextEditingController();
+  final descController = TextEditingController();
 
   final selectedImage = Rx<File?>(null); // Jika memakai File
   final isDamaged = false.obs;
@@ -77,6 +78,7 @@ class AjukanPengembalianController extends GetxController {
       final damagedCount = int.tryParse(damagedController.text) ?? 0;
       final missingCount = int.tryParse(missingController.text) ?? 0;
       final returnedAt = returnedAtController.text;
+      final desc = descController.text;
 
       String? base64Image;
       if (selectedImage.value != null) {
@@ -88,6 +90,7 @@ class AjukanPengembalianController extends GetxController {
         "damaged_count": damagedCount,
         "missing_count": missingCount,
         "returned_at": returnedAt,
+        "desc": desc,
         if (base64Image != null) "img": base64Image,
       };
 
@@ -98,6 +101,7 @@ class AjukanPengembalianController extends GetxController {
         Get.offAllNamed('/profile');
       } else {
         Get.snackbar("Gagal", response.body?['message'] ?? "Pengajuan gagal");
+        print("Error: ${response.body}");
       }
     } catch (e) {
       Get.snackbar("Error", "Terjadi kesalahan: $e");
