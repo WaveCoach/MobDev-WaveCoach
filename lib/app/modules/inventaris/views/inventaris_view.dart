@@ -23,7 +23,7 @@ class _InventarisViewState extends State<InventarisView> {
   @override
   void initState() {
     super.initState();
-    dropdownValue = 'Barang';
+    dropdownValue = 'Barang Yang Dipinjam';
   }
 
   @override
@@ -53,7 +53,8 @@ class _InventarisViewState extends State<InventarisView> {
               ],
             ),
           ),
-          if (dropdownValue != null && dropdownValue == "Barang")
+          if (dropdownValue != null && dropdownValue == "Barang Yang Dipinjam" || 
+              dropdownValue == "Stock Inventaris")
             ajukanPeminjaman(),
         ],
       ),
@@ -125,7 +126,7 @@ class _InventarisViewState extends State<InventarisView> {
         },
         items:
             [
-              'Barang',
+              'Barang Yang Dipinjam',
               'History Pengajuan',
               'Stock Inventaris',
             ].map<DropdownMenuItem<String>>((String value) {
@@ -161,7 +162,7 @@ class _InventarisViewState extends State<InventarisView> {
   }
 
   Widget _buildContent() {
-    if (dropdownValue == "Barang") {
+    if (dropdownValue == "Barang Yang Dipinjam") {
       return _borrowedItem();
     } else if (dropdownValue == "History Pengajuan") {
       return _historyPeminjamanInventaris();
@@ -247,7 +248,7 @@ class _InventarisViewState extends State<InventarisView> {
             // Daftar stok yang difilter
             Expanded(
               child: ListView.builder(
-                padding: EdgeInsets.only(bottom: 120),
+                padding: EdgeInsets.only(bottom: 190),
                 itemCount: filteredStockList.length,
                 itemBuilder: (context, index) {
                   final stock = filteredStockList[index];
@@ -843,7 +844,7 @@ class _InventarisViewState extends State<InventarisView> {
             child: RefreshIndicator(
               onRefresh: () async {
                 // Panggil fungsi untuk memuat ulang data borrowedList
-                await controller.fetchInventaris('Barang');
+                await controller.fetchInventaris('Barang Yang Dipinjam');
               },
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

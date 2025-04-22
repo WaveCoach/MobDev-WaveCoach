@@ -27,7 +27,7 @@ class InventarisController extends GetxController {
   void onInit() {
     super.onInit();
     roleId.value = GetStorage().read("roleId")?.toString() ?? "";
-    fetchInventaris('Barang');
+    fetchInventaris('Barang Yang Dipinjam');
     fetchInventaris('History Pengajuan', filter: 'Semua');
   }
 
@@ -42,7 +42,7 @@ class InventarisController extends GetxController {
           'History Pengajuan' => await apiService.historyPeminjamanInventaris(
             filter: filter,
           ),
-          'Barang' => await apiService.borrowedItem(),
+          'Barang Yang Dipinjam' => await apiService.borrowedItem(),
           _ => null,
         };
 
@@ -62,7 +62,7 @@ class InventarisController extends GetxController {
               historyList.value =
                   HistoryInventoryResponse.fromJson(body).data ?? [];
               break;
-            case 'Barang':
+            case 'Barang Yang Dipinjam':
               borrowedList.value =
                   BorrowedItemResponse.fromJson(body).data ?? [];
               break;
