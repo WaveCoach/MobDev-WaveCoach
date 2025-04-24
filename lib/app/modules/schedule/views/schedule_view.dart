@@ -31,6 +31,8 @@ class _ScheduleViewState extends State<ScheduleView> {
   ];
 
   int _selectedMonthIndex = 0;
+  bool _isHistorySelected = false; // Variabel baru untuk menandai "History"
+
   final ScheduleController controller = Get.put(ScheduleController());
 
   @override
@@ -208,19 +210,26 @@ class _ScheduleViewState extends State<ScheduleView> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  _selectedMonthIndex = -1; // Set index to -1 for history
+                  _isHistorySelected =
+                      !_isHistorySelected; // Toggle history selection
                 });
-                controller.fetchSchedules(
-                  history: true,
-                ); // Fetch history schedules
+                if (_isHistorySelected) {
+                  _selectedMonthIndex = 0;
+                  controller.fetchSchedules(
+                    history: true,
+                  ); // Fetch history schedules
+                } else {
+                  _selectedMonthIndex = 0;
+                  controller.fetchSchedules(); // Fetch current schedules
+                }
               },
               child: Container(
                 margin: EdgeInsets.fromLTRB(0, 15, 20, 15),
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
                 decoration: BoxDecoration(
                   color:
-                      _selectedMonthIndex == -1
-                          ? AppColors.deepOceanBlue
+                      _isHistorySelected
+                          ? AppColors.honeyGold
                           : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -237,8 +246,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w500, // Medium
                     fontSize: 16,
-                    color:
-                        _selectedMonthIndex == -1 ? Colors.white : Colors.black,
+                    color: _isHistorySelected ? Colors.white : Colors.black,
                   ),
                 ),
               ),
@@ -258,30 +266,52 @@ class _ScheduleViewState extends State<ScheduleView> {
           return const Center(child: Text("No schedules available"));
         }
 
-        // Filter schedule list based on the selected month index
+        // Filter schedule list based on the selected month index and history
         List filteredScheduleList =
-            controller.scheduleList.where((schedule) {
-              if (_selectedMonthIndex == -1) {
-                // Jangan filter apapun, karena data sudah dari endpoint history
-                return true;
-              } else if (_selectedMonthIndex == 0) {
-                final now = DateTime.now();
-                final scheduleDate = DateTime.parse(schedule.date);
-                return scheduleDate.isAfter(now) &&
-                    scheduleDate.isBefore(now.add(Duration(days: 3)));
-              } else if (_selectedMonthIndex == 1) {
-                return true; // semua
-              } else {
-                final scheduleMonth = DateTime.parse(schedule.date).month;
-                return scheduleMonth == _selectedMonthIndex - 1;
-              }
-            }).toList();
+    controller.scheduleList.where((schedule) {
+      final scheduleDate = DateTime.parse(schedule.date);
+      final scheduleMonth = scheduleDate.month;
 
-        // Check if "Terdekat" is selected and no schedules are available
-        if (_selectedMonthIndex == 0 && filteredScheduleList.isEmpty) {
+      // Filter berdasarkan bulan
+      bool isMonthMatch = false;
+      if (_selectedMonthIndex == 0) {
+        final now = DateTime.now();
+        final todayStart = DateTime(now.year, now.month, now.day);
+        final todayEnd = todayStart.add(Duration(days: 1));
+
+        if (_isHistorySelected) {
+          // Filter "Terdekat" (3 hari ke belakang termasuk hari ini)
+          isMonthMatch =
+              scheduleDate.isBefore(todayEnd) &&
+              scheduleDate.isAfter(todayStart.subtract(Duration(days: 3)));
+        } else {
+          // Filter "Terdekat" (hari ini dan 3 hari ke depan)
+          isMonthMatch =
+              scheduleDate.isAfter(todayStart.subtract(Duration(days: 1))) &&
+              scheduleDate.isBefore(todayEnd.add(Duration(days: 3)));
+        }
+      } else if (_selectedMonthIndex == 1) {
+        // Filter "Semua"
+        isMonthMatch = true;
+      } else {
+        // Filter berdasarkan bulan tertentu
+        isMonthMatch = scheduleMonth == _selectedMonthIndex - 1;
+      }
+
+      // Jika tombol "History" aktif, tambahkan filter untuk jadwal yang sudah berlalu
+      if (_isHistorySelected) {
+        return isMonthMatch && scheduleDate.isBefore(DateTime.now());
+      }
+
+      // Jika tombol "History" tidak aktif, gunakan filter bulan saja
+      return isMonthMatch;
+    }).toList();
+
+        // Tampilkan pesan jika tidak ada jadwal yang sesuai
+        if (filteredScheduleList.isEmpty) {
           return const Center(
             child: Text(
-              "Tidak ada jadwal rentang 3 Hari terdekat",
+              "Tidak ada jadwal yang sesuai",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -293,8 +323,11 @@ class _ScheduleViewState extends State<ScheduleView> {
 
         return RefreshIndicator(
           onRefresh: () async {
-            // Call your refresh function here
-            await controller.refreshScheduleList();
+            if (_isHistorySelected) {
+              await controller.fetchSchedules(history: true);
+            } else {
+              await controller.refreshScheduleList();
+            }
           },
           child: ListView.builder(
             padding: EdgeInsets.only(bottom: 120), // Add padding to the bottom
@@ -314,10 +347,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color:
-                          schedule.isAssessed == 1
-                              ? AppColors.pastelBlue
-                              : AppColors.softSteelBlue,
+                      color: AppColors.softSteelBlue,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -405,27 +435,53 @@ class _ScheduleViewState extends State<ScheduleView> {
                                           ),
                                         ),
                                       ),
-                                      Expanded(child: Container()),
-                                      if (schedule.status == "rescheduled")
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: AppColors.roseBlush,
-                                            borderRadius: BorderRadius.circular(
-                                              1000,
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (schedule.status == "rescheduled")
+                                            Container(
+                                              width: 20, // Lebar lingkaran
+                                              height: 20, // Tinggi lingkaran
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                shape:
+                                                    BoxShape
+                                                        .circle, // Membuat bentuk lingkaran
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "R", // Inisial huruf
+                                                  style: GoogleFonts.poppins(
+                                                    fontWeight:
+                                                        FontWeight.w600, // Bold
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                          ),
-                                          child: Text(
-                                            "Reschedule",
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14,
-                                              color: Colors.black,
+                                          SizedBox(width: 5),
+                                          if (schedule.isAssessed == 1)
+                                            Container(
+                                              width: 20, // Lebar lingkaran
+                                              height: 20, // Tinggi lingkaran
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                shape:
+                                                    BoxShape
+                                                        .circle, // Membuat bentuk lingkaran
+                                              ),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons
+                                                      .description, // Ikon dokumen
+                                                  size: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),

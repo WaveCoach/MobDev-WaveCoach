@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/student_model.dart';
 import 'package:mob_dev_wave_coach/app/modules/form_penilaian/model/swim_style_model.dart';
-import 'package:mob_dev_wave_coach/app/modules/home/views/home_view.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/controllers/schedule_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule/model/schedule_response.dart';
 import '../controllers/form_penilaian_controller.dart';
@@ -31,7 +30,8 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Get.offAll(() => HomeView(), arguments: 2);
+            Get.offNamed('/home', arguments: 2);
+            scheduleController.refreshScheduleList(); // Memanggil fungsi refresh
           },
         ),
         title: Text(
@@ -71,7 +71,7 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                   color: Colors.white,
                   fontSize: 32,
                   fontWeight: FontWeight.w600,
-                  height: 1,
+                  height: 1.2,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -188,12 +188,58 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
           ),
           readOnly: true,
           onTap: () async {
+            // Jalankan refresh schedule list terlebih dahulu
+            await scheduleController.refreshScheduleList();
+
+            // Cari tanggal awal yang valid
+            DateTime initialDate = DateTime.now();
+            if (!controller.isDateWithSchedule(initialDate)) {
+              // Jika tanggal saat ini tidak valid, cari tanggal valid berikutnya
+              initialDate = await _findNextValidDate();
+            }
+
             final pickedDate = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2101),
+              initialDate: initialDate,
+              firstDate: DateTime.now().subtract(const Duration(days: 30)), // Mulai dari 1 bulan sebelumnya
+              lastDate: scheduleController.scheduleList.isNotEmpty
+                  ? (scheduleController.scheduleList.last.date is DateTime
+                      ? scheduleController.scheduleList.last.date as DateTime
+                      : DateTime.tryParse(scheduleController.scheduleList.last.date.toString()) ?? DateTime(2101)) // Safely parse or fallback
+                  : DateTime(2101), // Default jika tidak ada jadwal
+              selectableDayPredicate: (DateTime date) {
+                // Periksa apakah tanggal memiliki jadwal latihan, termasuk jadwal yang sudah lewat
+                return controller.isDateWithSchedule(date);
+              },
+              builder: (BuildContext context, Widget? child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor: AppColors.deepOceanBlue, // Warna utama
+                    hintColor: AppColors.goldenAmber, // Warna aksen
+                    colorScheme: ColorScheme.light(
+                      primary: AppColors.deepOceanBlue, // Warna header
+                      onPrimary: Colors.white, // Warna teks header
+                      surface: Colors.white, // Warna latar belakang
+                      onSurface: Colors.black, // Warna teks
+                    ),
+                    dialogBackgroundColor: Colors.white, // Warna latar dialog
+                    textButtonTheme: TextButtonThemeData(
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.deepOceanBlue, // Warna tombol
+                      ),
+                    ),
+                  ),
+                  child: child != null
+                      ? Builder(
+                          builder: (BuildContext context) {
+                            return child;
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                );
+              },
             );
+
             if (pickedDate != null) {
               final formattedDate =
                   "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
@@ -728,6 +774,14 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
         ),
       ),
     );
+  }
+
+  Future<DateTime> _findNextValidDate() async {
+    DateTime date = DateTime.now();
+    while (!controller.isDateWithSchedule(date)) {
+      date = date.add(const Duration(days: 1)); // Tambahkan 1 hari
+    }
+    return date;
   }
 
   @override

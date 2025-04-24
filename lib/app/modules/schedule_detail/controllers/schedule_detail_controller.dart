@@ -31,4 +31,14 @@ class ScheduleDetailController extends GetxController {
       }
     });
   }
+
+  // Tambahkan metode refreshSchedule
+  void refreshSchedule() {
+    final id = Get.arguments['id']; // Ambil ID dari arguments
+    if (id != null) {
+      fetchScheduleDetail(id); // Panggil fetchScheduleDetail untuk refresh data
+    } else {
+      Get.snackbar("Error", "Schedule ID is missing");
+    }
+  }
 }

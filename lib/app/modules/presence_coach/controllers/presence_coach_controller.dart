@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
+import 'package:mob_dev_wave_coach/app/modules/schedule_detail/controllers/schedule_detail_controller.dart';
 
 class PresenceCoachController extends GetxController {
   final ApiService apiService = ApiService();
@@ -72,7 +73,10 @@ class PresenceCoachController extends GetxController {
 
     if (response.statusCode == 201) {
       Get.snackbar("Success", "Presensi berhasil dikirim");
-      Get.offAndToNamed('/schedule-detail', arguments: {'id': scheduleId});
+      Get.until((route) => route.settings.name == '/schedule-detail');
+      Get.toNamed('/schedule-detail', arguments: {'id': scheduleId});
+      final scheduleDetailController = Get.find<ScheduleDetailController>();
+      scheduleDetailController.refreshSchedule();
     } else {
       print("❌ Error: ${response.body}");
       Get.snackbar("Error", "Gagal mengirim presensi");

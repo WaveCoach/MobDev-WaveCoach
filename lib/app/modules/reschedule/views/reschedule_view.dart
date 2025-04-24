@@ -1,88 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import 'package:mob_dev_wave_coach/app/modules/reschedule/controllers/reschedule_controller.dart';
 
-class RescheduleView extends StatelessWidget {
+class RescheduleView extends StatefulWidget {
+  const RescheduleView({super.key});
+
+  @override
+  _RescheduleViewState createState() => _RescheduleViewState();
+}
+
+class _RescheduleViewState extends State<RescheduleView> {
   final RescheduleController controller = RescheduleController();
   final TextEditingController reasonController = TextEditingController();
-  RescheduleView({super.key});
+
+  @override
+  void dispose() {
+    reasonController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
+      body: Column(
         children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(0),
-              child: Container(
-                height: 230,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.deepOceanBlue,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 100,
-                          left: 35,
-                          right: 35,
-                        ),
-                        child: Text(
-                          "Form Reschedule Jadwal",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: "poppins_semibold",
-                            fontSize: 32,
-                            color: Colors.white,
-                            height: 1,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 15,
-                      top: 70,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.arrow_back, color: Colors.white),
-                            onPressed: () {
-                              Get.back(result: true); // Kirim sinyal untuk refresh
-                            },
-                          ),
-                          Text(
-                            "Kembali",
-                            style: TextStyle(
-                              fontFamily: "poppins_semibold",
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+          Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.deepOceanBlue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                "Pengajuan\nReschedule",
+                textAlign: TextAlign.center, // Set text alignment to center
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
+                  letterSpacing: -0.5,
                 ),
               ),
             ),
           ),
-          Positioned(
-            top: 230,
-            left: 0,
-            right: 0,
-            bottom: 0,
+          Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(25.0),
               child: Column(
@@ -96,10 +83,10 @@ class RescheduleView extends StatelessWidget {
                     ),
                     child: Text(
                       "Alasan",
-                      style: TextStyle(
-                        fontFamily: "poppins_semibold",
-                        fontSize: 16,
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -118,6 +105,12 @@ class RescheduleView extends StatelessWidget {
                     child: TextField(
                       controller: reasonController,
                       maxLines: 5,
+                      style: GoogleFonts.poppins(
+                        // Tambahkan style di sini
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -126,6 +119,11 @@ class RescheduleView extends StatelessWidget {
                           borderSide: BorderSide.none,
                         ),
                         hintText: 'Ketik disini',
+                        hintStyle: GoogleFonts.poppins(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
@@ -143,7 +141,9 @@ class RescheduleView extends StatelessWidget {
             String reason = reasonController.text.trim();
             if (reason.isNotEmpty) {
               controller.sendRescheduleRequest(reason);
-              Get.back(result: true); // Kirim sinyal untuk refresh setelah upload
+              Get.back(
+                result: true,
+              ); // Kirim sinyal untuk refresh setelah upload
             } else {
               Get.snackbar("Error", "Reason cannot be empty");
             }
@@ -156,11 +156,12 @@ class RescheduleView extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 15),
           ),
           child: Text(
-            "Upload",
-            style: TextStyle(
-              fontFamily: "poppins_semibold",
-              fontSize: 18,
+            "Submit",
+            style: GoogleFonts.poppins(
+              // Tambahkan style di sini
               color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
