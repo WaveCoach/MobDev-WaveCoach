@@ -524,41 +524,52 @@ class DetailHistoryPengajuanView
                                 ),
                               ),
                               const SizedBox(height: 50),
-                              Center(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (controller
-                                        .selectedStatus
-                                        .value
-                                        .isEmpty) {
-                                      Get.snackbar(
-                                        "Error",
-                                        "Silakan pilih status terlebih dahulu (Tolak atau Setuju).",
-                                      );
-                                      return;
-                                    }
+                              Column(
+                                children: [
+                                  if (data.data.status == "pending")
+                                    Center(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (controller
+                                              .selectedStatus
+                                              .value
+                                              .isEmpty) {
+                                            Get.snackbar(
+                                              "Error",
+                                              "Silakan pilih status terlebih dahulu (Tolak atau Setuju).",
+                                            );
+                                            return;
+                                          }
 
-                                    controller.submitStatusRequest(
-                                      data.data.id,
-                                      controller.selectedStatus.value,
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.deepOceanBlue,
-                                    minimumSize: Size(double.infinity, 54),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                          controller.submitStatusRequest(
+                                            data.data.id,
+                                            controller.selectedStatus.value,
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              AppColors.deepOceanBlue,
+                                          minimumSize: Size(
+                                            double.infinity,
+                                            54,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              15,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Submit",
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  child: Text(
-                                    "Submit",
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
+                                ],
                               ),
                             ],
                           );
@@ -1047,42 +1058,43 @@ class DetailHistoryPengajuanView
                                 ),
                               ),
                               const SizedBox(height: 50),
-                              Center(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (controller
-                                        .selectedStatus
-                                        .value
-                                        .isEmpty) {
-                                      Get.snackbar(
-                                        "Error",
-                                        "Silakan pilih status terlebih dahulu (Tolak atau Setuju).",
-                                      );
-                                      return;
-                                    }
+                              if (data.data.status == "pending")
+                                Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (controller
+                                          .selectedStatus
+                                          .value
+                                          .isEmpty) {
+                                        Get.snackbar(
+                                          "Error",
+                                          "Silakan pilih status terlebih dahulu (Tolak atau Setuju).",
+                                        );
+                                        return;
+                                      }
 
-                                    controller.submitStatusReturn(
-                                      data.data.id,
-                                      controller.selectedStatus.value,
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.deepOceanBlue,
-                                    minimumSize: Size(double.infinity, 54),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                                      controller.submitStatusReturn(
+                                        data.data.id,
+                                        controller.selectedStatus.value,
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.deepOceanBlue,
+                                      minimumSize: Size(double.infinity, 54),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
                                     ),
-                                  ),
-                                  child: Text(
-                                    "Submit",
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18,
-                                      color: Colors.white,
+                                    child: Text(
+                                      "Submit",
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
                             ],
                           );
                         } else {

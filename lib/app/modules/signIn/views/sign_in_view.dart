@@ -215,50 +215,21 @@ class _SignInViewState extends State<SignInView> {
       );
     }
 
-    Widget rememberMe() {
-      return Row(
-        children: [
-          Checkbox(
-            value: true,
-            onChanged: (bool? value) {
-              // Handle checkbox state change
-            },
-            checkColor: AppColors.deepOceanBlue,
-            activeColor: Colors.white,
-            side: BorderSide(color: Colors.white),
-            fillColor: WidgetStateProperty.resolveWith<Color>((
-              Set<WidgetState> states,
-            ) {
-              if (states.contains(WidgetState.selected)) {
-                return Colors.white;
-              }
-              return Colors.transparent;
-            }),
-          ),
-          Text(
-            "Remember me",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontFamily: "poppins_medium",
-            ),
-          ),
-        ],
-      );
-    }
-
     Widget forgotPassword() {
-      return GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, '/forget-pass');
-        },
-        child: Text(
-          "Forgot Password?",
-          style: GoogleFonts.poppins(
-            fontWeight:
-                FontWeight.w500, // Medium (sesuai dengan "poppins_medium")
-            fontSize: 14,
-            color: Colors.white,
+      return Align(
+        alignment: Alignment.centerRight,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/forget-pass');
+          },
+          child: Text(
+            "Forgot Password?",
+            style: GoogleFonts.poppins(
+              fontWeight:
+                  FontWeight.w500, // Medium (sesuai dengan "poppins_medium")
+              fontSize: 14,
+              color: Colors.white,
+            ),
           ),
         ),
       );
@@ -349,9 +320,7 @@ class _SignInViewState extends State<SignInView> {
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: Center(
                   child: IntrinsicHeight(
                     child: Column(
@@ -366,7 +335,7 @@ class _SignInViewState extends State<SignInView> {
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [rememberMe(), forgotPassword()],
+                            children: [forgotPassword()],
                           ),
                         ),
                         loginButton(),

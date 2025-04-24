@@ -17,6 +17,7 @@ class DetailHistoryPengajuanController extends GetxController {
   final typeView = "".obs;
   final roleId = 0.obs;
   final kondisi = "".obs;
+  final status = "".obs;
 
   @override
   void onInit() {
