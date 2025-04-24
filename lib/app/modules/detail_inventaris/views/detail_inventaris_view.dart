@@ -74,160 +74,166 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
 
               return RefreshIndicator(
                 onRefresh: controller.refreshBorrowingList,
-                child: ListView.builder(
-                  itemCount: controller.borrowingList.length,
-                  itemBuilder: (context, index) {
-                    final item = controller.borrowingList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 5,
-                      ),
-                      child: Card(
-                        color: Colors.white,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                child: Obx(() {
+                  // Sort the borrowingList outside of the ListView.builder
+                  final sortedBorrowingList = List.from(controller.borrowingList)
+                    ..sort((a, b) => a.tanggalPinjam.compareTo(b.tanggalPinjam));
+
+                  return ListView.builder(
+                    itemCount: sortedBorrowingList.length,
+                    itemBuilder: (context, index) {
+                      final item = sortedBorrowingList[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 5,
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: ListTile(
-                          subtitle: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Nama Master Coach",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  item.mastercoachName,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Tanggal Pinjam",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  item.tanggalPinjam,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Tanggal Kembali",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  item.tanggalKembali,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Jumlah",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  "${item.qtyOut}",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "Kondisi",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  item.status,
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                SizedBox(
-                                  width:
-                                      double
-                                          .infinity, // Memenuhi ruang antara kiri dan kanan
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      if (item.status == "borrowed") {
-                                        Get.toNamed(
-                                          '/ajukan-pengembalian',
-                                          arguments: {'landingId': item.id},
-                                        );
-                                      } else if (item.status == "returned") {
-                                        Get.toNamed('/bukti-pengembalian');
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      foregroundColor: Colors.black,
-                                      backgroundColor:
-                                          item.status == "borrowed"
-                                              ? AppColors.goldenAmber
-                                              : Colors
-                                                  .green, // Change color based on status
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      item.status == "borrowed"
-                                          ? "Ajukan Pengembalian"
-                                          : "Bukti Pengembalian", // Change text based on status
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                        child: Card(
+                          color: Colors.white,
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: ListTile(
+                            subtitle: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Nama Master Coach",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    item.mastercoachName,
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Tanggal Pinjam",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    item.tanggalPinjam,
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Tanggal Kembali",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    item.tanggalKembali,
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Jumlah",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${item.qtyOut}",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Kondisi",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    item.status,
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  SizedBox(
+                                    width:
+                                        double
+                                            .infinity, // Memenuhi ruang antara kiri dan kanan
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        if (item.status == "borrowed") {
+                                          Get.toNamed(
+                                            '/ajukan-pengembalian',
+                                            arguments: {'landingId': item.id},
+                                          );
+                                        } else if (item.status == "returned") {
+                                          Get.toNamed('/bukti-pengembalian');
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: Colors.black,
+                                        backgroundColor:
+                                            item.status == "borrowed"
+                                                ? AppColors.goldenAmber
+                                                : Colors
+                                                    .green, // Change color based on status
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        item.status == "borrowed"
+                                            ? "Ajukan Pengembalian"
+                                            : "Bukti Pengembalian", // Change text based on status
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  );
+                }),
               );
             }),
           ),

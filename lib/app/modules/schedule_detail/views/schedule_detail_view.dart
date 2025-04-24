@@ -80,55 +80,89 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                 ),
               ),
               SizedBox(
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    ColorizeAnimatedText(
+                child: Obx(() {
+                  if (controller.scheduleResponse.value?.schedule?.status ==
+                      "rescheduled") {
+                    return AnimatedTextKit(
+                      animatedTexts: [
+                        ColorizeAnimatedText(
+                          day,
+                          textStyle: GoogleFonts.poppins(
+                            fontSize: 150,
+                            fontWeight: FontWeight.w700,
+                            height: 1,
+                          ),
+                          colors: [
+                            Colors.white,
+                            Colors.white,
+                            AppColors.deepOceanBlue,
+                            Colors.white,
+                            Colors.white,
+                          ],
+                          speed: Duration(milliseconds: 1500), // Durasi animasi
+                        ),
+                      ],
+                      isRepeatingAnimation: true,
+                      repeatForever: true,
+                      pause: Duration(milliseconds: 2000), // Jeda antar animasi
+                    );
+                  } else {
+                    return Text(
                       day,
-                      textStyle: GoogleFonts.poppins(
+                      style: GoogleFonts.poppins(
                         fontSize: 150,
                         fontWeight: FontWeight.w700,
                         height: 1,
+                        color: Colors.white,
                       ),
-                      colors: [
-                        Colors.white,
-                        Colors.white,
-                        AppColors.deepOceanBlue,
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      speed: Duration(milliseconds: 1500), // Durasi animasi
-                    ),
-                  ],
-                  isRepeatingAnimation: true,
-                  repeatForever: true,
-                  pause: Duration(milliseconds: 2000), // Jeda antar animasi
-                ),
+                    );
+                  }
+                }),
               ),
               SizedBox(
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    ColorizeAnimatedText(
+                child: Obx(() {
+                  if (controller.scheduleResponse.value?.schedule?.status ==
+                      "rescheduled") {
+                    return AnimatedTextKit(
+                      animatedTexts: [
+                        ColorizeAnimatedText(
+                          monthYear,
+                          textStyle: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 40,
+                            fontWeight: FontWeight.w700,
+                            height: 1,
+                          ),
+                          colors: [
+                            Colors.white,
+                            Colors.white,
+                            AppColors.deepOceanBlue,
+                            Colors.white,
+                            Colors.white,
+                          ],
+                          speed: Duration(
+                            milliseconds: 480,
+                          ), // Durasi animasi sama
+                        ),
+                      ],
+                      isRepeatingAnimation: true,
+                      repeatForever: true,
+                      pause: Duration(
+                        milliseconds: 150,
+                      ), // Jeda antar animasi sama
+                    );
+                  } else {
+                    return Text(
                       monthYear,
-                      textStyle: GoogleFonts.poppins(
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 40,
                         fontWeight: FontWeight.w700,
                         height: 1,
                       ),
-                      colors: [
-                        Colors.white,
-                        Colors.white,
-                        AppColors.deepOceanBlue,
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      speed: Duration(milliseconds: 480), // Durasi animasi sama
-                    ),
-                  ],
-                  isRepeatingAnimation: true,
-                  repeatForever: true,
-                  pause: Duration(milliseconds: 150), // Jeda antar animasi sama
-                ),
+                    );
+                  }
+                }),
               ),
               SizedBox(height: 20),
               Obx(() {
@@ -383,22 +417,21 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed:
-                      isCoachAttendanceNull
-                          ? null
-                          : () {
-                            Get.toNamed(
-                              '/presence-student',
-                              arguments: {
-                                'scheduleId':
-                                    controller
-                                        .scheduleResponse
-                                        .value
-                                        ?.schedule
-                                        ?.id,
-                              },
-                            );
-                          },
+                  onPressed: isCoachAttendanceNull ||
+                          coach?.attendanceStatus == "Tidak Hadir" || // Tambahkan kondisi ini
+                          controller.scheduleResponse.value?.students?.any(
+                                (student) => student.attendanceStatus != null,
+                              ) == true
+                      ? null
+                      : () {
+                          Get.toNamed(
+                            '/presence-student',
+                            arguments: {
+                              'scheduleId':
+                                  controller.scheduleResponse.value?.schedule?.id,
+                            },
+                          );
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.deepOceanBlue,
                     padding: EdgeInsets.symmetric(vertical: 12),
@@ -600,27 +633,27 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
             Padding(
               padding: const EdgeInsets.only(right: 20),
               child: Obx(() {
-                    if (controller.scheduleResponse.value?.schedule?.status ==
-                        "rescheduled") {
-                      return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Text(
-                          "Reschedule",
-                          style: GoogleFonts.poppins(
-                            color: AppColors.deepOceanBlue,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    } else {
-                      return SizedBox.shrink(); // Tidak menampilkan apapun
-                    }
-                  }),
+                if (controller.scheduleResponse.value?.schedule?.status ==
+                    "rescheduled") {
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Text(
+                      "Reschedule",
+                      style: GoogleFonts.poppins(
+                        color: AppColors.deepOceanBlue,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                } else {
+                  return SizedBox.shrink(); // Tidak menampilkan apapun
+                }
+              }),
             ),
           ],
         ),

@@ -157,4 +157,10 @@ class FormPenilaianController extends GetxController {
     packageController.dispose();
     super.onClose();
   }
+
+  bool isDateWithSchedule(DateTime date) {
+  // Contoh logika: Periksa apakah tanggal ada di daftar jadwal
+  return scheduleController.scheduleList.any((schedule) =>
+      schedule.date == "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}");
+}
 }

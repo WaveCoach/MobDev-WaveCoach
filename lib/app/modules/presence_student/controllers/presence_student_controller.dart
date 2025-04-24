@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
+import 'package:mob_dev_wave_coach/app/modules/schedule_detail/controllers/schedule_detail_controller.dart';
 import 'package:mob_dev_wave_coach/app/modules/schedule_detail/model/schedule_detail_response.dart';
 
 class PresenceStudentController extends GetxController {
@@ -35,17 +36,18 @@ class PresenceStudentController extends GetxController {
       "student_attendance": studentAttendance,
     };
 
-    // print(requestBody.toString());
-
     try {
       final response = await apiService.absensiStudent(requestBody);
       if (response.statusCode == 201) {
         final responseData = response.body;
         Get.snackbar("Success", "Absensi berhasil 😃: ${responseData['data']}");
-        Get.offNamed(
-          '/schedule-detail',
-          arguments: {'scheduleId': Get.arguments['scheduleId']},
-        );
+
+        // Perubahan sesuai permintaan
+        int scheduleId = Get.arguments['scheduleId'];
+        Get.until((route) => route.settings.name == '/schedule-detail');
+        Get.toNamed('/schedule-detail', arguments: {'id': scheduleId});
+        final scheduleDetailController = Get.find<ScheduleDetailController>();
+        scheduleDetailController.refreshSchedule();
       } else {
         Get.snackbar("Error", "Gagal submit absensi: ${response.body}");
       }
