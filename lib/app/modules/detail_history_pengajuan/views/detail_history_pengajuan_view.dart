@@ -380,6 +380,112 @@ class DetailHistoryPengajuanView
                         ),
                       ),
                       SizedBox(height: 16),
+                      //bisakah buatkan label status dan alasan ditolak
+                      if (data.data.status == "approved" ||
+                          data.data.status == "rejected")
+                        Row(
+                          children: [
+                            // Label Ditolak (kiri)
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                  color:
+                                      data.data.status == "rejected"
+                                          ? Colors.red
+                                          : Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Ditolak",
+                                    style: TextStyle(
+                                      color:
+                                          data.data.status == "rejected"
+                                              ? Colors.white
+                                              : Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            // Label Setuju (kanan)
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                  color:
+                                      data.data.status == "approved"
+                                          ? Colors.green
+                                          : Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Setuju",
+                                    style: TextStyle(
+                                      color:
+                                          data.data.status == "approved"
+                                              ? Colors.white
+                                              : Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        SizedBox.shrink(), // disembunyikan kalau bukan approved/rejected
+
+                      if (data.data.status == "rejected") ...[
+                        SizedBox(height: 16),
+
+                        // Label
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Alasan Ditolak",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+
+                        // Container styled like your example
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text: data.data.rejectionReason ?? "-",
+                              ),
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: "Alasan Ditolak",
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                              ),
+                              readOnly: true,
+                              maxLines: null,
+                            ),
+                          ),
+                        ),
+                      ],
 
                       // Text("status: ${data.data.status}"),
                       // Text("alasan ditolak: ${data.data.rejectionReason}"),
@@ -388,7 +494,8 @@ class DetailHistoryPengajuanView
 
                       Obx(() {
                         if (controller.kondisi.value == "masuk" &&
-                            controller.roleId.value == 3) {
+                            controller.roleId.value == 3 &&
+                            data.data.status == "pending") {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -915,6 +1022,111 @@ class DetailHistoryPengajuanView
                         ),
                       ),
                       SizedBox(height: 16),
+                      if (data.data.status == "approved" ||
+                          data.data.status == "rejected")
+                        Row(
+                          children: [
+                            // Label Ditolak (kiri)
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                  color:
+                                      data.data.status == "rejected"
+                                          ? Colors.red
+                                          : Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Ditolak",
+                                    style: TextStyle(
+                                      color:
+                                          data.data.status == "rejected"
+                                              ? Colors.white
+                                              : Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            // Label Setuju (kanan)
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                  color:
+                                      data.data.status == "approved"
+                                          ? Colors.green
+                                          : Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Setuju",
+                                    style: TextStyle(
+                                      color:
+                                          data.data.status == "approved"
+                                              ? Colors.white
+                                              : Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        SizedBox.shrink(), // disembunyikan kalau bukan approved/rejected
+
+                      if (data.data.status == "rejected") ...[
+                        SizedBox(height: 16),
+
+                        // Label
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "Alasan Ditolak",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+
+                        // Container styled like your example
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text: data.data.rejectionReason ?? "-",
+                              ),
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: "Alasan Ditolak",
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: InputBorder.none,
+                              ),
+                              readOnly: true,
+                              maxLines: null,
+                            ),
+                          ),
+                        ),
+                      ],
 
                       // Text("status: ${data.data.status}"),
                       // Text("alasan ditolak: ${data.data.rejectionReason}"),
@@ -922,7 +1134,8 @@ class DetailHistoryPengajuanView
                       SizedBox(height: 16),
                       Obx(() {
                         if (controller.kondisi.value == "masuk" &&
-                            controller.roleId.value == 3) {
+                            controller.roleId.value == 3 &&
+                            data.data.status == "pending") {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
