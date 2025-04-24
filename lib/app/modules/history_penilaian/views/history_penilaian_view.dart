@@ -218,6 +218,26 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+
+                            Text(
+                              item.status ??
+                                  '-', // Jika item.status null, tampilkan '-'
+                              style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+
+                            Text(
+                              (item.averageScore?.toString() ??
+                                  '-'), // Mengonversi averageScore menjadi String atau '-'
+                              style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                           ],
                         ),
                         onTap: () {

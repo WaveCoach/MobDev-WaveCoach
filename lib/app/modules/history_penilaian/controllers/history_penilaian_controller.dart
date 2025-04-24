@@ -25,6 +25,7 @@ class HistoryPenilaianController extends GetxController {
       if (response.statusCode == 200 && response.body != null) {
         final data = AssessmentHistoryResponse.fromJson(response.body).data;
         historyPenilaianList.value = data;
+        print("RAW RESPONSE: ${response.body}");
       } else {
         logError("fetch history penilaian", response.statusText);
         Get.snackbar("Error", "Failed to load history penilaian");

@@ -10,6 +10,8 @@ class AssessmentHistory {
   final int? categoryId;
   final String? categoryName;
   final DateTime? createdAt;
+  final double? averageScore;
+  final String? status;
 
   AssessmentHistory({
     this.id,
@@ -23,6 +25,8 @@ class AssessmentHistory {
     this.categoryId,
     this.categoryName,
     this.createdAt,
+    this.averageScore,
+    this.status,
   });
 
   factory AssessmentHistory.fromJson(Map<String, dynamic> json) {
@@ -41,6 +45,8 @@ class AssessmentHistory {
           json['created_at'] != null
               ? DateTime.tryParse(json['created_at'])
               : null,
+      averageScore: (json['average_score'] as num?)?.toDouble(),
+      status: json['status'] as String?,
     );
   }
 }
