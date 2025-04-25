@@ -142,10 +142,23 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                             ),
                           ),
                         ),
-                        _buildSwimStyleDropdown(),
-                        const SizedBox(height: 16),
-                        _buildAspectAssessment(),
-                        const SizedBox(height: 30),
+                        Obx(
+                          () => ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: controller.indexAll.value,
+                            itemBuilder:
+                                (context, index) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildSwimStyleDropdown(index),
+                                    const SizedBox(height: 16),
+                                    _buildAspectAssessment(index),
+                                    const SizedBox(height: 16),
+                                  ],
+                                ),
+                          ),
+                        ),
                         _buildSubmitButton(),
                       ],
                     );
@@ -266,10 +279,10 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
               controller.isDateSelected.value = true;
 
               // Kosongkan aspek penilaian
-              controller.aspectList.clear();
+              controller.allAspectList.clear();
 
               // Reset Gaya Renang
-              controller.selectedSwimStyle.value = null;
+              controller.allSelectedSwimStyle.clear();
             }
           },
         ),
@@ -333,12 +346,12 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                         .fetchStudentBySchedule(); // Ambil daftar siswa baru
 
                     // Kosongkan aspek penilaian
-                    controller.aspectList.clear();
+                    controller.allAspectList.clear();
 
                     controller.fetchSwimStyle(selectedSchedule?.packageId ?? 0);
 
                     // Reset Gaya Renang
-                    controller.selectedSwimStyle.value = null;
+                    controller.allSelectedSwimStyle.clear();
                   });
                 },
               ),
@@ -437,10 +450,10 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                 controller.selectedStudent.value = selectedStudent;
 
                 // Kosongkan aspek penilaian
-                controller.aspectList.clear();
+                controller.allAspectList.clear();
 
                 // Reset Gaya Renang
-                controller.selectedSwimStyle.value = null;
+                controller.allSelectedSwimStyle.clear();
               });
             },
           ),
@@ -449,7 +462,7 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
     });
   }
 
-  Widget _buildSwimStyleDropdown() {
+  Widget _buildSwimStyleDropdown(int index) {
     return Obx(() {
       // Periksa apakah siswa telah dipilih
       final isStudentSelected = controller.selectedStudent.value != null;
@@ -469,7 +482,10 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
           child: DropdownButtonFormField<SwimStyle>(
             isExpanded: true,
             value:
-                isStudentSelected ? controller.selectedSwimStyle.value : null,
+                isStudentSelected &&
+                        index < controller.allSelectedSwimStyle.length
+                    ? controller.allSelectedSwimStyle[index].value
+                    : null,
             decoration: InputDecoration(
               hintText: "Pilih Gaya Renang",
               hintStyle: TextStyle(
@@ -496,10 +512,21 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
             onChanged:
                 isStudentSelected
                     ? (selectedSwimStyle) {
-                      setState(() {
-                        controller.selectedSwimStyle.value = selectedSwimStyle;
-                        controller.fetchAspectSwimStyle();
-                      });
+                      if (index < controller.allSelectedSwimStyle.length) {
+                        controller.allSelectedSwimStyle[index].value =
+                            selectedSwimStyle;
+                      } else {
+                        controller.allSelectedSwimStyle.add(
+                          Rxn<SwimStyle>(selectedSwimStyle),
+                        );
+                      }
+
+                      // Add a new empty if this shi the last
+                      if (index == controller.allSelectedSwimStyle.length - 1) {
+                        controller.allSelectedSwimStyle.add(Rxn<SwimStyle>());
+                        controller.indexAll++;
+                      }
+                      controller.fetchAspectSwimStyle(index);
                     }
                     : null, // Nonaktifkan onChanged jika tidak aktif
           ),
@@ -508,26 +535,26 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
     });
   }
 
-  Widget _buildAspectAssessment() {
+  Widget _buildAspectAssessment(int index) {
     return Obx(() {
-      if (controller.aspectList.isEmpty) {
-        return const Text(" ");
+      if (controller.allAspectList.length <= index) {
+        return const SizedBox(); // just return nothing if index doesnt have anyshit
       }
 
       return Column(
         children:
-            controller.aspectList.asMap().entries.map((entry) {
-              final index = entry.key;
+            controller.allAspectList[index].asMap().entries.map((entry) {
+              final aspectIndex = entry.key;
               final aspect = entry.value;
 
               // Buat controller baru jika belum ada
               controller.scoreControllers.putIfAbsent(
-                index,
+                aspectIndex,
                 () =>
                     TextEditingController(text: aspect.score?.toString() ?? ''),
               );
 
-              final scoreController = controller.scoreControllers[index]!;
+              final scoreController = controller.scoreControllers[aspectIndex]!;
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
