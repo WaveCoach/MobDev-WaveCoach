@@ -76,13 +76,11 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                 onRefresh: controller.refreshBorrowingList,
                 child: Obx(() {
                   // Sort the borrowingList outside of the ListView.builder
-                  final sortedBorrowingList = List.from(controller.borrowingList)
-                    ..sort((a, b) => a.tanggalPinjam.compareTo(b.tanggalPinjam));
 
                   return ListView.builder(
-                    itemCount: sortedBorrowingList.length,
+                    itemCount: controller.borrowingList.length,
                     itemBuilder: (context, index) {
-                      final item = sortedBorrowingList[index];
+                      final item = controller.borrowingList[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8.0,
@@ -129,7 +127,7 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                     ),
                                   ),
                                   Text(
-                                    item.tanggalPinjam,
+                                    item.tanggalPinjam ?? "-",
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -146,7 +144,7 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                     ),
                                   ),
                                   Text(
-                                    item.tanggalKembali,
+                                    item.tanggalKembali ?? "-",
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -163,7 +161,7 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                     ),
                                   ),
                                   Text(
-                                    "${item.qtyOut}",
+                                    "${item.qty}",
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -211,7 +209,9 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                                 : Colors
                                                     .green, // Change color based on status
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                         ),
                                       ),
                                       child: Text(
