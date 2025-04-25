@@ -88,7 +88,8 @@ class _ProfileViewState extends State<ProfileView> {
                             );
 
                             if (image != null) {
-                              if (!mounted) return; // Ensure the widget is still mounted before proceeding
+                              if (!mounted)
+                                return; // Ensure the widget is still mounted before proceeding
 
                               final bytes = await image.readAsBytes();
                               final base64Image = base64Encode(bytes);
@@ -103,7 +104,8 @@ class _ProfileViewState extends State<ProfileView> {
                                       ? 'image/jpeg'
                                       : 'application/octet-stream';
 
-                              if (mounted) { // Check again before updating the controller
+                              if (mounted) {
+                                // Check again before updating the controller
                                 controller.imageController.text =
                                     'data:$mimeType;base64,$base64Image';
 
@@ -123,13 +125,47 @@ class _ProfileViewState extends State<ProfileView> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                      image: controller.imageUrl.value.startsWith('data:image')
-                                          ? (controller.imageUrl.value.contains(',')
-                                              ? MemoryImage(base64Decode(controller.imageUrl.value.split(',').last))
-                                              : AssetImage('assets/images/default_profile.png')) // Fallback jika format tidak valid
-                                          : controller.imageUrl.value.startsWith('http')
-                                              ? NetworkImage(controller.imageUrl.value)
-                                              : FileImage(File(controller.imageUrl.value)) as ImageProvider,
+                                      image:
+                                          controller.imageUrl.value.isEmpty ||
+                                                  (!controller.imageUrl.value
+                                                          .startsWith(
+                                                            'data:image',
+                                                          ) &&
+                                                      !controller.imageUrl.value
+                                                          .startsWith('http') &&
+                                                      !File(
+                                                        controller
+                                                            .imageUrl
+                                                            .value,
+                                                      ).existsSync())
+                                              ? AssetImage(
+                                                'assets/images/default_profile.png',
+                                              ) // Gunakan gambar default
+                                              : controller.imageUrl.value
+                                                  .startsWith('data:image')
+                                              ? (controller.imageUrl.value
+                                                      .contains(',')
+                                                  ? MemoryImage(
+                                                    base64Decode(
+                                                      controller.imageUrl.value
+                                                          .split(',')
+                                                          .last,
+                                                    ),
+                                                  )
+                                                  : AssetImage(
+                                                    'assets/images/default_profile.png',
+                                                  )) // Fallback jika format tidak valid
+                                              : controller.imageUrl.value
+                                                  .startsWith('http')
+                                              ? NetworkImage(
+                                                controller.imageUrl.value,
+                                              )
+                                              : FileImage(
+                                                    File(
+                                                      controller.imageUrl.value,
+                                                    ),
+                                                  )
+                                                  as ImageProvider,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -140,7 +176,8 @@ class _ProfileViewState extends State<ProfileView> {
                                   child: GestureDetector(
                                     onTap: () async {
                                       final ImagePicker picker = ImagePicker();
-                                      final XFile? image = await showDialog<XFile?>(
+                                      final XFile?
+                                      image = await showDialog<XFile?>(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
@@ -149,25 +186,39 @@ class _ProfileViewState extends State<ProfileView> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 ListTile(
-                                                  leading: Icon(Icons.camera_alt),
+                                                  leading: Icon(
+                                                    Icons.camera_alt,
+                                                  ),
                                                   title: Text('Kamera'),
                                                   onTap: () async {
                                                     final XFile? pickedImage =
                                                         await picker.pickImage(
-                                                          source: ImageSource.camera,
+                                                          source:
+                                                              ImageSource
+                                                                  .camera,
                                                         );
-                                                    Navigator.pop(context, pickedImage);
+                                                    Navigator.pop(
+                                                      context,
+                                                      pickedImage,
+                                                    );
                                                   },
                                                 ),
                                                 ListTile(
-                                                  leading: Icon(Icons.photo_library),
+                                                  leading: Icon(
+                                                    Icons.photo_library,
+                                                  ),
                                                   title: Text('Galeri'),
                                                   onTap: () async {
                                                     final XFile? pickedImage =
                                                         await picker.pickImage(
-                                                          source: ImageSource.gallery,
+                                                          source:
+                                                              ImageSource
+                                                                  .gallery,
                                                         );
-                                                    Navigator.pop(context, pickedImage);
+                                                    Navigator.pop(
+                                                      context,
+                                                      pickedImage,
+                                                    );
                                                   },
                                                 ),
                                               ],
@@ -177,26 +228,33 @@ class _ProfileViewState extends State<ProfileView> {
                                       );
 
                                       if (image != null) {
-                                        if (!mounted) return; // Ensure the widget is still mounted before proceeding
+                                        if (!mounted)
+                                          return; // Ensure the widget is still mounted before proceeding
 
                                         final bytes = await image.readAsBytes();
                                         final base64Image = base64Encode(bytes);
                                         final fileExtension =
-                                            image.path.split('.').last.toLowerCase();
+                                            image.path
+                                                .split('.')
+                                                .last
+                                                .toLowerCase();
 
-                                        final mimeType = fileExtension == 'png'
-                                            ? 'image/png'
-                                            : fileExtension == 'jpg' ||
+                                        final mimeType =
+                                            fileExtension == 'png'
+                                                ? 'image/png'
+                                                : fileExtension == 'jpg' ||
                                                     fileExtension == 'jpeg'
                                                 ? 'image/jpeg'
                                                 : 'application/octet-stream';
 
-                                        if (mounted) { // Check again before updating the controller
+                                        if (mounted) {
+                                          // Check again before updating the controller
                                           controller.imageController.text =
                                               'data:$mimeType;base64,$base64Image';
 
                                           // Update the imageUrl to trigger UI refresh
-                                          controller.imageUrl.value = image.path;
+                                          controller.imageUrl.value =
+                                              image.path;
 
                                           await controller.updateProfile();
                                         }
@@ -348,11 +406,13 @@ class _ProfileViewState extends State<ProfileView> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Konfirmasi Logout', 
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                          )),
+                      title: Text(
+                        'Konfirmasi Logout',
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20,
+                        ),
+                      ),
                       content: Text(
                         'Apakah Anda yakin ingin logout dari aplikasi?',
                         style: GoogleFonts.poppins(
@@ -368,11 +428,16 @@ class _ProfileViewState extends State<ProfileView> {
                               child: ElevatedButton(
                                 onPressed: () => Navigator.pop(context, false),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.deepOceanBlue, // Warna tombol
+                                  backgroundColor:
+                                      AppColors.deepOceanBlue, // Warna tombol
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8), // Radius tombol
+                                    borderRadius: BorderRadius.circular(
+                                      8,
+                                    ), // Radius tombol
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                  ),
                                 ),
                                 child: Text(
                                   'Batal',
@@ -389,11 +454,16 @@ class _ProfileViewState extends State<ProfileView> {
                               child: ElevatedButton(
                                 onPressed: () => Navigator.pop(context, true),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.redPastel, // Warna tombol
+                                  backgroundColor:
+                                      AppColors.redPastel, // Warna tombol
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8), // Radius tombol
+                                    borderRadius: BorderRadius.circular(
+                                      8,
+                                    ), // Radius tombol
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                  ),
                                 ),
                                 child: Text(
                                   'Keluar',

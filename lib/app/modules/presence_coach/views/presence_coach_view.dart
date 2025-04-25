@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
@@ -28,73 +29,54 @@ class _PresenceCoachState extends State<PresenceCoachView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
       body: Obx(
-        () => Stack(
+        () => Column(
           children: [
             // Header
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 230,
-                decoration: BoxDecoration(
-                  color: AppColors.deepOceanBlue,
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 100),
-                        child: Text(
-                          "Absensi Coach",
-                          style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 32,
-                          color: Colors.white,
-                        ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 15,
-                      top: 70,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          Text(
-                            "Kembali",
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+            Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.deepOceanBlue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                "Absensi\nCoach",
+                textAlign: TextAlign.center, // Set text alignment to center
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
+                  letterSpacing: -0.5,
                 ),
               ),
             ),
+          ),
             // Content
-            Positioned(
-              top: 230,
-              left: 0,
-              right: 0,
-              bottom: 0,
+            Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(25.0),
                 child: Column(
@@ -352,51 +334,124 @@ class _PresenceCoachState extends State<PresenceCoachView> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Obx(
           () => ElevatedButton(
-            onPressed:
-                controller.isSubmitting.value
-                    ? null
-                    : () {
-                      final scheduleId = Get.arguments['scheduleId'];
+            onPressed: controller.isSubmitting.value
+                ? null
+                : () {
+                    final scheduleId = Get.arguments['scheduleId'];
 
-                      if (controller.showBuktiKehadiranButton.value) {
-                        controller.submitPresence(
-                          attendanceStatus: "Hadir",
-                          scheduleId: scheduleId,
-                        );
-                      } else if (showAlasanTidakHadir) {
-                        controller.submitPresence(
-                          attendanceStatus: "Tidak Hadir",
-                          scheduleId: scheduleId,
-                          remarks: alasanController.text,
-                        );
-                      } else {
-                        Get.snackbar(
-                          "Peringatan",
-                          "Lengkapi presensi terlebih dahulu.",
-                        );
-                      }
-                    },
+                    if (controller.showBuktiKehadiranButton.value || showAlasanTidakHadir) {
+                      // Tampilkan dialog konfirmasi
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.white,
+                            title: Text(
+                              "Konfirmasi",
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                              ),
+                            ),
+                            content: Text(
+                              "Apakah Anda yakin ingin mengirim presensi?",
+                              style: GoogleFonts.poppins(fontSize: 16),
+                            ),
+                            actions: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 50,
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: Colors.grey[300],
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Tutup dialog
+                                        },
+                                        child: Text(
+                                          "Batal",
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 50,
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: AppColors.deepOceanBlue,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Tutup dialog
+                                          if (controller.showBuktiKehadiranButton.value) {
+                                            controller.submitPresence(
+                                              attendanceStatus: "Hadir",
+                                              scheduleId: scheduleId,
+                                            );
+                                          } else if (showAlasanTidakHadir) {
+                                            controller.submitPresence(
+                                              attendanceStatus: "Tidak Hadir",
+                                              scheduleId: scheduleId,
+                                              remarks: alasanController.text,
+                                            );
+                                          }
+                                        },
+                                        child: Text(
+                                          "Ya",
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      Get.snackbar(
+                        "Peringatan",
+                        "Lengkapi presensi terlebih dahulu.",
+                      );
+                    }
+                  },
             style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  controller.isSubmitting.value
-                      ? Colors.grey
-                      : const Color(0xFF264C6B),
+              backgroundColor: controller.isSubmitting.value
+                  ? Colors.grey
+                  : const Color(0xFF264C6B),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
               padding: const EdgeInsets.symmetric(vertical: 15),
             ),
-            child:
-                controller.isSubmitting.value
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                      "Submit",
-                      style: TextStyle(
-                        fontFamily: "poppins_semibold",
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
+            child: controller.isSubmitting.value
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text(
+                  "Submit",
+                  style: TextStyle(
+                    fontFamily: "poppins_semibold",
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
           ),
         ),
       ),
