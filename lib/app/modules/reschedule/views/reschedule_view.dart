@@ -140,10 +140,94 @@ class _RescheduleViewState extends State<RescheduleView> {
           onPressed: () {
             String reason = reasonController.text.trim();
             if (reason.isNotEmpty) {
-              controller.sendRescheduleRequest(reason);
-              Get.back(
-                result: true,
-              ); // Kirim sinyal untuk refresh setelah upload
+              // Tampilkan dialog konfirmasi
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text(
+                      "Konfirmasi",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                      ),
+                    ),
+                    content: Text(
+                      "Apakah Anda yakin ingin Reschedule Jadwal? Reschedule hanya bisa di ajukan sekali.",
+                      style: GoogleFonts.poppins(fontSize: 16),
+                    ),
+                    actions: [
+                      Row(
+                        mainAxisAlignment:
+                            MainAxisAlignment
+                                .spaceBetween, // Mengatur jarak antar tombol
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 50, // Tinggi tombol
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      Colors
+                                          .grey[300], // Warna latar belakang tombol Batal
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      8,
+                                    ), // Radius sudut tombol
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Tutup dialog
+                                },
+                                child: Text(
+                                  "Batal",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10), // Jarak antara tombol
+                          Expanded(
+                            child: SizedBox(
+                              height: 50, // Tinggi tombol
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor:
+                                      AppColors
+                                          .deepOceanBlue, // Warna latar belakang tombol Ya
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      8,
+                                    ), // Radius sudut tombol
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Tutup dialog
+                                  controller.sendRescheduleRequest(reason);
+                                  Get.back(
+                                    result: true,
+                                  ); // Kirim sinyal untuk refresh
+                                },
+                                child: Text(
+                                  "Ya",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              );
             } else {
               Get.snackbar("Error", "Reason cannot be empty");
             }
@@ -158,7 +242,6 @@ class _RescheduleViewState extends State<RescheduleView> {
           child: Text(
             "Submit",
             style: GoogleFonts.poppins(
-              // Tambahkan style di sini
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w500,

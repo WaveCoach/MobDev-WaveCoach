@@ -291,8 +291,15 @@ class _ScheduleViewState extends State<ScheduleView> {
               scheduleDate.isBefore(todayEnd.add(Duration(days: 3)));
         }
       } else if (_selectedMonthIndex == 1) {
-        // Filter "Semua"
-        isMonthMatch = true;
+        if (_isHistorySelected) {
+          // Filter "Semua" dengan History aktif
+          isMonthMatch = true;
+        } else {
+          // Filter "Semua" dengan History nonaktif
+          final now = DateTime.now();
+          final todayStart = DateTime(now.year, now.month, now.day);
+          isMonthMatch = scheduleDate.isAfter(todayStart.subtract(Duration(days: 1))) || scheduleDate.isAtSameMomentAs(now);
+        }
       } else {
         // Filter berdasarkan bulan tertentu
         isMonthMatch = scheduleMonth == _selectedMonthIndex - 1;
