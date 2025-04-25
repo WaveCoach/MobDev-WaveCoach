@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import '../controllers/detail_inventaris_controller.dart';
+import 'package:intl/intl.dart';
 
 class DetailInventarisView extends StatefulWidget {
   @override
@@ -102,6 +103,23 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
+                                    "Tipe",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    item.type,
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
                                     "Nama Master Coach",
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
@@ -127,7 +145,20 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                     ),
                                   ),
                                   Text(
-                                    item.tanggalPinjam ?? "-",
+                                    (item.tanggalPinjam ?? item.createdAt) !=
+                                                null &&
+                                            (DateTime.tryParse(
+                                                  item.tanggalPinjam ??
+                                                      item.createdAt,
+                                                ) !=
+                                                null)
+                                        ? DateFormat('d MMMM yyyy').format(
+                                          DateTime.tryParse(
+                                            item.tanggalPinjam ??
+                                                item.createdAt,
+                                          )!,
+                                        )
+                                        : '-', // Menampilkan '-' jika tanggal tidak valid
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -144,13 +175,32 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                     ),
                                   ),
                                   Text(
-                                    item.tanggalKembali ?? "-",
+                                    (item.tanggalKembali != null &&
+                                            DateTime.tryParse(
+                                                  item.tanggalKembali!,
+                                                ) !=
+                                                null)
+                                        ? DateFormat('d MMMM yyyy').format(
+                                          DateTime.tryParse(
+                                            item.tanggalKembali!,
+                                          )!,
+                                        )
+                                        : (item.returnedAt != null &&
+                                            DateTime.tryParse(
+                                                  item.returnedAt!,
+                                                ) !=
+                                                null)
+                                        ? DateFormat('d MMMM yyyy').format(
+                                          DateTime.tryParse(item.returnedAt!)!,
+                                        )
+                                        : '-', // Menampilkan '-' jika tanggal tidak valid
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
+
                                   SizedBox(height: 10),
                                   Text(
                                     "Jumlah",
@@ -198,7 +248,31 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                             arguments: {'landingId': item.id},
                                           );
                                         } else if (item.status == "returned") {
-                                          Get.toNamed('/bukti-pengembalian');
+                                          // Menampilkan modal dengan gambar
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                  'Bukti Pengembalian',
+                                                ),
+                                                content: Image.network(
+                                                  item.imgInventoryReturn ??
+                                                      '-',
+                                                ), // Menampilkan gambar
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
+                                                    },
+                                                    child: Text('Tutup'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -217,7 +291,7 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                       child: Text(
                                         item.status == "borrowed"
                                             ? "Ajukan Pengembalian"
-                                            : "Bukti Pengembalian", // Change text based on status
+                                            : "Bukti Pengembalian",
                                         style: GoogleFonts.poppins(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
