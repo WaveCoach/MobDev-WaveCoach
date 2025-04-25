@@ -179,26 +179,18 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 5),
+                            Text(
+                              item.studentName ?? '-',
+                              style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(height: 5),
                             Row(
-                              children: [
-                                //Paket Renang
-                                Text(
-                                  item.packageName ?? '-',
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Container(
-                                  width: 1,
-                                  height: 16,
-                                  color: Colors.black,
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                  ),
-                                ),
-                                //Kategori Gaya
+                              children: [              
                                 Text(
                                   item.categoryName ?? '-',
                                   style: GoogleFonts.poppins(
@@ -210,33 +202,67 @@ class _HistoryPenilaianViewState extends State<HistoryPenilaianView> {
                               ],
                             ),
                             //Nama Siswa
-                            Text(
-                              item.studentName ?? '-',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-
-                            Text(
-                              item.status ??
-                                  '-', // Jika item.status null, tampilkan '-'
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-
-                            Text(
-                              (item.averageScore?.toString() ??
-                                  '-'), // Mengonversi averageScore menjadi String atau '-'
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
+                            SizedBox(height: 5),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                //Paket Renang
+                                Text(
+                                  item.packageName ?? '-',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        (item.status == 'Lulus')
+                                            ? Colors.green
+                                            : Colors.red,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize:
+                                        MainAxisSize
+                                            .min, // Membuat panjang Container mengikuti konten
+                                    children: [
+                                      // Status
+                                      Text(
+                                        item.status ?? '-',
+                                        style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      // Divider
+                                      Container(
+                                        width: 1,
+                                        height: 16,
+                                        color: Colors.white,
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                        ),
+                                      ),
+                                      // Average Score
+                                      Text(
+                                        (item.averageScore?.toString() ?? '-'),
+                                        style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
