@@ -248,7 +248,31 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                             arguments: {'landingId': item.id},
                                           );
                                         } else if (item.status == "returned") {
-                                          Get.toNamed('/bukti-pengembalian');
+                                          // Menampilkan modal dengan gambar
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                  'Bukti Pengembalian',
+                                                ),
+                                                content: Image.network(
+                                                  item.imgInventoryReturn ??
+                                                      '-',
+                                                ), // Menampilkan gambar
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(
+                                                        context,
+                                                      ).pop();
+                                                    },
+                                                    child: Text('Tutup'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -267,7 +291,7 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                       child: Text(
                                         item.status == "borrowed"
                                             ? "Ajukan Pengembalian"
-                                            : "Bukti Pengembalian", // Change text based on status
+                                            : "Bukti Pengembalian",
                                         style: GoogleFonts.poppins(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
