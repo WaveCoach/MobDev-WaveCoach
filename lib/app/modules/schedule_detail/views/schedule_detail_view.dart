@@ -166,44 +166,64 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               ),
               SizedBox(height: 20),
               Obx(() {
-                if (controller
-                        .scheduleResponse
-                        .value
-                        ?.schedule
-                        ?.hasRescheduleRequest ==
-                    false) {
-                  return ElevatedButton.icon(
-                    onPressed: () {
-                      Get.toNamed(
-                        '/reschedule',
-                        arguments: {
-                          'scheduleId':
-                              controller.scheduleResponse.value?.schedule?.id,
-                        },
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 25,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-                    icon: Icon(Icons.edit, color: Colors.white, size: 22),
-                    label: Text(
-                      'Pengajuan Reschedule',
+                final allStudentsMarked = controller.scheduleResponse.value?.students?.every(
+                      (student) => student.attendanceStatus != null,
+                    ) ?? false;
+
+                final coachAttendanceStatus = controller.scheduleResponse.value?.coach?.attendanceStatus;
+
+                if (controller.scheduleResponse.value?.schedule?.hasRescheduleRequest == false) {
+                  if (allStudentsMarked) {
+                    // Jika semua siswa telah melakukan absensi
+                    return Text(
+                      'Jadwal telah berlangsung',
                       style: GoogleFonts.poppins(
-                        color: Colors.white,
+                        color: AppColors.lightGreen,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
-                    ),
-                  );
+                    );
+                  } else {
+                    // Jika absensi siswa belum selesai
+                    return Opacity(
+                      opacity: coachAttendanceStatus == "Tidak Hadir" ? 0.5 : 1.0, // Opasitas rendah jika coach "Tidak Hadir"
+                      child: ElevatedButton.icon(
+                        onPressed: coachAttendanceStatus == "Tidak Hadir"
+                            ? null // Disable button if coach is "Tidak Hadir"
+                            : () {
+                                Get.toNamed(
+                                  '/reschedule',
+                                  arguments: {
+                                    'scheduleId': controller.scheduleResponse.value?.schedule?.id,
+                                  },
+                                );
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: coachAttendanceStatus == "Tidak Hadir"
+                              ? Colors.grey // Disabled button color
+                              : Colors.orange,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 25,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                        icon: Icon(Icons.edit, color: Colors.white, size: 22),
+                        label: Text(
+                          'Pengajuan Reschedule',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                 } else {
-                  return SizedBox.shrink(); // Tidak menampilkan apapun
+                  return SizedBox.shrink(); // Tidak menampilkan apapun jika sudah ada permintaan reschedule
                 }
               }),
             ],
@@ -373,6 +393,16 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
         final coach = controller.scheduleResponse.value?.coach;
         final isCoachAttendanceNull = coach?.attendanceStatus == null;
 
+        // Tentukan warna tombol berdasarkan status kehadiran coach
+        Color buttonColor;
+        if (coach?.attendanceStatus == "Hadir") {
+          buttonColor = Colors.green; // Warna hijau untuk "Hadir"
+        } else if (coach?.attendanceStatus == "Tidak Hadir") {
+          buttonColor = Colors.red; // Warna merah untuk "Tidak Hadir"
+        } else {
+          buttonColor = AppColors.deepOceanBlue; // Warna default
+        }
+
         return Container(
           padding: EdgeInsets.only(left: 20, right: 20),
           child: Column(
@@ -397,16 +427,24 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                           }
                           : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.deepOceanBlue,
+                    backgroundColor: buttonColor, // Warna tombol
+                    foregroundColor: Colors.white, // Warna teks tombol
+                    disabledBackgroundColor:
+                        buttonColor, // Warna tombol saat nonaktif
+                    disabledForegroundColor:
+                        Colors.white, // Warna teks saat tombol nonaktif
                     padding: EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: Text(
-                    'Absensi Coach',
+                    coach?.attendanceStatus == "Hadir"
+                        ? 'Coach Hadir'
+                        : coach?.attendanceStatus == "Tidak Hadir"
+                        ? 'Coach Tidak Hadir'
+                        : 'Absensi Coach',
                     style: GoogleFonts.poppins(
-                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
@@ -417,30 +455,48 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: isCoachAttendanceNull ||
-                          coach?.attendanceStatus == "Tidak Hadir" || // Tambahkan kondisi ini
-                          controller.scheduleResponse.value?.students?.any(
-                                (student) => student.attendanceStatus != null,
-                              ) == true
-                      ? null
-                      : () {
-                          Get.toNamed(
-                            '/presence-student',
-                            arguments: {
-                              'scheduleId':
-                                  controller.scheduleResponse.value?.schedule?.id,
-                            },
-                          );
-                        },
+                  onPressed:
+                      coach?.attendanceStatus == "Hadir" &&
+                              controller.scheduleResponse.value?.students?.any(
+                                    (student) =>
+                                        student.attendanceStatus == null,
+                                  ) ==
+                                  true
+                          ? () {
+                            Get.toNamed(
+                              '/presence-student',
+                              arguments: {
+                                'scheduleId':
+                                    controller
+                                        .scheduleResponse
+                                        .value
+                                        ?.schedule
+                                        ?.id,
+                              },
+                            );
+                          }
+                          : null, // Disable button if all students have been marked
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.deepOceanBlue,
+                    backgroundColor:
+                        controller.scheduleResponse.value?.students?.any(
+                                  (student) => student.attendanceStatus == null,
+                                ) ==
+                                false
+                            ? Colors
+                                .green // Green if all students are marked
+                            : AppColors.deepOceanBlue, // Default color
                     padding: EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: Text(
-                    'Absensi Siswa',
+                    controller.scheduleResponse.value?.students?.any(
+                              (student) => student.attendanceStatus == null,
+                            ) ==
+                            false
+                        ? 'Absensi Siswa Selesai' // Text when all students are marked
+                        : 'Absensi Siswa', // Default text
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

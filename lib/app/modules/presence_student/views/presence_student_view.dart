@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_dev_wave_coach/app/core/values/app_colors.dart';
 import '../controllers/presence_student_controller.dart';
 
@@ -21,51 +23,51 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
+      body: Column(
         children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 230,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.deepOceanBlue,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
+          Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.deepOceanBlue,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
               ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 100),
-                      child: Text(
-                        "Absensi Siswa",
-                        style: TextStyle(
-                          fontFamily: "poppins_semibold",
-                          fontSize: 32,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 15,
-                    top: 70,
-                    child: BackButton(color: Colors.white),
-                  ),
-                ],
+            ),
+            child: Center(
+              child: Text(
+                "Absensi\nSiswa",
+                textAlign: TextAlign.center, // Set text alignment to center
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
+                  letterSpacing: -0.5,
+                ),
               ),
             ),
           ),
-          Positioned(
-            top: 230,
-            left: 0,
-            right: 0,
-            bottom: 0,
+          Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(25.0),
               child: Column(
@@ -79,13 +81,14 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
                     ),
                     child: Text(
                       "Presensi Kehadiran",
-                      style: TextStyle(
-                        fontFamily: "poppins_semibold",
-                        fontSize: 16,
+                      style: GoogleFonts.poppins(
                         color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
+                  SizedBox(height: 20),
                   Obx(() {
                     final student =
                         controller.studentResponse.value?.students ?? [];
@@ -105,10 +108,10 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
                           children: [
                             Text(
                               '${index + 1}. ${siswaList[index]['name']}',
-                              style: TextStyle(
-                                fontFamily: "poppins_medium",
-                                fontSize: 20,
+                              style: GoogleFonts.poppins(
                                 color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                             const SizedBox(height: 5),
@@ -137,10 +140,10 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
                                         ),
                                         child: Text(
                                           "Hadir",
-                                          style: TextStyle(
-                                            fontFamily: "poppins_regular",
-                                            fontSize: 18,
+                                          style: GoogleFonts.poppins(
                                             color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         ),
                                       ),
@@ -201,15 +204,93 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: ElevatedButton(
           onPressed: () {
-            List<Map<String, dynamic>> studentAttendance =
-                attendanceData.entries.map((entry) {
-                  return {
-                    "student_id": entry.key,
-                    "attendance_status": entry.value,
-                  };
-                }).toList();
+            if (attendanceData.isNotEmpty) {
+              // Tampilkan dialog konfirmasi
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: Text(
+                      "Konfirmasi",
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                      ),
+                    ),
+                    content: Text(
+                      "Apakah Anda yakin ingin mengirim data kehadiran?",
+                      style: GoogleFonts.poppins(fontSize: 16),
+                    ),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.grey[300],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Tutup dialog
+                                },
+                                child: Text(
+                                  "Batal",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Color(0xFF264C6B),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Tutup dialog
+                                  List<Map<String, dynamic>> studentAttendance =
+                                      attendanceData.entries.map((entry) {
+                                    return {
+                                      "student_id": entry.key,
+                                      "attendance_status": entry.value,
+                                    };
+                                  }).toList();
 
-            controller.submitPresenceStudent(studentAttendance);
+                                  controller.submitPresenceStudent(studentAttendance);
+                                },
+                                child: Text(
+                                  "Ya",
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              Get.snackbar("Error", "Data kehadiran tidak boleh kosong");
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF264C6B),
@@ -219,12 +300,12 @@ class _PresenceStudentViewState extends State<PresenceStudentView> {
             padding: EdgeInsets.symmetric(vertical: 15),
           ),
           child: Text(
-            "Upload",
-            style: TextStyle(
-              fontFamily: "poppins_semibold",
-              fontSize: 18,
-              color: Colors.white,
-            ),
+            "Submit",
+            style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
           ),
         ),
       ),
