@@ -336,10 +336,11 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                 ),
                                 child: TextFormField(
                                   controller: controller.qtyReturnedController,
+                                  enabled:
+                                      false, // 🔒 Membuat input tidak bisa diedit
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
-                                    FilteringTextInputFormatter
-                                        .digitsOnly, // Hanya angka
+                                    FilteringTextInputFormatter.digitsOnly,
                                     TextInputFormatter.withFunction((
                                       oldValue,
                                       newValue,
@@ -352,7 +353,7 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                       if (value == null ||
                                           value < 1 ||
                                           value > (detail.qtyBorrow ?? 0)) {
-                                        return oldValue; // Batalkan perubahan jika di luar batas
+                                        return oldValue;
                                       }
                                       return newValue;
                                     }),
@@ -369,14 +370,6 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                     ),
                                     border: InputBorder.none,
                                   ),
-                                  onChanged: (value) {
-                                    final int? qty = int.tryParse(value);
-                                    if (qty != null &&
-                                        qty > (detail.qtyBorrow ?? 0)) {
-                                      controller.qtyReturnedController.text =
-                                          "${detail.qtyBorrow}";
-                                    }
-                                  },
                                 ),
                               ),
                             ),
@@ -786,7 +779,8 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                             final args = Get.arguments;
                             final landingId = args['landingId'];
 
-                            final isSuccess = await controller.submitReturnRequest(landingId);
+                            final isSuccess = await controller
+                                .submitReturnRequest(landingId);
                             if (isSuccess) {
                               Get.offAll(() => HomeView(), arguments: 1);
                             } else {

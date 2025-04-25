@@ -53,7 +53,8 @@ class _InventarisViewState extends State<InventarisView> {
               ],
             ),
           ),
-          if (dropdownValue != null && dropdownValue == "Barang Yang Dipinjam" || 
+          if (dropdownValue != null &&
+                  dropdownValue == "Barang Yang Dipinjam" ||
               dropdownValue == "Stock Inventaris")
             ajukanPeminjaman(),
         ],
@@ -944,7 +945,7 @@ class _InventarisViewState extends State<InventarisView> {
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      "Jumlah: ${item.totalQtyBorrowed}",
+                                      "Jumlah: ${item.totalQtyRemaining}",
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 13,
