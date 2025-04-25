@@ -35,7 +35,7 @@ class FormPenilaianController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchSwimStyle();
+    // fetchSwimStyle();
   }
 
   Future<void> fetchSchedulesByDate({
@@ -74,9 +74,9 @@ class FormPenilaianController extends GetxController {
     });
   }
 
-  Future<void> fetchSwimStyle() async {
+  Future<void> fetchSwimStyle(int id) async {
     await wrapLoading(isLoading, () async {
-      final response = await apiService.getStyleSwim();
+      final response = await apiService.getStyleSwim(id);
 
       if (response.statusCode == 200) {
         swimStyleList.value = SwimStyleResponse.fromJson(response.body).data;

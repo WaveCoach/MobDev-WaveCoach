@@ -31,7 +31,8 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Get.offNamed('/home', arguments: 2);
-            scheduleController.refreshScheduleList(); // Memanggil fungsi refresh
+            scheduleController
+                .refreshScheduleList(); // Memanggil fungsi refresh
           },
         ),
         title: Text(
@@ -201,12 +202,20 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
             final pickedDate = await showDatePicker(
               context: context,
               initialDate: initialDate,
-              firstDate: DateTime.now().subtract(const Duration(days: 30)), // Mulai dari 1 bulan sebelumnya
-              lastDate: scheduleController.scheduleList.isNotEmpty
-                  ? (scheduleController.scheduleList.last.date is DateTime
-                      ? scheduleController.scheduleList.last.date as DateTime
-                      : DateTime.tryParse(scheduleController.scheduleList.last.date.toString()) ?? DateTime(2101)) // Safely parse or fallback
-                  : DateTime(2101), // Default jika tidak ada jadwal
+              firstDate: DateTime.now().subtract(
+                const Duration(days: 30),
+              ), // Mulai dari 1 bulan sebelumnya
+              lastDate:
+                  scheduleController.scheduleList.isNotEmpty
+                      ? (scheduleController.scheduleList.last.date is DateTime
+                          ? scheduleController.scheduleList.last.date
+                              as DateTime
+                          : DateTime.tryParse(
+                                scheduleController.scheduleList.last.date
+                                    .toString(),
+                              ) ??
+                              DateTime(2101)) // Safely parse or fallback
+                      : DateTime(2101), // Default jika tidak ada jadwal
               selectableDayPredicate: (DateTime date) {
                 // Periksa apakah tanggal memiliki jadwal latihan, termasuk jadwal yang sudah lewat
                 return controller.isDateWithSchedule(date);
@@ -225,17 +234,19 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                     dialogBackgroundColor: Colors.white, // Warna latar dialog
                     textButtonTheme: TextButtonThemeData(
                       style: TextButton.styleFrom(
-                        foregroundColor: AppColors.deepOceanBlue, // Warna tombol
+                        foregroundColor:
+                            AppColors.deepOceanBlue, // Warna tombol
                       ),
                     ),
                   ),
-                  child: child != null
-                      ? Builder(
-                          builder: (BuildContext context) {
-                            return child;
-                          },
-                        )
-                      : const SizedBox.shrink(),
+                  child:
+                      child != null
+                          ? Builder(
+                            builder: (BuildContext context) {
+                              return child;
+                            },
+                          )
+                          : const SizedBox.shrink(),
                 );
               },
             );
@@ -323,6 +334,8 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
 
                     // Kosongkan aspek penilaian
                     controller.aspectList.clear();
+
+                    controller.fetchSwimStyle(selectedSchedule?.packageId ?? 0);
 
                     // Reset Gaya Renang
                     controller.selectedSwimStyle.value = null;
