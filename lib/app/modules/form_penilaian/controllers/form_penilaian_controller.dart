@@ -22,19 +22,22 @@ class FormPenilaianController extends GetxController {
 
   final selectedSchedule = Rxn<Schedule>();
   final selectedStudent = Rxn<Student>();
-  final selectedSwimStyle = Rxn<SwimStyle>();
 
   final studentList = <Student>[].obs;
   final swimStyleList = <SwimStyle>[].obs;
-  final aspectList = <AssessmentAspect>[].obs;
 
   final Map<int, TextEditingController> scoreControllers = {};
 
   var isDateSelected = false.obs;
 
+  var indexAll = 1.obs;
+  var allSelectedSwimStyle = <Rxn<SwimStyle>>[].obs;
+  var allAspectList = <RxList<AssessmentAspect>>[].obs;
+
   @override
   void onInit() {
     super.onInit();
+    allSelectedSwimStyle.add(Rxn<SwimStyle>()); // DO NOT DELETE THIS
     // fetchSwimStyle();
   }
 
@@ -86,16 +89,17 @@ class FormPenilaianController extends GetxController {
     });
   }
 
-  Future<void> fetchAspectSwimStyle() async {
-    final swimStyle = selectedSwimStyle.value;
+  Future<void> fetchAspectSwimStyle(int index) async {
+    final swimStyle = allSelectedSwimStyle[index].value;
     if (swimStyle == null) return;
 
     await wrapLoading(isLoading, () async {
       final response = await apiService.getStyleSwimAspect(swimStyle.id);
 
       if (response.statusCode == 200) {
-        aspectList.value =
-            AssessmentAspectResponse.fromJson(response.body).data;
+        allAspectList.add(
+          AssessmentAspectResponse.fromJson(response.body).data.obs,
+        );
       } else {
         logError("Fetch aspects", response.statusCode);
       }
@@ -103,52 +107,52 @@ class FormPenilaianController extends GetxController {
   }
 
   Future<void> submitAssessment() async {
-    final student = selectedStudent.value;
-    final swimStyle = selectedSwimStyle.value;
-    final schedule = selectedSchedule.value;
+    // final student = selectedStudent.value;
+    // final swimStyle = selectedSwimStyle.value;
+    // final schedule = selectedSchedule.value;
 
-    if (student == null || swimStyle == null || schedule == null) {
-      return;
-    }
+    // if (student == null || swimStyle == null || schedule == null) {
+    //   return;
+    // }
 
-    final body = {
-      "student_id": student.id,
-      "assessment_date": dateController.text,
-      "schedule_id": schedule.id,
-      "package_id": schedule.packageId,
-      "assessment_category_id": swimStyle.id,
-      "details":
-          aspectList.map((aspect) {
-            return {
-              "aspect_id": aspect.id,
-              "score": aspect.score,
-              "remarks": aspect.remarks ?? "",
-            };
-          }).toList(),
-    };
+    // final body = {
+    //   "student_id": student.id,
+    //   "assessment_date": dateController.text,
+    //   "schedule_id": schedule.id,
+    //   "package_id": schedule.packageId,
+    //   "assessment_category_id": swimStyle.id,
+    //   "details":
+    //       aspectList.map((aspect) {
+    //         return {
+    //           "aspect_id": aspect.id,
+    //           "score": aspect.score,
+    //           "remarks": aspect.remarks ?? "",
+    //         };
+    //       }).toList(),
+    // };
 
-    await wrapLoading(isLoading, () async {
-      final response = await apiService.postAssessment(body);
+    // await wrapLoading(isLoading, () async {
+    //   final response = await apiService.postAssessment(body);
 
-      if (response.statusCode == 200) {
-        Get.snackbar(
-          "Success",
-          "Assessment submitted successfully",
-          snackPosition: SnackPosition.TOP,
-        );
-        Get.offAllNamed('/history-penilaian');
-      } else {
-        logError(
-          "Submit assessment",
-          "${response.statusCode}: ${response.body}",
-        );
-        Get.snackbar(
-          "Error",
-          "Failed to submit assessment: ${response.body}",
-          snackPosition: SnackPosition.TOP,
-        );
-      }
-    });
+    //   if (response.statusCode == 200) {
+    //     Get.snackbar(
+    //       "Success",
+    //       "Assessment submitted successfully",
+    //       snackPosition: SnackPosition.TOP,
+    //     );
+    //     Get.offAllNamed('/history-penilaian');
+    //   } else {
+    //     logError(
+    //       "Submit assessment",
+    //       "${response.statusCode}: ${response.body}",
+    //     );
+    //     Get.snackbar(
+    //       "Error",
+    //       "Failed to submit assessment: ${response.body}",
+    //       snackPosition: SnackPosition.TOP,
+    //     );
+    //   }
+    // });
   }
 
   @override
@@ -159,8 +163,11 @@ class FormPenilaianController extends GetxController {
   }
 
   bool isDateWithSchedule(DateTime date) {
-  // Contoh logika: Periksa apakah tanggal ada di daftar jadwal
-  return scheduleController.scheduleList.any((schedule) =>
-      schedule.date == "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}");
-}
+    // Contoh logika: Periksa apakah tanggal ada di daftar jadwal
+    return scheduleController.scheduleList.any(
+      (schedule) =>
+          schedule.date ==
+          "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+    );
+  }
 }
