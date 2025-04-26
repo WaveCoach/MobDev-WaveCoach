@@ -23,9 +23,9 @@ class DetailInventarisController extends GetxController {
     isLoading.value = false;
 
     if (response.statusCode == 200 && response.body != null) {
+      print("Response: ${response.body}");
       final data = BorrowingResponse.fromJson(response.body).data;
       borrowingList.value = data;
-      print("Borrowing List: ${borrowingList.length}");
     } else {
       Get.snackbar("Error", "Failed to load borrowing list");
     }
