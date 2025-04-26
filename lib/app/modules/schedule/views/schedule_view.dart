@@ -87,10 +87,46 @@ class _ScheduleViewState extends State<ScheduleView> {
                       onTap: () {
                         Get.toNamed('/notification');
                       },
-                      child: Icon(
-                        Icons.notifications,
-                        color: Colors.white,
-                        size: 40,
+                      child: Stack(
+                        children: [
+                          Icon(
+                            Icons.notifications,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Obx(() {
+                              if (controller.unreadNotificationCount.value >
+                                  0) {
+                                return Container(
+                                  padding: EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(
+                                    controller.unreadNotificationCount.value >
+                                            99
+                                        ? '99+'
+                                        : controller
+                                            .unreadNotificationCount
+                                            .value
+                                            .toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return SizedBox.shrink(); // Hide if no unread notifications
+                              }
+                            }),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -228,9 +264,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
                 decoration: BoxDecoration(
                   color:
-                      _isHistorySelected
-                          ? AppColors.honeyGold
-                          : Colors.white,
+                      _isHistorySelected ? AppColors.honeyGold : Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -268,51 +302,59 @@ class _ScheduleViewState extends State<ScheduleView> {
 
         // Filter schedule list based on the selected month index and history
         List filteredScheduleList =
-    controller.scheduleList.where((schedule) {
-      final scheduleDate = DateTime.parse(schedule.date);
-      final scheduleMonth = scheduleDate.month;
+            controller.scheduleList.where((schedule) {
+              final scheduleDate = DateTime.parse(schedule.date);
+              final scheduleMonth = scheduleDate.month;
 
-      // Filter berdasarkan bulan
-      bool isMonthMatch = false;
-      if (_selectedMonthIndex == 0) {
-        final now = DateTime.now();
-        final todayStart = DateTime(now.year, now.month, now.day);
-        final todayEnd = todayStart.add(Duration(days: 1));
+              // Filter berdasarkan bulan
+              bool isMonthMatch = false;
+              if (_selectedMonthIndex == 0) {
+                final now = DateTime.now();
+                final todayStart = DateTime(now.year, now.month, now.day);
+                final todayEnd = todayStart.add(Duration(days: 1));
 
-        if (_isHistorySelected) {
-          // Filter "Terdekat" (3 hari ke belakang termasuk hari ini)
-          isMonthMatch =
-              scheduleDate.isBefore(todayEnd) &&
-              scheduleDate.isAfter(todayStart.subtract(Duration(days: 3)));
-        } else {
-          // Filter "Terdekat" (hari ini dan 3 hari ke depan)
-          isMonthMatch =
-              scheduleDate.isAfter(todayStart.subtract(Duration(days: 1))) &&
-              scheduleDate.isBefore(todayEnd.add(Duration(days: 3)));
-        }
-      } else if (_selectedMonthIndex == 1) {
-        if (_isHistorySelected) {
-          // Filter "Semua" dengan History aktif
-          isMonthMatch = true;
-        } else {
-          // Filter "Semua" dengan History nonaktif
-          final now = DateTime.now();
-          final todayStart = DateTime(now.year, now.month, now.day);
-          isMonthMatch = scheduleDate.isAfter(todayStart.subtract(Duration(days: 1))) || scheduleDate.isAtSameMomentAs(now);
-        }
-      } else {
-        // Filter berdasarkan bulan tertentu
-        isMonthMatch = scheduleMonth == _selectedMonthIndex - 1;
-      }
+                if (_isHistorySelected) {
+                  // Filter "Terdekat" (3 hari ke belakang termasuk hari ini)
+                  isMonthMatch =
+                      scheduleDate.isBefore(todayEnd) &&
+                      scheduleDate.isAfter(
+                        todayStart.subtract(Duration(days: 3)),
+                      );
+                } else {
+                  // Filter "Terdekat" (hari ini dan 3 hari ke depan)
+                  isMonthMatch =
+                      scheduleDate.isAfter(
+                        todayStart.subtract(Duration(days: 1)),
+                      ) &&
+                      scheduleDate.isBefore(todayEnd.add(Duration(days: 3)));
+                }
+              } else if (_selectedMonthIndex == 1) {
+                if (_isHistorySelected) {
+                  // Filter "Semua" dengan History aktif
+                  isMonthMatch = true;
+                } else {
+                  // Filter "Semua" dengan History nonaktif
+                  final now = DateTime.now();
+                  final todayStart = DateTime(now.year, now.month, now.day);
+                  isMonthMatch =
+                      scheduleDate.isAfter(
+                        todayStart.subtract(Duration(days: 1)),
+                      ) ||
+                      scheduleDate.isAtSameMomentAs(now);
+                }
+              } else {
+                // Filter berdasarkan bulan tertentu
+                isMonthMatch = scheduleMonth == _selectedMonthIndex - 1;
+              }
 
-      // Jika tombol "History" aktif, tambahkan filter untuk jadwal yang sudah berlalu
-      if (_isHistorySelected) {
-        return isMonthMatch && scheduleDate.isBefore(DateTime.now());
-      }
+              // Jika tombol "History" aktif, tambahkan filter untuk jadwal yang sudah berlalu
+              if (_isHistorySelected) {
+                return isMonthMatch && scheduleDate.isBefore(DateTime.now());
+              }
 
-      // Jika tombol "History" tidak aktif, gunakan filter bulan saja
-      return isMonthMatch;
-    }).toList();
+              // Jika tombol "History" tidak aktif, gunakan filter bulan saja
+              return isMonthMatch;
+            }).toList();
 
         // Tampilkan pesan jika tidak ada jadwal yang sesuai
         if (filteredScheduleList.isEmpty) {

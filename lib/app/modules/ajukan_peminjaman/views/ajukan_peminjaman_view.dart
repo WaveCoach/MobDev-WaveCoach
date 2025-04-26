@@ -243,13 +243,15 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
             int index = entry.key;
             Map<String, dynamic> stuff = entry.value;
 
-            List<InventoryItem> availableItems = controller.stuffList.where((item) {
-              return !controller.stuffFormList.any(
-                (form) =>
-                    form['selectedStuff']?.inventoryId == item.inventoryId &&
-                    form != stuff,
-              );
-            }).toList();
+            List<InventoryItem> availableItems =
+                controller.stuffList.where((item) {
+                  return !controller.stuffFormList.any(
+                    (form) =>
+                        form['selectedStuff']?.inventoryId ==
+                            item.inventoryId &&
+                        form != stuff,
+                  );
+                }).toList();
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 12.0),
@@ -261,10 +263,7 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                       padding: const EdgeInsets.only(bottom: 4.0),
                       child: Text(
                         stuff['error'],
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 12,
-                        ),
+                        style: const TextStyle(color: Colors.red, fontSize: 12),
                       ),
                     ),
                   Row(
@@ -289,14 +288,15 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                               ),
                               isExpanded: true,
                               value: stuff['selectedStuff'],
-                              items: availableItems.map((item) {
-                                return DropdownMenuItem<InventoryItem>(
-                                  value: item,
-                                  child: Text(
-                                    "${item.inventoryName ?? "-"} (Qty: ${item.qty ?? 0})",
-                                  ),
-                                );
-                              }).toList(),
+                              items:
+                                  availableItems.map((item) {
+                                    return DropdownMenuItem<InventoryItem>(
+                                      value: item,
+                                      child: Text(
+                                        "${item.inventoryName ?? "-"} (Qty: ${item.qty ?? 0})",
+                                      ),
+                                    );
+                                  }).toList(),
                               onChanged: (value) {
                                 stuff['selectedStuff'] = value;
                                 stuff['error'] = null; // Reset error
@@ -318,7 +318,9 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                            ),
                             child: TextFormField(
                               key: ValueKey(
                                 "qty-${stuff['selectedStuff']?.inventoryId ?? index}",
@@ -334,7 +336,8 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                                 int? quantity = int.tryParse(value);
                                 if (quantity != null &&
                                     stuff['selectedStuff'] != null &&
-                                    quantity > (stuff['selectedStuff']?.qty ?? 0)) {
+                                    quantity >
+                                        (stuff['selectedStuff']?.qty ?? 0)) {
                                   stuff['error'] =
                                       "Jumlah melebihi kuantitas barang, Max: ${stuff['selectedStuff']?.qty ?? 0}";
                                 } else {
@@ -351,11 +354,12 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
                       IconButton(
                         icon: const Icon(Icons.remove_circle),
                         color: Colors.red,
-                        onPressed: controller.stuffFormList.length > 1
-                            ? () {
-                                controller.stuffFormList.removeAt(index);
-                              }
-                            : null,
+                        onPressed:
+                            controller.stuffFormList.length > 1
+                                ? () {
+                                  controller.stuffFormList.removeAt(index);
+                                }
+                                : null,
                       ),
                     ],
                   ),
@@ -365,58 +369,58 @@ class AjukanPeminjamanView extends GetView<AjukanPeminjamanController> {
           }).toList(),
           allItemsSelected
               ? const Text(
-                  "Semua jenis barang telah dipilih",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey,
-                  ),
-                )
+                "Semua jenis barang telah dipilih",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                ),
+              )
               : ElevatedButton(
-                  onPressed: () {
-                    controller.stuffFormList.add({
-                      'selectedStuff': null,
-                      'quantity': '',
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.goldenAmber,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                onPressed: () {
+                  controller.stuffFormList.add({
+                    'selectedStuff': null,
+                    'quantity': '',
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.goldenAmber,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 20,
-                        height: 20,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                          size: 14,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        "Tambah Barang",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                        size: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      "Tambah Barang",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           const SizedBox(height: 16),
         ],
       );

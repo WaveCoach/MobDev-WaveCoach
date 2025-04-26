@@ -196,4 +196,8 @@ class ApiService extends GetConnect {
   Future<Response> getNotificationDetail(int NotifId) {
     return get("$url/notification/$NotifId", headers: getHeaders());
   }
+
+  Future<Response> getCountNotification() {
+    return get("$url/notification-count", headers: getHeaders());
+  }
 }

@@ -10,12 +10,14 @@ class ScheduleController extends GetxController {
   final isLoading = false.obs;
   final scheduleList = <Schedule>[].obs;
   final name = ''.obs;
+  final unreadNotificationCount = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
     name.value = GetStorage().read("name") ?? "";
     fetchSchedules();
+    fetchNotificationCount();
   }
 
   Future<void> fetchSchedules({bool? history}) async {
@@ -30,6 +32,24 @@ class ScheduleController extends GetxController {
         Get.snackbar("Error", "Failed to load schedules");
       }
     });
+  }
+
+  Future<void> fetchNotificationCount() async {
+    await wrapLoading(isLoading, () async {
+      final response = await apiService.getCountNotification();
+
+      if (response.statusCode == 200 && response.body != null) {
+        final data = response.body['data']['unread_count'];
+        unreadNotificationCount.value = data;
+      } else {
+        logError("fetch notification count", response.statusText);
+        Get.snackbar("Error", "Failed to load notification count");
+      }
+    });
+  }
+
+  Future<void> refreshNotificationCount() async {
+    await fetchNotificationCount();
   }
 
   Future<void> refreshScheduleList() async {
