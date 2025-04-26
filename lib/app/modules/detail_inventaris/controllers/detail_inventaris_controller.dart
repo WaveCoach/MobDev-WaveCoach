@@ -13,7 +13,8 @@ class DetailInventarisController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    id = Get.arguments;
+    final args = Get.arguments;
+    final id = args['id'];
     fetchBorrowingList(id);
   }
 

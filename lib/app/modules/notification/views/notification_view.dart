@@ -134,6 +134,11 @@ class _NotificationViewState extends State<NotificationView> {
                     bottom: 15,
                   ),
                   child: GestureDetector(
+                    onTap:
+                        () => Get.toNamed(
+                          '/detail-notification',
+                          arguments: {'id': notification.id},
+                        ),
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(

@@ -19,6 +19,8 @@ import '../modules/detail_history_pengajuan/bindings/detail_history_pengajuan_bi
 import '../modules/detail_history_pengajuan/views/detail_history_pengajuan_view.dart';
 import '../modules/detail_inventaris/bindings/detail_inventaris_binding.dart';
 import '../modules/detail_inventaris/views/detail_inventaris_view.dart';
+import '../modules/detail_notification/bindings/detail_notification_binding.dart';
+import '../modules/detail_notification/views/detail_notification_view.dart';
 import '../modules/forget_pass/bindings/forget_pass_binding.dart';
 import '../modules/forget_pass/views/forget_pass_view.dart';
 import '../modules/form_penilaian/bindings/form_penilaian_binding.dart';
@@ -205,11 +207,15 @@ class AppPages {
       page: () => const DetailHistoryPengajuanView(),
       binding: DetailHistoryPengajuanBinding(),
     ),
-
     GetPage(
       name: _Paths.BUKTI_PENGEMBALIAN,
       page: () => const BuktiPengembalianView(),
       binding: BuktiPengembalianBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_NOTIFICATION,
+      page: () => DetailNotificationView(),
+      binding: DetailNotificationBinding(),
     ),
   ];
 }

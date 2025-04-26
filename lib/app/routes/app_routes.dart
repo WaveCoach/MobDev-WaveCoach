@@ -29,6 +29,7 @@ abstract class Routes {
   static const HISTORY_PENILAIAN_DETAIL = _Paths.HISTORY_PENILAIAN_DETAIL;
   static const DETAIL_HISTORY_PENGAJUAN = _Paths.DETAIL_HISTORY_PENGAJUAN;
   static const BUKTI_PENGEMBALIAN = _Paths.BUKTI_PENGEMBALIAN;
+  static const DETAIL_NOTIFICATION = _Paths.DETAIL_NOTIFICATION;
 }
 
 abstract class _Paths {
@@ -59,4 +60,5 @@ abstract class _Paths {
   static const HISTORY_PENILAIAN_DETAIL = '/history-penilaian-detail';
   static const DETAIL_HISTORY_PENGAJUAN = '/detail-history-pengajuan';
   static const BUKTI_PENGEMBALIAN = '/bukti-pengembalian';
+  static const DETAIL_NOTIFICATION = '/detail-notification';
 }

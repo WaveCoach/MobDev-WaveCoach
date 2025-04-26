@@ -336,8 +336,6 @@ class AjukanPengembalianView extends GetView<AjukanPengembalianController> {
                                 ),
                                 child: TextFormField(
                                   controller: controller.qtyReturnedController,
-                                  enabled:
-                                      false, // 🔒 Membuat input tidak bisa diedit
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
