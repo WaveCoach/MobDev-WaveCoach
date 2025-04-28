@@ -51,10 +51,6 @@ dependencies:
   dropdown_search: ^6.0.2
   animated_text_kit: ^4.2.2
   flutter_launcher_icons: ^0.14.3
-  pusher_channels_flutter: ^2.5.0
-  flutter_dotenv: ^5.2.1
-  flutter_local_notifications: ^19.1.0
-  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -79,7 +75,6 @@ flutter_launcher_icons:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - .env
     - assets/images/
     - assets/icons/NavBarJadwal.svg
     - assets/icons/NavBarInventaris.svg
