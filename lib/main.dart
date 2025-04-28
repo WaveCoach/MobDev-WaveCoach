@@ -17,9 +17,6 @@ void main() async {
   String pusherApiKey = dotenv.env['PUSHER_API_KEY'] ?? '';
   String pusherCluster = dotenv.env['PUSHER_CLUSTER'] ?? '';
 
-  print('Pusher API Key: $pusherApiKey');
-  print('Pusher Cluster: $pusherCluster');
-
   final box = GetStorage();
   String? userId = box.read('user_id')?.toString(); // pastikan string
 
