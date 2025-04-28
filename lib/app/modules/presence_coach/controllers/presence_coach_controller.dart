@@ -59,6 +59,7 @@ class PresenceCoachController extends GetxController {
       "schedule_id": scheduleId,
       "attendance_status": attendanceStatus,
     };
+    print("Data yang dikirim: $body");
 
     if (attendanceStatus == "Tidak Hadir" && remarks != null) {
       body["remarks"] = remarks;
