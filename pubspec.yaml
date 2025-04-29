@@ -79,7 +79,6 @@ flutter_launcher_icons:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - .env
     - assets/images/
     - assets/icons/NavBarJadwal.svg
     - assets/icons/NavBarInventaris.svg
