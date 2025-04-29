@@ -17,6 +17,9 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
 
   @override
   Widget build(BuildContext context) {
+    // Ambil argumen itemName
+    final String itemName = Get.arguments['itemName'] ?? 'Nama Barang';
+
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -31,9 +34,8 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
         backgroundColor: AppColors.deepOceanBlue,
         iconTheme: const IconThemeData(color: Colors.white),
         systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
-          statusBarColor:
-              Colors.transparent, // Optional: Make status bar transparent
+          statusBarIconBrightness: Brightness.dark,
+          statusBarColor: Colors.transparent,
         ),
       ),
       backgroundColor: AppColors.skyBlue,
@@ -51,8 +53,8 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
             ),
             child: Center(
               child: Text(
-                "Nama\nBarang",
-                textAlign: TextAlign.center, // Set text alignment to center
+                itemName, // Gunakan itemName di sini
+                textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 32,
@@ -291,7 +293,7 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                         style: ElevatedButton.styleFrom(
                                           foregroundColor: Colors.white,
                                           backgroundColor:
-                                              AppColors.deepOceanBlue,
+                                              Colors.green,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
                                               8,
@@ -299,7 +301,7 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                           ),
                                         ),
                                         child: Text(
-                                          "Lihat Gambar",
+                                          "Bukti Pengembalian",
                                           style: GoogleFonts.poppins(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600,

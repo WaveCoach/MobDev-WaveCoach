@@ -627,20 +627,25 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     Padding(
                       padding: const EdgeInsets.only(left: 16),
                       child: Obx(() {
-                        if (controller
-                                .scheduleResponse
-                                .value
-                                ?.schedule
-                                ?.isAssessed ==
-                            1) {
+                        if (controller.scheduleResponse.value?.schedule?.isAssessed == 1) {
                           return SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {
-                                // Add your onPressed code here!
-                              },
+                              onPressed: student.attendanceStatus == null
+                                  ? null // Disable button if attendanceStatus is null
+                                  : () {
+                                      Get.toNamed(
+                                        '/form-penilaian', // Ganti dengan route form penilaian Anda
+                                        arguments: {
+                                          'scheduleId': controller.scheduleResponse.value?.schedule?.id,
+                                          'studentId': student.id, // Pastikan Anda memiliki ID siswa
+                                        },
+                                      );
+                                    },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.deepOceanBlue,
+                                backgroundColor: student.attendanceStatus == null
+                                    ? Colors.grey // Disabled button color
+                                    : AppColors.deepOceanBlue, // Active button color
                                 padding: EdgeInsets.symmetric(
                                   vertical: 8.0,
                                   horizontal: 16.0,

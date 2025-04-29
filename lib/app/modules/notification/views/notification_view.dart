@@ -119,15 +119,22 @@ class _NotificationViewState extends State<NotificationView> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: Offset(0, 0),
-                          ),
-                        ],
+                        color:
+                            notification.isRead
+                                ? Colors.white
+                                : const Color.fromARGB(255, 229, 242, 253),
+                        border: Border.all(
+                          color: Colors.grey, // Warna outline
+                          width: 1.0, // Ketebalan outline
+                        ),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.black.withOpacity(0.25),
+                        //     spreadRadius: 1,
+                        //     blurRadius: 5,
+                        //     offset: Offset(0, 0),
+                        //   ),
+                        // ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -30,7 +30,15 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Get.offNamed('/home', arguments: 2);
+            final scheduleId = Get.arguments?['scheduleId'];
+            if (scheduleId != null) {
+              Get.offNamed(
+                '/schedule-detail',
+                arguments: {'scheduleId': scheduleId},
+              );
+            } else {
+              Get.offNamed('/home', arguments: 2);
+            }
             scheduleController
                 .refreshScheduleList(); // Memanggil fungsi refresh
           },
@@ -154,11 +162,45 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                                     _buildSwimStyleDropdown(index),
                                     const SizedBox(height: 16),
                                     _buildAspectAssessment(index),
-                                    const SizedBox(height: 16),
+                                    const SizedBox(height: 4),
                                   ],
                                 ),
                           ),
                         ),
+                        Center(
+                          child: Obx(() {
+                            // Periksa apakah setidaknya satu gaya renang telah dipilih
+                            final anySwimStyleSelected = controller.allSelectedSwimStyle.any((swimStyle) => swimStyle.value != null);
+
+                            return Visibility(
+                              visible: anySwimStyleSelected, // Tampilkan tombol jika setidaknya satu gaya renang dipilih
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    controller.indexAll++;
+                                    controller.allSelectedSwimStyle.add(Rxn<SwimStyle>());
+                                  });
+                                },
+                                icon: const Icon(Icons.add, color: Colors.white),
+                                label: Text(
+                                  "Tambah Penilaian",
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.deepOceanBlue,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        SizedBox(height: 25),
                         _buildSubmitButton(),
                       ],
                     );
@@ -471,66 +513,87 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
         return const Center(child: Text("Tidak ada gaya renang tersedia"));
       }
 
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
-          border: Border.all(color: Colors.black.withOpacity(0.2)),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12),
-          child: DropdownButtonFormField<SwimStyle>(
-            isExpanded: true,
-            value:
-                isStudentSelected &&
-                        index < controller.allSelectedSwimStyle.length
-                    ? controller.allSelectedSwimStyle[index].value
-                    : null,
-            decoration: InputDecoration(
-              hintText: "Pilih Gaya Renang",
-              hintStyle: TextStyle(
-                color: Colors.grey, // Ubah warna label jika tidak aktif
+      return Row(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+                border: Border.all(color: Colors.black.withOpacity(0.2)),
               ),
-              border: InputBorder.none,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: DropdownButtonFormField<SwimStyle>(
+                  isExpanded: true,
+                  value: isStudentSelected &&
+                          index < controller.allSelectedSwimStyle.length
+                      ? controller.allSelectedSwimStyle[index].value
+                      : null,
+                  decoration: const InputDecoration(
+                    hintText: "Pilih Gaya Renang",
+                    hintStyle: TextStyle(
+                      color: Colors.grey, // Ubah warna label jika tidak aktif
+                    ),
+                    border: InputBorder.none,
+                  ),
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                  items: isStudentSelected
+                      ? controller.swimStyleList
+                          .map<DropdownMenuItem<SwimStyle>>((swimStyle) {
+                          return DropdownMenuItem<SwimStyle>(
+                            value: swimStyle,
+                            child: Text(swimStyle.name),
+                          );
+                        }).toList()
+                      : null, // Kosongkan item jika tidak aktif
+                  onChanged: isStudentSelected
+                      ? (selectedSwimStyle) {
+                          if (index < controller.allSelectedSwimStyle.length) {
+                            controller.allSelectedSwimStyle[index].value =
+                                selectedSwimStyle;
+                          } else {
+                            controller.allSelectedSwimStyle.add(
+                              Rxn<SwimStyle>(selectedSwimStyle),
+                            );
+                          }
+                          controller.fetchAspectSwimStyle(index);
+                        }
+                      : null, // Nonaktifkan onChanged jika tidak aktif
+                ),
+              ),
             ),
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
-              color: Colors.black,
-            ),
-            items:
-                isStudentSelected
-                    ? controller.swimStyleList.map<DropdownMenuItem<SwimStyle>>(
-                      (swimStyle) {
-                        return DropdownMenuItem<SwimStyle>(
-                          value: swimStyle,
-                          child: Text(swimStyle.name),
-                        );
-                      },
-                    ).toList()
-                    : null, // Kosongkan item jika tidak aktif
-            onChanged:
-                isStudentSelected
-                    ? (selectedSwimStyle) {
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            onPressed: controller.allSelectedSwimStyle.length > 1
+                ? () {
+                    setState(() {
+                      // Pastikan indeks valid sebelum menghapus
                       if (index < controller.allSelectedSwimStyle.length) {
-                        controller.allSelectedSwimStyle[index].value =
-                            selectedSwimStyle;
-                      } else {
-                        controller.allSelectedSwimStyle.add(
-                          Rxn<SwimStyle>(selectedSwimStyle),
-                        );
+                        controller.allSelectedSwimStyle.removeAt(index);
+                      }
+                      if (index < controller.allAspectList.length) {
+                        controller.allAspectList.removeAt(index);
                       }
 
-                      // Add a new empty if this shi the last
-                      if (index == controller.allSelectedSwimStyle.length - 1) {
-                        controller.allSelectedSwimStyle.add(Rxn<SwimStyle>());
-                        controller.indexAll++;
-                      }
-                      controller.fetchAspectSwimStyle(index);
-                    }
-                    : null, // Nonaktifkan onChanged jika tidak aktif
+                      // Kurangi jumlah dropdown yang dirender
+                      controller.indexAll.value--;
+                    });
+                  }
+                : null, // Nonaktifkan tombol jika hanya tersisa satu pilihan
+            icon: Icon(
+              Icons.remove_circle,
+              color: controller.allSelectedSwimStyle.length > 1
+                  ? Colors.red
+                  : Colors.grey, // Ubah warna tombol jika dinonaktifkan
+            ),
           ),
-        ),
+        ],
       );
     });
   }

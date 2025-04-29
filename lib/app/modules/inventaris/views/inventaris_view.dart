@@ -863,7 +863,10 @@ class _InventarisViewState extends State<InventarisView> {
                     onTap: () {
                       Get.toNamed(
                         Routes.DETAIL_INVENTARIS,
-                        arguments: item.inventoryId,
+                        arguments: {
+                          'inventoryId': item.inventoryId, // Kirim inventoryId
+                          'itemName': item.name, // Kirim itemName
+                        },
                       );
                     },
                     child: Stack(

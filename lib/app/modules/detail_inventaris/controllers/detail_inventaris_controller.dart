@@ -13,7 +13,8 @@ class DetailInventarisController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    id = Get.arguments;
+    // Ambil inventoryId dari Get.arguments
+    id = Get.arguments['inventoryId']; // Pastikan ini sesuai dengan argumen yang dikirim
     fetchBorrowingList(id);
   }
 

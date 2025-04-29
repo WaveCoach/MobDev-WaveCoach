@@ -34,6 +34,8 @@ class FormPenilaianController extends GetxController {
   var allSelectedSwimStyle = <Rxn<SwimStyle>>[].obs;
   var allAspectList = <RxList<AssessmentAspect>>[].obs;
 
+  var isAddingAssessment = false.obs; // Tambahkan variabel ini
+
   @override
   void onInit() {
     super.onInit();
