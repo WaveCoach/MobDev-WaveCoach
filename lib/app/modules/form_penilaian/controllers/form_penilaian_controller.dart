@@ -112,7 +112,7 @@ class FormPenilaianController extends GetxController {
     final student = selectedStudent.value;
     final schedule = selectedSchedule.value;
 
-    if (student == null || schedule == null || swimStylesWithAspects.isEmpty) {
+    if (student == null || schedule == null) {
       return;
     }
 
@@ -122,20 +122,28 @@ class FormPenilaianController extends GetxController {
       "schedule_id": schedule.id,
       "package_id": schedule.packageId,
       "categories":
-          swimStylesWithAspects.map((style) {
+          swimStyleList.map((style) {
             return {
               "assessment_category_id": style.id,
               "details":
-                  style.aspects.map((aspect) {
-                    return {
-                      "aspect_id": aspect.id,
-                      "score": aspect.score,
-                      "remarks": aspect.remarks ?? "",
-                    };
+                  allAspectList.expand((aspectList) {
+                    return aspectList.map((aspect) {
+                      return {
+                        "aspect_id": aspect.id,
+                        "score":
+                            int.tryParse(
+                              scoreControllers[aspect.id]?.text ?? "",
+                            ) ??
+                            0,
+                        "remarks": aspect.remarks ?? "",
+                      };
+                    });
                   }).toList(),
             };
           }).toList(),
     };
+
+    debugPrint("Body: $body");
 
     await wrapLoading(isLoading, () async {
       final response = await apiService.postAssessment(body);
