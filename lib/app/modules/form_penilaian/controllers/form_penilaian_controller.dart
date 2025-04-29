@@ -107,52 +107,56 @@ class FormPenilaianController extends GetxController {
   }
 
   Future<void> submitAssessment() async {
-    // final student = selectedStudent.value;
-    // final swimStyle = selectedSwimStyle.value;
-    // final schedule = selectedSchedule.value;
+    final student = selectedStudent.value;
+    final schedule = selectedSchedule.value;
 
-    // if (student == null || swimStyle == null || schedule == null) {
-    //   return;
-    // }
+    if (student == null || schedule == null || swimStylesWithAspects.isEmpty) {
+      return;
+    }
 
-    // final body = {
-    //   "student_id": student.id,
-    //   "assessment_date": dateController.text,
-    //   "schedule_id": schedule.id,
-    //   "package_id": schedule.packageId,
-    //   "assessment_category_id": swimStyle.id,
-    //   "details":
-    //       aspectList.map((aspect) {
-    //         return {
-    //           "aspect_id": aspect.id,
-    //           "score": aspect.score,
-    //           "remarks": aspect.remarks ?? "",
-    //         };
-    //       }).toList(),
-    // };
+    final body = {
+      "student_id": student.id,
+      "assessment_date": dateController.text,
+      "schedule_id": schedule.id,
+      "package_id": schedule.packageId,
+      "categories":
+          swimStylesWithAspects.map((style) {
+            return {
+              "assessment_category_id": style.id,
+              "details":
+                  style.aspects.map((aspect) {
+                    return {
+                      "aspect_id": aspect.id,
+                      "score": aspect.score,
+                      "remarks": aspect.remarks ?? "",
+                    };
+                  }).toList(),
+            };
+          }).toList(),
+    };
 
-    // await wrapLoading(isLoading, () async {
-    //   final response = await apiService.postAssessment(body);
+    await wrapLoading(isLoading, () async {
+      final response = await apiService.postAssessment(body);
 
-    //   if (response.statusCode == 200) {
-    //     Get.snackbar(
-    //       "Success",
-    //       "Assessment submitted successfully",
-    //       snackPosition: SnackPosition.TOP,
-    //     );
-    //     Get.offAllNamed('/history-penilaian');
-    //   } else {
-    //     logError(
-    //       "Submit assessment",
-    //       "${response.statusCode}: ${response.body}",
-    //     );
-    //     Get.snackbar(
-    //       "Error",
-    //       "Failed to submit assessment: ${response.body}",
-    //       snackPosition: SnackPosition.TOP,
-    //     );
-    //   }
-    // });
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Success",
+          "Assessment submitted successfully",
+          snackPosition: SnackPosition.TOP,
+        );
+        Get.offAllNamed('/history-penilaian');
+      } else {
+        logError(
+          "Submit assessment",
+          "${response.statusCode}: ${response.body}",
+        );
+        Get.snackbar(
+          "Error",
+          "Failed to submit assessment: ${response.body}",
+          snackPosition: SnackPosition.TOP,
+        );
+      }
+    });
   }
 
   @override
