@@ -1,84 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
+import 'app/routes/app_pages.dart';
+
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get_storage/get_storage.dart';
-import 'dart:convert'; // untuk jsonDecode
+import 'dart:convert';
 
-import 'app/routes/app_pages.dart';
-import 'package:mob_dev_wave_coach/app/core/services/api_service.dart';
-
-// Notifikasi Plugin Global
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: ".env");
   await GetStorage.init();
-  await _initializeNotifications();
-
-  String pusherApiKey = dotenv.env['PUSHER_API_KEY'] ?? '';
-  String pusherCluster = dotenv.env['PUSHER_CLUSTER'] ?? '';
 
   final box = GetStorage();
   String? userId = box.read('user_id')?.toString();
 
   if (userId == null) {
-    print('User ID tidak ditemukan di storage!');
-    return;
-  }
+    Get.put(ApiService());
 
-  PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
+    runApp(
+      GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "Application",
+        initialRoute: AppPages.INITIAL,
+        getPages: AppPages.routes,
+      ),
+    );
+  } else {
+    // SUDAH LOGIN: Jalankan aplikasi versi lengkap
+    await dotenv.load(fileName: ".env");
+    await _initializeNotifications();
 
-  await pusher.init(
-    apiKey: pusherApiKey,
-    cluster: pusherCluster,
-    onConnectionStateChange: (currentState, previousState) {
-      print('Connection state changed from $previousState to $currentState');
-    },
-    onError: (String message, int? code, dynamic exception) {
-      print('Pusher error: $message, Code: $code, Exception: $exception');
-    },
-  );
+    String pusherApiKey = dotenv.env['PUSHER_API_KEY'] ?? '';
+    String pusherCluster = dotenv.env['PUSHER_CLUSTER'] ?? '';
 
-  await pusher.connect();
+    PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
 
-  String channelName = 'notification-channel-user-$userId';
-  await pusher.subscribe(channelName: channelName);
-
-  pusher.onEvent = (PusherEvent event) async {
-    print(
-      'Received event: ${event.eventName}, Channel: ${event.channelName}, Data: ${event.data}',
+    await pusher.init(
+      apiKey: pusherApiKey,
+      cluster: pusherCluster,
+      onConnectionStateChange: (currentState, previousState) {
+        print('Connection state changed from $previousState to $currentState');
+      },
+      onError: (String message, int? code, dynamic exception) {
+        print('Pusher error: $message, Code: $code, Exception: $exception');
+      },
     );
 
-    try {
-      Map<String, dynamic> data = jsonDecode(event.data);
+    await pusher.connect();
 
-      String title = data['title'] ?? 'Notifikasi';
-      String message = data['message'] ?? 'Pesan baru diterima';
+    String channelName = 'notification-channel-user-$userId';
+    await pusher.subscribe(channelName: channelName);
 
-      await showNotification(title: title, body: message);
-    } catch (e) {
-      print('Gagal memproses event data: $e');
-    }
-  };
+    pusher.onEvent = (PusherEvent event) async {
+      print(
+        'Received event: ${event.eventName}, Channel: ${event.channelName}, Data: ${event.data}',
+      );
 
-  Get.put(ApiService());
+      try {
+        Map<String, dynamic> data = jsonDecode(event.data);
 
-  runApp(
-    GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Application",
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
-    ),
-  );
+        String title = data['title'] ?? 'Notifikasi';
+        String message = data['message'] ?? 'Pesan baru diterima';
+
+        await showNotification(title: title, body: message);
+      } catch (e) {
+        print('Gagal memproses event data: $e');
+      }
+    };
+
+    Get.put(ApiService());
+
+    runApp(
+      GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "Application",
+        initialRoute: AppPages.INITIAL,
+        getPages: AppPages.routes,
+      ),
+    );
+  }
 }
 
-// Inisialisasi Notifikasi
 Future<void> _initializeNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -90,7 +98,6 @@ Future<void> _initializeNotifications() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-// Fungsi untuk Menampilkan Notifikasi
 Future<void> showNotification({
   required String title,
   required String body,
@@ -98,8 +105,8 @@ Future<void> showNotification({
   try {
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-          'your_channel_id', // Ganti sesuai kebutuhan
-          'Your Channel Name', // Ganti sesuai kebutuhan
+          'your_channel_id',
+          'Your Channel Name',
           importance: Importance.max,
           priority: Priority.high,
         );
@@ -109,7 +116,7 @@ Future<void> showNotification({
     );
 
     await flutterLocalNotificationsPlugin.show(
-      0, // ID Notifikasi
+      0,
       title,
       body,
       notificationDetails,
