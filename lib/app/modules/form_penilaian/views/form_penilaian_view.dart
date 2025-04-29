@@ -260,20 +260,26 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
               firstDate: DateTime.now().subtract(
                 const Duration(days: 30),
               ), // Mulai dari 1 bulan sebelumnya
-              lastDate:
-                  scheduleController.scheduleList.isNotEmpty
-                      ? (scheduleController.scheduleList.last.date is DateTime
-                          ? scheduleController.scheduleList.last.date
-                              as DateTime
-                          : DateTime.tryParse(
-                                scheduleController.scheduleList.last.date
-                                    .toString(),
-                              ) ??
-                              DateTime(2101)) // Safely parse or fallback
-                      : DateTime(2101), // Default jika tidak ada jadwal
+              lastDate: scheduleController.scheduleList.isNotEmpty
+                  ? (scheduleController.scheduleList.last.date is DateTime
+                      ? scheduleController.scheduleList.last.date as DateTime
+                      : DateTime.tryParse(
+                            scheduleController.scheduleList.last.date.toString(),
+                          ) ??
+                          DateTime(2101)) // Safely parse or fallback
+                  : DateTime(2101), // Default jika tidak ada jadwal
               selectableDayPredicate: (DateTime date) {
-                // Periksa apakah tanggal memiliki jadwal latihan, termasuk jadwal yang sudah lewat
-                return controller.isDateWithSchedule(date);
+                // Periksa apakah tanggal memiliki jadwal latihan dengan assessment
+                return scheduleController.scheduleList.any((schedule) {
+                  final scheduleDate = schedule.date is DateTime
+                      ? schedule.date as DateTime
+                      : DateTime.tryParse(schedule.date.toString());
+                  return scheduleDate != null &&
+                      scheduleDate.year == date.year &&
+                      scheduleDate.month == date.month &&
+                      scheduleDate.day == date.day &&
+                      schedule.isAssessed == 1; // Hanya jadwal dengan assessment
+                });
               },
               builder: (BuildContext context, Widget? child) {
                 return Theme(
@@ -294,14 +300,13 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                       ),
                     ),
                   ),
-                  child:
-                      child != null
-                          ? Builder(
-                            builder: (BuildContext context) {
-                              return child;
-                            },
-                          )
-                          : const SizedBox.shrink(),
+                  child: child != null
+                      ? Builder(
+                          builder: (BuildContext context) {
+                            return child;
+                          },
+                        )
+                      : const SizedBox.shrink(),
                 );
               },
             );
