@@ -297,8 +297,36 @@ class _ScheduleViewState extends State<ScheduleView> {
         }
 
         if (controller.scheduleList.isEmpty) {
-          return const Center(child: Text("No schedules available"));
-        }
+      return RefreshIndicator(
+        onRefresh: () async {
+          if (_isHistorySelected) {
+            await controller.fetchSchedules(history: true);
+          } else {
+            await controller.refreshScheduleList();
+          }
+        },
+        child: Center( // Membungkus ListView dengan Center agar pesan berada di tengah
+          child: ListView(
+            shrinkWrap: true, // Agar ListView hanya sebesar kontennya
+            children: const [
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    "No schedules available",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
         // Filter schedule list based on the selected month index and history
         List filteredScheduleList =
