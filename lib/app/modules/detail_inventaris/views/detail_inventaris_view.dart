@@ -236,69 +236,106 @@ class _DetailInventarisViewState extends State<DetailInventarisView> {
                                     ),
                                   ),
                                   SizedBox(height: 20),
-                                  SizedBox(
-                                    width:
-                                        double
-                                            .infinity, // Memenuhi ruang antara kiri dan kanan
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        if (item.status == "borrowed") {
-                                          Get.toNamed(
-                                            '/ajukan-pengembalian',
-                                            arguments: {'landingId': item.id},
-                                          );
-                                        } else if (item.status == "returned") {
-                                          // Menampilkan modal dengan gambar
+                                  if (item.type == "pengembalian")
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () {
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
                                               return AlertDialog(
-                                                title: Text(
-                                                  'Bukti Pengembalian',
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Image.network(
+                                                      item.imgInventoryReturn ??
+                                                          '',
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                    Text(
+                                                      "Gambar Modal",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                content: Image.network(
-                                                  item.imgInventoryReturn ??
-                                                      '-',
-                                                ), // Menampilkan gambar
-                                                actions: <Widget>[
+                                                actions: [
                                                   TextButton(
                                                     onPressed: () {
                                                       Navigator.of(
                                                         context,
                                                       ).pop();
                                                     },
-                                                    child: Text('Tutup'),
+                                                    child: Text(
+                                                      "Tutup",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                    ),
                                                   ),
                                                 ],
                                               );
                                             },
                                           );
-                                        }
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        foregroundColor: Colors.black,
-                                        backgroundColor:
-                                            item.status == "borrowed"
-                                                ? AppColors.goldenAmber
-                                                : Colors
-                                                    .green, // Change color based on status
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor:
+                                              AppColors.deepOceanBlue,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Lihat Gambar",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ),
-                                      child: Text(
-                                        item.status == "borrowed"
-                                            ? "Ajukan Pengembalian"
-                                            : "Bukti Pengembalian",
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
+                                    ),
+                                  if (item.type == "peminjaman")
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Get.toNamed(
+                                            '/ajukan-pengembalian',
+                                            arguments: {'landingId': item.id},
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: Colors.black,
+                                          backgroundColor:
+                                              AppColors.goldenAmber,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Ajukan Pengembalian",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
                                 ],
                               ),
                             ),
