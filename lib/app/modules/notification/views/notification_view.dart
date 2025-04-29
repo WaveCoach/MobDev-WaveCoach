@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,7 +22,7 @@ class _NotificationViewState extends State<NotificationView> {
 
   Widget header() {
     return Container(
-      height: 230,
+      height: 150,
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.deepOceanBlue,
@@ -30,43 +31,18 @@ class _NotificationViewState extends State<NotificationView> {
           bottomRight: Radius.circular(20),
         ),
       ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 70,
-            left: 15,
-            child: GestureDetector(
-              onTap: () => Get.back(),
-              child: Row(
-                children: [
-                  Icon(Icons.arrow_back, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text(
-                    "Kembali",
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+      child: Center(
+        child: Text(
+          "Notification",
+          textAlign: TextAlign.center, // Set text alignment to center
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.w600,
+            height: 1,
+            letterSpacing: -0.5,
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 100),
-              child: Text(
-                "Notification",
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -161,7 +137,7 @@ class _NotificationViewState extends State<NotificationView> {
                               padding: const EdgeInsets.only(right: 20),
                               child: ClipOval(
                                 child: Image.asset(
-                                  'assets/images/coachSarah.jpg',
+                                  'assets/images/default_profile.png',
                                   width: 45,
                                   height: 45,
                                   fit: BoxFit.cover,
@@ -270,6 +246,32 @@ class _NotificationViewState extends State<NotificationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0, // Adjust spacing between back icon and title
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     Get.offNamed('/home', arguments: 2);
+        //     scheduleController
+        //         .refreshScheduleList(); // Memanggil fungsi refresh
+        //   },
+        // ),
+        title: Text(
+          "Kembali",
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.deepOceanBlue,
+        iconTheme: const IconThemeData(color: Colors.white),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.dark, // Set icons to dark (gray)
+          statusBarColor:
+              Colors.transparent, // Optional: Make status bar transparent
+        ),
+      ),
       backgroundColor: AppColors.skyBlue,
       body: Stack(
         children: [
