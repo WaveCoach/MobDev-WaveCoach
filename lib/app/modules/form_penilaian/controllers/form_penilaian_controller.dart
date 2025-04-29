@@ -40,7 +40,6 @@ class FormPenilaianController extends GetxController {
   void onInit() {
     super.onInit();
     allSelectedSwimStyle.add(Rxn<SwimStyle>()); // DO NOT DELETE THIS
-    // fetchSwimStyle();
   }
 
   Future<void> fetchSchedulesByDate({
@@ -122,9 +121,9 @@ class FormPenilaianController extends GetxController {
       "schedule_id": schedule.id,
       "package_id": schedule.packageId,
       "categories":
-          swimStyleList.map((style) {
+          allSelectedSwimStyle.map((style) {
             return {
-              "assessment_category_id": style.id,
+              "assessment_category_id": style.value?.id ?? 0,
               "details":
                   allAspectList.expand((aspectList) {
                     return aspectList.map((aspect) {

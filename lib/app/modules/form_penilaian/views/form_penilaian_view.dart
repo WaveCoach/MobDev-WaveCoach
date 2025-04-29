@@ -170,18 +170,26 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                         Center(
                           child: Obx(() {
                             // Periksa apakah setidaknya satu gaya renang telah dipilih
-                            final anySwimStyleSelected = controller.allSelectedSwimStyle.any((swimStyle) => swimStyle.value != null);
+                            final anySwimStyleSelected = controller
+                                .allSelectedSwimStyle
+                                .any((swimStyle) => swimStyle.value != null);
 
                             return Visibility(
-                              visible: anySwimStyleSelected, // Tampilkan tombol jika setidaknya satu gaya renang dipilih
+                              visible:
+                                  anySwimStyleSelected, // Tampilkan tombol jika setidaknya satu gaya renang dipilih
                               child: ElevatedButton.icon(
                                 onPressed: () {
                                   setState(() {
                                     controller.indexAll++;
-                                    controller.allSelectedSwimStyle.add(Rxn<SwimStyle>());
+                                    controller.allSelectedSwimStyle.add(
+                                      Rxn<SwimStyle>(),
+                                    );
                                   });
                                 },
-                                icon: const Icon(Icons.add, color: Colors.white),
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
                                 label: Text(
                                   "Tambah Penilaian",
                                   style: GoogleFonts.poppins(
@@ -526,10 +534,11 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: DropdownButtonFormField<SwimStyle>(
                   isExpanded: true,
-                  value: isStudentSelected &&
-                          index < controller.allSelectedSwimStyle.length
-                      ? controller.allSelectedSwimStyle[index].value
-                      : null,
+                  value:
+                      isStudentSelected &&
+                              index < controller.allSelectedSwimStyle.length
+                          ? controller.allSelectedSwimStyle[index].value
+                          : null,
                   decoration: const InputDecoration(
                     hintText: "Pilih Gaya Renang",
                     hintStyle: TextStyle(
@@ -542,55 +551,61 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
                     fontSize: 15,
                     color: Colors.black,
                   ),
-                  items: isStudentSelected
-                      ? controller.swimStyleList
-                          .map<DropdownMenuItem<SwimStyle>>((swimStyle) {
-                          return DropdownMenuItem<SwimStyle>(
-                            value: swimStyle,
-                            child: Text(swimStyle.name),
-                          );
-                        }).toList()
-                      : null, // Kosongkan item jika tidak aktif
-                  onChanged: isStudentSelected
-                      ? (selectedSwimStyle) {
-                          if (index < controller.allSelectedSwimStyle.length) {
-                            controller.allSelectedSwimStyle[index].value =
-                                selectedSwimStyle;
-                          } else {
-                            controller.allSelectedSwimStyle.add(
-                              Rxn<SwimStyle>(selectedSwimStyle),
-                            );
+                  items:
+                      isStudentSelected
+                          ? controller.swimStyleList
+                              .map<DropdownMenuItem<SwimStyle>>((swimStyle) {
+                                return DropdownMenuItem<SwimStyle>(
+                                  value: swimStyle,
+                                  child: Text(swimStyle.name),
+                                );
+                              })
+                              .toList()
+                          : null, // Kosongkan item jika tidak aktif
+                  onChanged:
+                      isStudentSelected
+                          ? (selectedSwimStyle) {
+                            if (index <
+                                controller.allSelectedSwimStyle.length) {
+                              controller.allSelectedSwimStyle[index].value =
+                                  selectedSwimStyle;
+                            } else {
+                              controller.allSelectedSwimStyle.add(
+                                Rxn<SwimStyle>(selectedSwimStyle),
+                              );
+                            }
+                            controller.fetchAspectSwimStyle(index);
                           }
-                          controller.fetchAspectSwimStyle(index);
-                        }
-                      : null, // Nonaktifkan onChanged jika tidak aktif
+                          : null, // Nonaktifkan onChanged jika tidak aktif
                 ),
               ),
             ),
           ),
           const SizedBox(width: 8),
           IconButton(
-            onPressed: controller.allSelectedSwimStyle.length > 1
-                ? () {
-                    setState(() {
-                      // Pastikan indeks valid sebelum menghapus
-                      if (index < controller.allSelectedSwimStyle.length) {
-                        controller.allSelectedSwimStyle.removeAt(index);
-                      }
-                      if (index < controller.allAspectList.length) {
-                        controller.allAspectList.removeAt(index);
-                      }
+            onPressed:
+                controller.allSelectedSwimStyle.length > 1
+                    ? () {
+                      setState(() {
+                        // Pastikan indeks valid sebelum menghapus
+                        if (index < controller.allSelectedSwimStyle.length) {
+                          controller.allSelectedSwimStyle.removeAt(index);
+                        }
+                        if (index < controller.allAspectList.length) {
+                          controller.allAspectList.removeAt(index);
+                        }
 
-                      // Kurangi jumlah dropdown yang dirender
-                      controller.indexAll.value--;
-                    });
-                  }
-                : null, // Nonaktifkan tombol jika hanya tersisa satu pilihan
+                        // Kurangi jumlah dropdown yang dirender
+                        controller.indexAll.value--;
+                      });
+                    }
+                    : null, // Nonaktifkan tombol jika hanya tersisa satu pilihan
             icon: Icon(
               Icons.remove_circle,
-              color: controller.allSelectedSwimStyle.length > 1
-                  ? Colors.red
-                  : Colors.grey, // Ubah warna tombol jika dinonaktifkan
+              color:
+                  controller.allSelectedSwimStyle.length > 1
+                      ? Colors.red
+                      : Colors.grey, // Ubah warna tombol jika dinonaktifkan
             ),
           ),
         ],
@@ -612,12 +627,12 @@ class _FormPenilaianViewState extends State<FormPenilaianView> {
 
               // Buat controller baru jika belum ada
               controller.scoreControllers.putIfAbsent(
-                aspectIndex,
+                aspect.id,
                 () =>
                     TextEditingController(text: aspect.score?.toString() ?? ''),
               );
 
-              final scoreController = controller.scoreControllers[aspectIndex]!;
+              final scoreController = controller.scoreControllers[aspect.id]!;
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
