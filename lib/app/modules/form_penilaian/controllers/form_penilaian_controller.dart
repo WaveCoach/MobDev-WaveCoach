@@ -99,13 +99,39 @@ class FormPenilaianController extends GetxController {
       final response = await apiService.getStyleSwimAspect(swimStyle.id);
 
       if (response.statusCode == 200) {
-        allAspectList.add(
-          AssessmentAspectResponse.fromJson(response.body).data.obs,
-        );
+        final aspects = AssessmentAspectResponse.fromJson(response.body).data;
+
+        if (index < allAspectList.length) {
+          allAspectList[index].assignAll(aspects);
+        } else {
+          while (allAspectList.length <= index) {
+            allAspectList.add(<AssessmentAspect>[].obs);
+          }
+
+          allAspectList[index].assignAll(aspects);
+        }
       } else {
         logError("Fetch aspects", response.statusCode);
       }
     });
+  }
+
+  List<SwimStyleWithAspects> get swimStylesWithAspects {
+    final result = <SwimStyleWithAspects>[];
+
+    for (int i = 0; i < allSelectedSwimStyle.length; i++) {
+      final swimStyle = allSelectedSwimStyle[i].value;
+
+      if (swimStyle == null || i >= allAspectList.length) {
+        continue;
+      }
+
+      result.add(
+        SwimStyleWithAspects(id: swimStyle.id, aspects: allAspectList[i]),
+      );
+    }
+
+    return result;
   }
 
   Future<void> submitAssessment() async {
@@ -176,4 +202,11 @@ class FormPenilaianController extends GetxController {
           "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
     );
   }
+}
+
+class SwimStyleWithAspects {
+  final int id;
+  final List<AssessmentAspect> aspects;
+
+  SwimStyleWithAspects({required this.id, required this.aspects});
 }

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ApiService extends GetConnect {
-  final String url = "https://wavecoach.cintaramayanti.com/api";
+  final String url = "http://192.168.1.4:8000/api";
   final storage = GetStorage();
 
   Map<String, String> getHeaders({bool withAuth = true}) {
