@@ -72,6 +72,8 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
             children: [
               Text(
                 controller.scheduleResponse.value?.schedule?.packageName ?? "",
+                textAlign:
+                    TextAlign.center, // Tambahan: Rata tengah untuk nama paket
                 style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 20,
@@ -80,99 +82,126 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                 ),
               ),
               SizedBox(
+                width:
+                    double.infinity, // Tambahan: Agar mengambil lebar maksimal
                 child: Obx(() {
                   if (controller.scheduleResponse.value?.schedule?.status ==
                       "rescheduled") {
-                    return AnimatedTextKit(
-                      animatedTexts: [
-                        ColorizeAnimatedText(
-                          day,
-                          textStyle: GoogleFonts.poppins(
-                            fontSize: 150,
-                            fontWeight: FontWeight.w700,
-                            height: 1,
+                    return Center(
+                      // Tambahan: Membungkus dengan Center
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          ColorizeAnimatedText(
+                            day,
+                            textAlign:
+                                TextAlign.center, // Tambahan: Rata tengah
+                            textStyle: GoogleFonts.poppins(
+                              fontSize: 150,
+                              fontWeight: FontWeight.w700,
+                              height: 1,
+                            ),
+                            colors: [
+                              Colors.white,
+                              Colors.white,
+                              AppColors.deepOceanBlue,
+                              Colors.white,
+                              Colors.white,
+                            ],
+                            speed: Duration(milliseconds: 1500),
                           ),
-                          colors: [
-                            Colors.white,
-                            Colors.white,
-                            AppColors.deepOceanBlue,
-                            Colors.white,
-                            Colors.white,
-                          ],
-                          speed: Duration(milliseconds: 1500), // Durasi animasi
-                        ),
-                      ],
-                      isRepeatingAnimation: true,
-                      repeatForever: true,
-                      pause: Duration(milliseconds: 2000), // Jeda antar animasi
+                        ],
+                        isRepeatingAnimation: true,
+                        repeatForever: true,
+                        pause: Duration(milliseconds: 2000),
+                      ),
                     );
                   } else {
-                    return Text(
-                      day,
-                      style: GoogleFonts.poppins(
-                        fontSize: 150,
-                        fontWeight: FontWeight.w700,
-                        height: 1,
-                        color: Colors.white,
+                    return Center(
+                      // Tambahan: Membungkus dengan Center
+                      child: Text(
+                        day,
+                        textAlign: TextAlign.center, // Tambahan: Rata tengah
+                        style: GoogleFonts.poppins(
+                          fontSize: 150,
+                          fontWeight: FontWeight.w700,
+                          height: 1,
+                          color: Colors.white,
+                        ),
                       ),
                     );
                   }
                 }),
               ),
               SizedBox(
+                width:
+                    double.infinity, // Tambahan: Agar mengambil lebar maksimal
                 child: Obx(() {
                   if (controller.scheduleResponse.value?.schedule?.status ==
                       "rescheduled") {
-                    return AnimatedTextKit(
-                      animatedTexts: [
-                        ColorizeAnimatedText(
-                          monthYear,
-                          textStyle: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.w700,
-                            height: 1,
+                    return Center(
+                      // Tambahan: Membungkus dengan Center
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          ColorizeAnimatedText(
+                            monthYear,
+                            textAlign:
+                                TextAlign.center, // Tambahan: Rata tengah
+                            textStyle: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.w700,
+                              height: 1,
+                            ),
+                            colors: [
+                              Colors.white,
+                              Colors.white,
+                              AppColors.deepOceanBlue,
+                              Colors.white,
+                              Colors.white,
+                            ],
+                            speed: Duration(milliseconds: 480),
                           ),
-                          colors: [
-                            Colors.white,
-                            Colors.white,
-                            AppColors.deepOceanBlue,
-                            Colors.white,
-                            Colors.white,
-                          ],
-                          speed: Duration(
-                            milliseconds: 480,
-                          ), // Durasi animasi sama
-                        ),
-                      ],
-                      isRepeatingAnimation: true,
-                      repeatForever: true,
-                      pause: Duration(
-                        milliseconds: 150,
-                      ), // Jeda antar animasi sama
+                        ],
+                        isRepeatingAnimation: true,
+                        repeatForever: true,
+                        pause: Duration(milliseconds: 150),
+                      ),
                     );
                   } else {
-                    return Text(
-                      monthYear,
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.w700,
-                        height: 1,
+                    return Center(
+                      // Tambahan: Membungkus dengan Center
+                      child: Text(
+                        monthYear,
+                        textAlign: TextAlign.center, // Tambahan: Rata tengah
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w700,
+                          height: 1,
+                        ),
                       ),
                     );
                   }
                 }),
               ),
+
               SizedBox(height: 20),
               Obx(() {
-                final allStudentsMarked = controller.scheduleResponse.value?.students?.every(
+                final allStudentsMarked =
+                    controller.scheduleResponse.value?.students?.every(
                       (student) => student.attendanceStatus != null,
-                    ) ?? false;
+                    ) ??
+                    false;
 
-                final coachAttendanceStatus = controller.scheduleResponse.value?.coach?.attendanceStatus;
+                final coachAttendanceStatus =
+                    controller.scheduleResponse.value?.coach?.attendanceStatus;
 
-                if (controller.scheduleResponse.value?.schedule?.hasRescheduleRequest == false) {
+                if (controller
+                        .scheduleResponse
+                        .value
+                        ?.schedule
+                        ?.hasRescheduleRequest ==
+                    false) {
                   if (allStudentsMarked) {
                     // Jika semua siswa telah melakukan absensi
                     return Text(
@@ -186,22 +215,33 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                   } else {
                     // Jika absensi siswa belum selesai
                     return Opacity(
-                      opacity: coachAttendanceStatus == "Tidak Hadir" ? 0.5 : 1.0, // Opasitas rendah jika coach "Tidak Hadir"
+                      opacity:
+                          coachAttendanceStatus == "Tidak Hadir"
+                              ? 0.5
+                              : 1.0, // Opasitas rendah jika coach "Tidak Hadir"
                       child: ElevatedButton.icon(
-                        onPressed: coachAttendanceStatus == "Tidak Hadir"
-                            ? null // Disable button if coach is "Tidak Hadir"
-                            : () {
-                                Get.toNamed(
-                                  '/reschedule',
-                                  arguments: {
-                                    'scheduleId': controller.scheduleResponse.value?.schedule?.id,
-                                  },
-                                );
-                              },
+                        onPressed:
+                            coachAttendanceStatus == "Tidak Hadir"
+                                ? null // Disable button if coach is "Tidak Hadir"
+                                : () {
+                                  Get.toNamed(
+                                    '/reschedule',
+                                    arguments: {
+                                      'scheduleId':
+                                          controller
+                                              .scheduleResponse
+                                              .value
+                                              ?.schedule
+                                              ?.id,
+                                    },
+                                  );
+                                },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: coachAttendanceStatus == "Tidak Hadir"
-                              ? Colors.grey // Disabled button color
-                              : Colors.orange,
+                          backgroundColor:
+                              coachAttendanceStatus == "Tidak Hadir"
+                                  ? Colors
+                                      .grey // Disabled button color
+                                  : Colors.orange,
                           padding: EdgeInsets.symmetric(
                             vertical: 4,
                             horizontal: 25,
@@ -627,25 +667,41 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     Padding(
                       padding: const EdgeInsets.only(left: 16),
                       child: Obx(() {
-                        if (controller.scheduleResponse.value?.schedule?.isAssessed == 1) {
+                        if (controller
+                                .scheduleResponse
+                                .value
+                                ?.schedule
+                                ?.isAssessed ==
+                            1) {
                           return SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: student.attendanceStatus == null
-                                  ? null // Disable button if attendanceStatus is null
-                                  : () {
-                                      Get.toNamed(
-                                        '/form-penilaian', // Ganti dengan route form penilaian Anda
-                                        arguments: {
-                                          'scheduleId': controller.scheduleResponse.value?.schedule?.id,
-                                          'studentId': student.id, // Pastikan Anda memiliki ID siswa
-                                        },
-                                      );
-                                    },
+                              onPressed:
+                                  student.attendanceStatus == null
+                                      ? null // Disable button if attendanceStatus is null
+                                      : () {
+                                        Get.toNamed(
+                                          '/form-penilaian', // Ganti dengan route form penilaian Anda
+                                          arguments: {
+                                            'scheduleId':
+                                                controller
+                                                    .scheduleResponse
+                                                    .value
+                                                    ?.schedule
+                                                    ?.id,
+                                            'studentId':
+                                                student
+                                                    .id, // Pastikan Anda memiliki ID siswa
+                                          },
+                                        );
+                                      },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: student.attendanceStatus == null
-                                    ? Colors.grey // Disabled button color
-                                    : AppColors.deepOceanBlue, // Active button color
+                                backgroundColor:
+                                    student.attendanceStatus == null
+                                        ? Colors
+                                            .grey // Disabled button color
+                                        : AppColors
+                                            .deepOceanBlue, // Active button color
                                 padding: EdgeInsets.symmetric(
                                   vertical: 8.0,
                                   horizontal: 16.0,
